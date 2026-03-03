@@ -1,32 +1,22 @@
 'use client';
 
-import { useIsMobile } from '@/hooks/useMediaQuery';
-
 interface SeasonPickerProps {
   season: string;
   onSelect?: () => void;
 }
 
 export default function SeasonPicker({ season, onSelect }: SeasonPickerProps) {
-  const isMobile = useIsMobile();
-
   return (
     <div
+      className="season-picker"
       onClick={onSelect}
       style={{
-        position: 'absolute',
         backgroundColor: '#262626',
         display: 'flex',
         gap: '16px',
-        height: '48px',
         alignItems: 'center',
-        left: isMobile ? 0 : 'calc(50% - 1255px / 2)',
-        right: isMobile ? 0 : undefined,
         padding: '8px',
         borderRadius: '4px',
-        top: isMobile ? '160px' : '147px',
-        width: isMobile ? undefined : '246px',
-        zIndex: 1000,
         cursor: 'pointer',
       }}
     >

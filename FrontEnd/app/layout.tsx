@@ -4,6 +4,7 @@ import { AuthProvider } from "@/lib/auth-context";
 import { openSans, notoSans } from "@/lib/fonts";
 import FontAwesomeLoader from "@/components/layout/FontAwesomeLoader";
 import MobileFooterNav from "@/components/layout/MobileFooterNav";
+import MobileLayoutWrapper from "@/components/layout/MobileLayoutWrapper";
 
 export const metadata: Metadata = {
   title: "Major Pain Fantasy Golf",
@@ -25,10 +26,14 @@ export default function RootLayout({
     <html lang="en" className={`${openSans.variable} ${notoSans.variable}`}>
       <body className={openSans.className} style={{ backgroundColor: '#0f0f0f' }}>
         <FontAwesomeLoader />
-        <AuthProvider>
-          {children}
-          <MobileFooterNav />
-        </AuthProvider>
+        <MobileLayoutWrapper>
+          <AuthProvider>
+            <div className="mobile-layout-main">
+              {children}
+            </div>
+            <MobileFooterNav />
+          </AuthProvider>
+        </MobileLayoutWrapper>
       </body>
     </html>
   );

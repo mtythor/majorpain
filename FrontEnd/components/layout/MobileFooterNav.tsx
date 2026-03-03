@@ -9,15 +9,12 @@ export default function MobileFooterNav() {
   const router = useRouter();
   const isMobile = useIsMobile();
 
-  if (!isMobile) return null;
-
   const showFooter =
-    pathname?.startsWith('/season') ||
-    pathname?.startsWith('/tournament') ||
-    pathname?.startsWith('/draft') ||
-    pathname?.startsWith('/admin');
-
-  if (!showFooter) return null;
+    isMobile &&
+    (pathname?.startsWith('/season') ||
+      pathname?.startsWith('/tournament') ||
+      pathname?.startsWith('/draft') ||
+      pathname?.startsWith('/admin'));
 
   const currentView = pathname?.startsWith('/season') ? 'season' : 'tournament';
 
@@ -41,16 +38,16 @@ export default function MobileFooterNav() {
     <div
       className="mobile-footer-nav"
       style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        display: 'flex',
-        zIndex: 1000,
+        display: showFooter ? 'flex' : 'none',
+        width: '100%',
+        maxWidth: '100%',
+        flexShrink: 0,
         backgroundColor: '#0f0f0f',
+        borderTop: '4px solid #0E0E0E',
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
         paddingLeft: 'env(safe-area-inset-left, 0px)',
         paddingRight: 'env(safe-area-inset-right, 0px)',
+        boxSizing: 'border-box',
       }}
     >
       <button
@@ -58,6 +55,7 @@ export default function MobileFooterNav() {
         style={{
           flex: 1,
           minWidth: 0,
+          minHeight: 52,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -66,9 +64,9 @@ export default function MobileFooterNav() {
           cursor: 'pointer',
           fontFamily: "'Open Sans', sans-serif",
           fontWeight: 800,
-          fontSize: '12px',
+          fontSize: 'clamp(13px, 3.5vw, 16px)',
           color: currentView === 'tournament' ? '#fdc71c' : '#ffffff',
-          padding: '12px 8px',
+          padding: '14px 12px',
         }}
         aria-pressed={currentView === 'tournament'}
       >
@@ -79,6 +77,7 @@ export default function MobileFooterNav() {
         style={{
           flex: 1,
           minWidth: 0,
+          minHeight: 52,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -87,9 +86,9 @@ export default function MobileFooterNav() {
           cursor: 'pointer',
           fontFamily: "'Open Sans', sans-serif",
           fontWeight: 800,
-          fontSize: '12px',
+          fontSize: 'clamp(13px, 3.5vw, 16px)',
           color: currentView === 'season' ? '#fdc71c' : '#ffffff',
-          padding: '12px 8px',
+          padding: '14px 12px',
         }}
         aria-pressed={currentView === 'season'}
       >

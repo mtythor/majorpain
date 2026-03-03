@@ -26,164 +26,169 @@ export default function Header({
 }: HeaderProps) {
   const isMobile = useIsMobile();
 
-  // Mobile: design tokens for stripe positioning
-  if (isMobile) {
-    return (
-      <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          top: 0,
-          width: '100%',
-          padding: 0,
-          zIndex: 10,
-          overflow: 'visible',
-        }}
-      >
-        {/* Logo centered at top - uses CSS for viewport-based scaling */}
-        <div
-          style={{
-            position: 'absolute',
-            left: '50%',
-            top: 0,
-            transform: 'translateX(-50%)',
-            flexShrink: 0,
-          }}
-        >
-          <Logo className="header-logo" size={{ width: 140, height: 97 }} />
-        </div>
-        {/* Left stripe */}
-        <div
-          style={{
-            position: 'absolute',
-            left: 'calc(50% - var(--stripe-offset))',
-            top: 'var(--stripe-top)',
-            transform: 'translateX(-50%)',
-            width: 'var(--stripe-width)',
-            overflow: 'hidden',
-          }}
-        >
-          <Stripe width="100%" compact />
-        </div>
-        {/* Right stripe */}
-        <div
-          style={{
-            position: 'absolute',
-            left: 'calc(50% + var(--stripe-offset))',
-            top: 'var(--stripe-top)',
-            transform: 'translateX(-50%)',
-            width: 'var(--stripe-width)',
-            overflow: 'hidden',
-          }}
-        >
-          <Stripe width="100%" compact />
-        </div>
-      </div>
-    );
-  }
+  // Logo dimensions: 140px mobile (per globals.css), 232px desktop. 4px gap each side.
+  const logoHalfWidth = isMobile ? 70 : 116;
+  const stripeGap = 4;
+  const stripeTop = isMobile ? 47 : 73;
 
   return (
     <div
       style={{
         position: 'absolute',
-        display: 'flex',
-        gap: '9px',
-        alignItems: 'flex-start',
-        justifyContent: 'space-between',
         left: 0,
         top: 0,
         width: '100%',
         padding: 0,
         zIndex: 10,
+        overflow: 'visible',
       }}
     >
-      {/* Header Left Side */}
+      {/* Stripes - from screen edges to logo edges, behind everything */}
       <div
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '29px',
-          height: '97px',
-          alignItems: 'flex-start',
-          justifyContent: 'flex-end',
-          paddingTop: '8px',
-          paddingBottom: 0,
-          paddingLeft: 0,
-          paddingRight: 0,
-          position: 'relative',
-          flex: '1 1 0',
-          minWidth: '595px',
-          maxWidth: 'calc(50% - 120px)',
+          position: 'absolute',
+          left: 0,
+          top: stripeTop,
+          width: `calc(50% - ${logoHalfWidth}px - ${stripeGap}px)`,
+          overflow: 'hidden',
+          zIndex: 1,
         }}
       >
-        <NavBar currentView={currentView} onViewChange={onViewChange} userProfile={userProfile} />
-        <Stripe />
+        <Stripe width="100%" compact={isMobile} />
       </div>
-
-      {/* Center Logo - header-logo class shrinks on mobile via globals.css */}
       <div
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
+          position: 'absolute',
+          right: 0,
+          top: stripeTop,
+          width: `calc(50% - ${logoHalfWidth}px - ${stripeGap}px)`,
+          overflow: 'hidden',
+          zIndex: 1,
+        }}
+      >
+        <Stripe width="100%" compact={isMobile} />
+      </div>
+      {/* Logo centered on top of stripes */}
+      <div
+        style={{
           position: 'absolute',
           left: '50%',
+          top: 0,
           transform: 'translateX(-50%)',
           flexShrink: 0,
+          zIndex: 2,
         }}
       >
-        <Logo className="header-logo" />
+        <Logo
+          className="header-logo"
+          size={isMobile ? { width: 140, height: 97 } : { width: 232, height: 160 }}
+        />
       </div>
-
-      {/* Header Right Side */}
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '25px',
-          height: '97px',
-          alignItems: 'flex-end',
-          justifyContent: 'flex-end',
-          paddingTop: '8px',
-          paddingBottom: 0,
-          paddingLeft: 0,
-          paddingRight: 0,
-          position: 'relative',
-          flex: '1 1 0',
-          minWidth: '595px',
-          maxWidth: 'calc(50% - 120px)',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            gap: '8px',
-            alignItems: 'center',
-            height: '40px',
-            paddingLeft: 0,
-            paddingRight: '16px',
-            paddingTop: 0,
-            paddingBottom: 0,
-            position: 'relative',
-            flexShrink: 0,
-          }}
-        >
-          {currentView === 'tournament' && (
-            <>
+      {/* Mobile: ViewToggle left, avatar right, no divider */}
+      {isMobile && (
+        <>
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              display: 'flex',
+              alignItems: 'center',
+              paddingTop: 6,
+              paddingLeft: 16,
+              zIndex: 2,
+            }}
+          >
+            {currentView === 'tournament' && (
               <ViewToggle currentView={viewMode} onViewChange={onViewModeChange} />
-              <Divider />
-            </>
-          )}
-          {userProfile && (
-            <ProfilePicture
-              src={userProfile.imageUrl}
-              alt={userProfile.name}
-              size={32}
-            />
-          )}
-        </div>
-        <Stripe />
-      </div>
+            )}
+          </div>
+          <div
+            style={{
+              position: 'absolute',
+              right: 0,
+              top: 0,
+              display: 'flex',
+              alignItems: 'center',
+              paddingTop: 6,
+              paddingRight: 16,
+              zIndex: 2,
+            }}
+          >
+            {userProfile && (
+              <ProfilePicture
+                src={userProfile.imageUrl}
+                alt={userProfile.name}
+                size={32}
+              />
+            )}
+          </div>
+        </>
+      )}
+      {/* Desktop: NavBar and right-side controls above the stripes */}
+      {!isMobile && (
+        <>
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '29px',
+              height: stripeTop,
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
+              paddingTop: '16px',
+              paddingLeft: 0,
+              maxWidth: 'calc(50% - 120px)',
+              zIndex: 2,
+            }}
+          >
+            <NavBar currentView={currentView} onViewChange={onViewChange} userProfile={userProfile} />
+          </div>
+          <div
+            style={{
+              position: 'absolute',
+              right: 0,
+              top: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '25px',
+              height: stripeTop,
+              alignItems: 'flex-end',
+              justifyContent: 'flex-start',
+              paddingTop: '16px',
+              paddingRight: '16px',
+              maxWidth: 'calc(50% - 120px)',
+              zIndex: 2,
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                gap: '8px',
+                alignItems: 'center',
+                height: '40px',
+              }}
+            >
+              {currentView === 'tournament' && (
+                <>
+                  <ViewToggle currentView={viewMode} onViewChange={onViewModeChange} />
+                  <Divider />
+                </>
+              )}
+              {userProfile && (
+                <ProfilePicture
+                  src={userProfile.imageUrl}
+                  alt={userProfile.name}
+                  size={32}
+                />
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

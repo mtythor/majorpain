@@ -32,6 +32,7 @@ interface PlayerTablesProps {
 }
 
 export default function PlayerTables({ players, position = 'absolute' }: PlayerTablesProps) {
+  const tableWidth = 'min(1057px, 100%)';
   const baseStyle = position === 'relative'
     ? {
         position: 'relative' as const,
@@ -40,8 +41,9 @@ export default function PlayerTables({ players, position = 'absolute' }: PlayerT
         gap: '24px',
         alignItems: 'flex-start' as const,
         zIndex: 5,
-        overflowX: 'hidden' as const,
-        width: '1057px',
+        overflowX: 'auto' as const,
+        width: tableWidth,
+        minWidth: 0,
       }
     : {
         position: 'absolute' as const,
@@ -55,8 +57,9 @@ export default function PlayerTables({ players, position = 'absolute' }: PlayerT
         zIndex: 5,
         maxHeight: 'calc(100vh - 228px - 50px)',
         overflowY: 'auto' as const,
-        overflowX: 'hidden' as const,
-        width: '1057px',
+        overflowX: 'auto' as const,
+        width: tableWidth,
+        minWidth: 0,
       };
 
   return (
@@ -73,6 +76,7 @@ export default function PlayerTables({ players, position = 'absolute' }: PlayerT
             alignItems: 'flex-start',
             position: 'relative',
             width: '1057px',
+            minWidth: '1057px',
           }}
           data-player-table-id={player.id}
         >
@@ -82,6 +86,7 @@ export default function PlayerTables({ players, position = 'absolute' }: PlayerT
               alignItems: 'center',
               position: 'relative',
               width: '1057px',
+              minWidth: '1057px',
             }}
           >
             {/* POS Column */}

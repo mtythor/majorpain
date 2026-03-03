@@ -143,7 +143,11 @@ export default function PlayerCards({ players, position = 'absolute' }: PlayerCa
                         : '#ffffff',
                   }}
                 >
-                  <p data-golfer-position-name style={{ lineHeight: 'normal', margin: 0 }}>
+                  <p
+                    data-golfer-position-name
+                    className={styles.golferNameLine}
+                    style={{ lineHeight: 'normal', margin: 0 }}
+                  >
                     <span className={styles.golferNameShort}>
                       {player.hasResults === false
                         ? getLastName(golfer.name)

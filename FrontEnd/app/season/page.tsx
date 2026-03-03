@@ -75,7 +75,7 @@ export default function SeasonPage() {
             gap: '24px',
             alignItems: 'flex-start',
             left: isMobile ? 0 : '50%',
-            top: isMobile ? '200px' : '214px',
+            top: isMobile ? '169px' : '232px',
             transform: isMobile ? 'none' : 'translateX(-50%)',
             zIndex: 5,
             width: isMobile ? '100%' : undefined,

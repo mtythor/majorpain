@@ -758,7 +758,9 @@ export default function TournamentTableView({ params }: { params: { id: string }
         onSelect={handleTournamentSelect}
         viewMode="table"
       />
-      {!isMobile && <TournamentVenue tournament={tournament} viewMode="table" />}
+      <div className="tournament-venue-desktop">
+        <TournamentVenue tournament={tournament} viewMode="table" />
+      </div>
       {isLoadingTableData ? (
         <div
           style={{
@@ -767,7 +769,7 @@ export default function TournamentTableView({ params }: { params: { id: string }
             justifyContent: 'center',
             alignItems: 'center',
             left: isMobile ? 0 : '50%',
-            top: isMobile ? '200px' : '252px',
+            top: isMobile ? '169px' : '232px',
             transform: isMobile ? 'none' : 'translateX(-50%)',
             zIndex: 5,
             width: isMobile ? '100%' : '1057px',
@@ -787,7 +789,7 @@ export default function TournamentTableView({ params }: { params: { id: string }
             gap: '24px',
             alignItems: 'flex-start',
             left: isMobile ? 0 : '50%',
-            top: isMobile ? '200px' : '252px',
+            top: isMobile ? '169px' : '232px',
             transform: isMobile ? 'none' : 'translateX(-50%)',
             zIndex: 5,
             width: isMobile ? '100%' : '1057px',
@@ -806,7 +808,7 @@ export default function TournamentTableView({ params }: { params: { id: string }
             gap: '24px',
             alignItems: 'flex-start',
             left: isMobile ? 0 : '50%',
-            top: isMobile ? '200px' : '252px',
+            top: isMobile ? '169px' : '232px',
             transform: isMobile ? 'none' : 'translateX(-50%)',
             zIndex: 5,
             width: isMobile ? '100%' : undefined,
