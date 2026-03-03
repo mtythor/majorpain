@@ -52,6 +52,9 @@ html {
   /* Breakpoints - single source of truth */
   --breakpoint-mobile: 767px;
   --breakpoint-desktop-picker: 816px;
+
+  /* Picker and venue bar - shared height */
+  --picker-height: 48px;
 }
 
 body {
@@ -195,7 +198,7 @@ body {
   position: absolute;
   /* Mobile: header logo 97px + 8px gap; Desktop: header 160px + 8px gap */
   top: 105px;
-  height: 48px;
+  height: var(--picker-height);
   z-index: 1000;
   left: 50%;
   transform: translateX(-50%);
@@ -221,7 +224,7 @@ body {
 .season-picker {
   position: absolute;
   top: 105px;
-  height: 48px;
+  height: var(--picker-height);
   z-index: 1000;
   left: 50%;
   transform: translateX(-50%);

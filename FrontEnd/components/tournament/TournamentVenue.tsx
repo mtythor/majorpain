@@ -15,18 +15,18 @@ export default function TournamentVenue({ tournament, viewMode }: TournamentVenu
 
   const { name, par, location } = tournament.venue;
 
-  const rightEdgeOffset = viewMode === 'list' ? PICKER_OFFSETS.list : viewMode === 'draft' ? PICKER_OFFSETS.draft : PICKER_OFFSETS.table;
+  const contentHalfWidth = viewMode === 'list' ? PICKER_OFFSETS.list : viewMode === 'draft' ? PICKER_OFFSETS.draft : PICKER_OFFSETS.table;
 
   return (
     <div
       style={{
         position: 'absolute',
         right: '50%',
-        top: '184px',
-        width: '400px',
-        height: '48px',
+        top: '168px', // Same row as tournament picker on desktop
+        width: '360px',
+        height: 'var(--picker-height)',
         zIndex: 1000,
-        transform: `translateX(${rightEdgeOffset}px)`, // Right edge aligns with PlayerCards or PlayerTables
+        transform: `translateX(${contentHalfWidth}px)`, // Right edge aligns with page content right edge
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
