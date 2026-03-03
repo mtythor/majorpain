@@ -1,0 +1,161 @@
+/* Fonts loaded via next/font in layout - Open Sans, Noto Sans. Consolas is system font. */
+/* Use var(--font-noto-sans) for Noto Sans in inline styles where needed. */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --color-background: #0f0f0f;
+  --color-background-alt: #151515;
+  --color-background-row-alt: #1f1f1f;
+  --color-background-row: #262626;
+  --color-accent: #fdc71c;
+  --color-accent-green: #00a900;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #707070;
+  --color-border: #323232;
+  --color-border-divider: #707070;
+  --color-draft-blue: #3ca1ff;
+}
+
+body {
+  background-color: var(--color-background);
+  font-family: 'Open Sans', sans-serif;
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: var(--color-text-primary);
+}
+
+@media (max-width: 767px) {
+  body {
+    padding-bottom: calc(clamp(48px, 12vh, 64px) + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Mobile footer nav - fixed at bottom, fluid height for graceful sizing */
+  .mobile-footer-nav {
+    min-height: clamp(48px, 12vh, 64px);
+    box-sizing: border-box;
+  }
+
+  /* Force header logo smaller on mobile - works regardless of JS/hydration */
+  .header-logo {
+    width: 140px !important;
+    height: auto !important;
+    aspect-ratio: 232 / 160;
+  }
+  .header-logo > div {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Scrollbar Styling for Player Tables */
+.player-tables-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.player-tables-container::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 4px;
+}
+
+.player-tables-container::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+
+.player-tables-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.player-tables-container {
+  scrollbar-width: thin;
+  scrollbar-color: #444 #1a1a1a;
+}
+
+/* Custom Scrollbar Styling for Tournament Picker Dropdown */
+.tournament-picker-dropdown::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tournament-picker-dropdown::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 4px;
+}
+
+.tournament-picker-dropdown::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+
+.tournament-picker-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.tournament-picker-dropdown {
+  scrollbar-width: thin;
+  scrollbar-color: #444 #1a1a1a;
+}
+
+/* Tournament list - fluid responsive layout, scales gracefully at any viewport size */
+.tournament-list-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+  left: 50%;
+  top: clamp(220px, 28vh, 252px);
+  width: min(100% - 16px, 800px);
+  padding: 0 8px;
+  box-sizing: border-box;
+  z-index: 5;
+  transform: translateX(-50%);
+  container-type: inline-size;
+  container-name: playerCards;
+}
+@media (min-width: 816px) {
+  .tournament-list-content {
+    padding: 0;
+  }
+}
+.tournament-list-footer {
+  width: 100%;
+  max-width: 800px;
+}
+
+/* Tournament picker - fluid layout */
+.tournament-picker {
+  position: absolute;
+  top: clamp(160px, 20vh, 184px);
+  height: 48px;
+  z-index: 1000;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+@media (min-width: 816px) {
+  .tournament-picker {
+    left: 50%;
+    right: auto;
+    width: 239px;
+    transform: translateX(var(--picker-offset, -400px));
+  }
+}
+
+.tournament-venue-desktop {
+  display: none;
+}
+@media (min-width: 816px) {
+  .tournament-venue-desktop {
+    display: block;
+  }
+}

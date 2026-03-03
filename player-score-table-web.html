@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Score Table Web Component</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            font-family: 'Open Sans', sans-serif;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .player-score-table-web {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            width: 1057px;
+        }
+
+        .table-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 1057px;
+        }
+
+        .table-column {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            margin-right: -1px;
+            padding-bottom: 1px;
+        }
+
+        .table-column.pos-column {
+            width: 92px;
+        }
+
+        .table-column.player-column {
+            width: 238px;
+        }
+
+        .table-column.score-column {
+            width: 92px;
+        }
+
+        /* Header Cell */
+        .header-cell {
+            background-color: #151515;
+            border: 1px solid #323232;
+            display: flex;
+            height: 32px;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 0 16px;
+            position: relative;
+            width: 100%;
+            margin-bottom: -1px;
+        }
+
+        .header-cell.player-header {
+            justify-content: flex-start;
+        }
+
+        .header-cell.player-header .cell-text {
+            text-align: left;
+        }
+
+        .header-text {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            line-height: normal;
+            text-align: center;
+            text-transform: uppercase;
+            color: #ffffff;
+        }
+
+        /* Player Color Divider */
+        .player-color-divider {
+            background-color: #74a553;
+            height: 2px;
+            width: 100%;
+            flex-shrink: 0;
+            display: block;
+        }
+
+        /* Score Cell */
+        .score-cell {
+            border: 1px solid #323232;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 0 16px;
+            position: relative;
+            width: 100%;
+            margin-bottom: -1px;
+        }
+
+        .score-cell.active-player {
+            background-color: #000000;
+            height: 64px;
+            padding-top: 12px;
+        }
+
+        .score-cell.standard-row {
+            background-color: #262626;
+            height: 48px;
+        }
+
+        .score-cell.alternate-row {
+            background-color: #1a1a1a;
+            height: 48px;
+        }
+
+        .score-cell.pos-avg {
+            flex-direction: column;
+            gap: 0;
+            align-items: center;
+            justify-content: center;
+            padding-top: 0;
+        }
+
+        .score-cell.pos-avg .cell-text {
+            margin: 0;
+        }
+
+        .score-cell.pos-avg .cell-text.pos-avg-value {
+            margin-top: 4px;
+        }
+
+        .score-cell.player-cell {
+            gap: 16px;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 0;
+        }
+
+        .table-column.player-column .score-cell.standard-row,
+        .table-column.player-column .score-cell.alternate-row {
+            justify-content: flex-start;
+            padding: 0 16px 0 16px;
+        }
+
+        .table-column.player-column .score-cell.standard-row .cell-text,
+        .table-column.player-column .score-cell.alternate-row .cell-text {
+            text-align: left;
+        }
+
+        .score-cell.aggregate {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-top: 0;
+        }
+
+        /* Cell Text */
+        .cell-text {
+            font-family: 'Open Sans', sans-serif;
+            line-height: normal;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .cell-text.header {
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .cell-text.standard {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .cell-text.aggregate {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .cell-text.total-aggregate {
+            font-weight: 700;
+            font-size: 24px;
+        }
+
+        .cell-text.player-name {
+            font-weight: 800;
+            font-size: 24px;
+            line-height: normal;
+        }
+
+        .cell-text.pos-avg-label {
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 1;
+        }
+
+        .cell-text.pos-avg-value {
+            font-weight: 800;
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        .cell-text.alternate {
+            opacity: 0.5;
+        }
+
+        /* Profile Pic */
+        .profile-pic-container {
+            position: relative;
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .profile-pic-image-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            margin: 0;
+        }
+
+        .profile-pic-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Empty cells for active player rounds */
+        .score-cell.empty {
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <div class="player-score-table-web" data-name="Player Score Table Web" data-node-id="489:565">
+        <div class="table-container" data-node-id="489:566">
+            <!-- POS Column -->
+            <div class="table-column pos-column" data-node-id="489:567">
+                <div class="header-cell" data-node-id="489:568">
+                    <p class="cell-text header">POS</p>
+                </div>
+                <div class="player-color-divider"></div>
+                <div class="score-cell active-player pos-avg" data-node-id="489:570">
+                    <p class="cell-text pos-avg-label">AVG</p>
+                    <p class="cell-text pos-avg-value">24</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:571">
+                    <p class="cell-text standard">1</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:572">
+                    <p class="cell-text standard">2</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:573">
+                    <p class="cell-text standard">3</p>
+                </div>
+                <div class="score-cell alternate-row" data-node-id="489:574">
+                    <p class="cell-text standard alternate">ALT</p>
+                </div>
+            </div>
+
+            <!-- PLAYER Column -->
+            <div class="table-column player-column" data-node-id="489:575">
+                <div class="header-cell player-header" data-node-id="489:576">
+                    <p class="cell-text header">PLAYER</p>
+                </div>
+                <div class="player-color-divider"></div>
+                <div class="score-cell active-player player-cell" data-node-id="489:579">
+                    <div class="profile-pic-container">
+                        <div class="profile-pic-image-wrapper">
+                            <img alt="Player Avatar" class="profile-pic-image" src="Images/Player_MtyThor.jpg" />
+                        </div>
+                    </div>
+                    <p class="cell-text player-name">MtyThor</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:580">
+                    <p class="cell-text standard">Tommy Fleetwood</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:581">
+                    <p class="cell-text standard">Russell Henley</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:582">
+                    <p class="cell-text standard">Cameron Young</p>
+                </div>
+                <div class="score-cell alternate-row" data-node-id="489:583">
+                    <p class="cell-text standard alternate">Brian Harman</p>
+                </div>
+            </div>
+
+            <!-- STROKES Column -->
+            <div class="table-column score-column" data-node-id="489:584">
+                <div class="header-cell" data-node-id="489:585">
+                    <p class="cell-text header">STROKES</p>
+                </div>
+                <div class="player-color-divider"></div>
+                <div class="score-cell active-player aggregate" data-node-id="489:587">
+                    <p class="cell-text aggregate">-47</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:588">
+                    <p class="cell-text standard">-18</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:589">
+                    <p class="cell-text standard">-15</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:590">
+                    <p class="cell-text standard">-14</p>
+                </div>
+                <div class="score-cell alternate-row" data-node-id="489:591">
+                    <p class="cell-text standard alternate">-10</p>
+                </div>
+            </div>
+
+            <!-- ROUND 1 Column -->
+            <div class="table-column score-column" data-node-id="489:592">
+                <div class="header-cell" data-node-id="489:593">
+                    <p class="cell-text header">ROUND 1</p>
+                </div>
+                <div class="player-color-divider"></div>
+                <div class="score-cell active-player empty" data-node-id="489:595"></div>
+                <div class="score-cell standard-row" data-node-id="489:596">
+                    <p class="cell-text standard">64</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:597">
+                    <p class="cell-text standard">61</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:598">
+                    <p class="cell-text standard">67</p>
+                </div>
+                <div class="score-cell alternate-row" data-node-id="489:599">
+                    <p class="cell-text standard alternate">67</p>
+                </div>
+            </div>
+
+            <!-- ROUND 2 Column -->
+            <div class="table-column score-column" data-node-id="489:600">
+                <div class="header-cell" data-node-id="489:601">
+                    <p class="cell-text header">ROUND 2</p>
+                </div>
+                <div class="player-color-divider"></div>
+                <div class="score-cell active-player empty" data-node-id="489:603"></div>
+                <div class="score-cell standard-row" data-node-id="489:604">
+                    <p class="cell-text standard">64</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:605">
+                    <p class="cell-text standard">61</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:606">
+                    <p class="cell-text standard">67</p>
+                </div>
+                <div class="score-cell alternate-row" data-node-id="489:607">
+                    <p class="cell-text standard alternate">67</p>
+                </div>
+            </div>
+
+            <!-- ROUND 3 Column -->
+            <div class="table-column score-column" data-node-id="489:608">
+                <div class="header-cell" data-node-id="489:609">
+                    <p class="cell-text header">ROUND 3</p>
+                </div>
+                <div class="player-color-divider"></div>
+                <div class="score-cell active-player empty" data-node-id="489:611"></div>
+                <div class="score-cell standard-row" data-node-id="489:612">
+                    <p class="cell-text standard">64</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:613">
+                    <p class="cell-text standard">61</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:614">
+                    <p class="cell-text standard">67</p>
+                </div>
+                <div class="score-cell alternate-row" data-node-id="489:615">
+                    <p class="cell-text standard alternate">67</p>
+                </div>
+            </div>
+
+            <!-- ROUND 4 Column -->
+            <div class="table-column score-column" data-node-id="489:616">
+                <div class="header-cell" data-node-id="489:617">
+                    <p class="cell-text header">ROUND 4</p>
+                </div>
+                <div class="player-color-divider"></div>
+                <div class="score-cell active-player empty" data-node-id="489:619"></div>
+                <div class="score-cell standard-row" data-node-id="489:620">
+                    <p class="cell-text standard">64</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:621">
+                    <p class="cell-text standard">61</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:622">
+                    <p class="cell-text standard">67</p>
+                </div>
+                <div class="score-cell alternate-row" data-node-id="489:623">
+                    <p class="cell-text standard alternate">67</p>
+                </div>
+            </div>
+
+            <!-- POINTS Column -->
+            <div class="table-column score-column" data-node-id="489:624">
+                <div class="header-cell" data-node-id="489:625">
+                    <p class="cell-text header">Points</p>
+                </div>
+                <div class="player-color-divider"></div>
+                <div class="score-cell active-player aggregate" data-node-id="489:627">
+                    <p class="cell-text aggregate">293</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:628">
+                    <p class="cell-text standard">99</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:629">
+                    <p class="cell-text standard">98</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:630">
+                    <p class="cell-text standard">96</p>
+                </div>
+                <div class="score-cell alternate-row" data-node-id="489:631">
+                    <p class="cell-text standard alternate">87</p>
+                </div>
+            </div>
+
+            <!-- BONUS Column -->
+            <div class="table-column score-column" data-node-id="489:632">
+                <div class="header-cell" data-node-id="489:633">
+                    <p class="cell-text header">bonus</p>
+                </div>
+                <div class="player-color-divider"></div>
+                <div class="score-cell active-player aggregate" data-node-id="489:635">
+                    <p class="cell-text aggregate">16</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:636">
+                    <p class="cell-text standard">6</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:637">
+                    <p class="cell-text standard">5</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:638">
+                    <p class="cell-text standard">5</p>
+                </div>
+                <div class="score-cell alternate-row" data-node-id="489:639">
+                    <p class="cell-text standard alternate">3</p>
+                </div>
+            </div>
+
+            <!-- TOTAL Column -->
+            <div class="table-column score-column" data-node-id="489:640">
+                <div class="header-cell" data-node-id="489:641">
+                    <p class="cell-text header">Total</p>
+                </div>
+                <div class="player-color-divider"></div>
+                <div class="score-cell active-player aggregate" data-node-id="489:643">
+                    <p class="cell-text total-aggregate">309</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:644">
+                    <p class="cell-text standard">105</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:645">
+                    <p class="cell-text standard">103</p>
+                </div>
+                <div class="score-cell standard-row" data-node-id="489:646">
+                    <p class="cell-text standard">101</p>
+                </div>
+                <div class="score-cell alternate-row" data-node-id="489:647">
+                    <p class="cell-text standard alternate">90</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

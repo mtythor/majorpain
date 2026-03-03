@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Season View - Web</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700;800&family=Noto+Sans:wght@400;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0f0f0f;
+            font-family: 'Open Sans', sans-serif;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background Image */
+        .background-image {
+            position: absolute;
+            top: 86px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            z-index: 0;
+        }
+
+        .background-image img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        /* Header Styles */
+        .header-container {
+            position: absolute;
+            display: flex;
+            gap: 9px;
+            align-items: flex-start;
+            justify-content: space-between;
+            left: 0;
+            top: 0;
+            width: 100%;
+            padding: 0;
+            z-index: 10;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 29px;
+            height: 97px;
+            align-items: flex-start;
+            justify-content: flex-end;
+            padding-top: 8px;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+            position: relative;
+            flex: 1 1 0;
+            min-width: 595px;
+            max-width: calc(50% - 120px);
+        }
+
+        .nav-bar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding-left: 16px;
+            padding-right: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .nav-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            position: relative;
+            border-radius: 4px;
+            flex-shrink: 0;
+            width: 104px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+        }
+
+        .nav-button.selected {
+            background-color: #262626;
+        }
+
+        .nav-button-text {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .nav-button.selected .nav-button-text {
+            color: #fdc71c;
+        }
+
+        .nav-button.unselected .nav-button-text {
+            color: #ffffff;
+        }
+
+        .stripe {
+            height: 24px;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .stripe-line-1 {
+            position: absolute;
+            background-color: #fdc71c;
+            height: 10px;
+            left: 0;
+            top: 14px;
+            width: 100%;
+            right: 0;
+        }
+
+        .stripe-line-2 {
+            position: absolute;
+            background-color: #fdc71c;
+            height: 4px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            right: 0;
+        }
+
+        .stripe-line-3 {
+            position: absolute;
+            background-color: #00a900;
+            height: 2px;
+            left: 0;
+            top: 8px;
+            width: 100%;
+            right: 0;
+        }
+
+        .profile-pic-mp-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            flex-shrink: 0;
+        }
+
+        .logo-container {
+            height: 160px;
+            position: relative;
+            flex-shrink: 0;
+            width: 232px;
+        }
+
+        .logo-image-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .logo-image {
+            position: absolute;
+            height: 183.18%;
+            left: -15.15%;
+            max-width: none;
+            top: -28.8%;
+            width: 126.11%;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            align-items: flex-end;
+            padding-top: 8px;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+            position: relative;
+            flex: 1 1 0;
+            min-width: 595px;
+            max-width: calc(50% - 120px);
+        }
+
+        .header-right-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding-left: 0;
+            padding-right: 16px;
+            padding-top: 0;
+            padding-bottom: 0;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .icon-bar {
+            height: 34px;
+            position: relative;
+            flex-shrink: 0;
+            width: 72px;
+        }
+
+        .icon-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            position: absolute;
+            border-radius: 4px;
+            top: 0;
+            cursor: pointer;
+        }
+
+        .icon-button.selected {
+            background-color: #262626;
+            left: 0;
+        }
+
+        .icon-button.unselected {
+            background-color: transparent;
+            left: 40px;
+        }
+
+        .icon-button i {
+            font-size: 18px;
+            line-height: normal;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .icon-button.selected i {
+            color: #fdc71c;
+        }
+
+        .icon-button.unselected i {
+            color: #ffffff;
+        }
+
+        .divider-vertical {
+            display: flex;
+            height: 40px;
+            align-items: center;
+            padding: 8px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .divider-line {
+            background-color: #707070;
+            height: 100%;
+            flex-shrink: 0;
+            width: 1px;
+        }
+
+        .profile-pic {
+            overflow: hidden;
+            position: relative;
+            border-radius: 40px;
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+        }
+
+        .profile-pic-image-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .profile-pic-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        /* Season Page Container */
+        .season-page-container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* Season Picker */
+        .season-picker {
+            position: absolute;
+            background-color: #262626;
+            display: flex;
+            gap: 16px;
+            height: 48px;
+            align-items: center;
+            left: calc(50% - 1255px / 2);
+            padding: 8px;
+            border-radius: 4px;
+            top: 147px;
+            width: 246px;
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .season-picker-icon {
+            height: 24px;
+            position: relative;
+            flex-shrink: 0;
+            width: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .season-picker-icon i {
+            font-size: 18px;
+            color: #ffffff;
+        }
+
+        .season-picker-text {
+            display: flex;
+            flex: 1 0 0;
+            min-height: 0;
+            min-width: 0;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            position: relative;
+        }
+
+        .season-picker-text p {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            font-size: 12px;
+            color: #ffffff;
+        }
+
+        .season-picker-caret {
+            height: 10px;
+            position: relative;
+            flex-shrink: 0;
+            width: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .season-picker-caret i {
+            font-size: 10px;
+            color: #ffffff;
+        }
+
+        /* Main Content */
+        .main-content {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: flex-start;
+            left: 50%;
+            top: 214px;
+            transform: translateX(-50%);
+            z-index: 5;
+        }
+
+        /* Season Table */
+        .season-table-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .season-table-header {
+            display: flex;
+            gap: 17px;
+            align-items: flex-start;
+            padding: 8px;
+            position: relative;
+            border-radius: 20px 20px 0 0;
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .season-table-row {
+            background-color: #262626;
+            border: 1px solid #323232;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 8px;
+            position: relative;
+            border-radius: 8px;
+            flex-shrink: 0;
+            margin-bottom: 24px;
+        }
+
+        .season-table-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .season-header-cell {
+            display: flex;
+            height: 32px;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .season-header-cell.player-header {
+            width: 206px;
+            padding-left: 16px;
+        }
+
+        .season-header-cell.tournament-header {
+            width: 77px;
+            justify-content: center;
+        }
+
+        .season-header-cell.season-avg-header {
+            width: 77px;
+            justify-content: center;
+        }
+
+        .season-header-text {
+            font-family: 'Noto Sans', sans-serif;
+            font-weight: 700;
+            line-height: normal;
+            position: relative;
+            flex-shrink: 0;
+            font-size: 12px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .season-header-text.player-text {
+            font-size: 12px;
+        }
+
+        .season-header-text.tournament-text {
+            font-size: 10px;
+        }
+
+        .tournament-header-multiline {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tournament-header-multiline p {
+            font-family: 'Noto Sans', sans-serif;
+            font-weight: 700;
+            line-height: normal;
+            position: relative;
+            flex-shrink: 0;
+            font-size: 10px;
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 0;
+        }
+
+        .season-row-content {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            position: relative;
+            border-radius: 20px 20px 0 0;
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .season-row-player {
+            display: flex;
+            gap: 16px;
+            height: 64px;
+            align-items: center;
+            overflow: hidden;
+            padding-left: 10px;
+            position: relative;
+            flex-shrink: 0;
+            width: 206px;
+        }
+
+        .season-row-profile-pic {
+            position: relative;
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            overflow: hidden;
+            border-radius: 40px;
+        }
+
+        .season-row-profile-pic-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .season-row-profile-pic-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .season-row-player-name {
+            font-family: 'Noto Sans', sans-serif;
+            font-weight: 800;
+            line-height: normal;
+            position: relative;
+            flex-shrink: 0;
+            font-size: 18px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .season-row-divider {
+            display: flex;
+            align-items: center;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            position: relative;
+            align-self: stretch;
+            flex-shrink: 0;
+        }
+
+        .season-row-divider-line {
+            background-color: #707070;
+            height: 100%;
+            flex-shrink: 0;
+            width: 1px;
+        }
+
+        .season-row-divider-thick {
+            background-color: #707070;
+            height: 100%;
+            flex-shrink: 0;
+            width: 2px;
+        }
+
+        .season-row-divider-thick.mtythor {
+            background-color: #74a553;
+        }
+
+        .season-row-divider-thick.kristakay {
+            background-color: #e12c55;
+        }
+
+        .season-row-divider-thick.mrhattyhat {
+            background-color: #ff7340;
+        }
+
+        .season-row-divider-thick.atticus {
+            background-color: #3ca1ff;
+        }
+
+        .season-row-divider-thick.fatrando {
+            background-color: #88584d;
+        }
+
+        .season-row-score-cell {
+            display: flex;
+            flex-direction: column;
+            height: 64px;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding-left: 16px;
+            padding-right: 16px;
+            position: relative;
+            flex-shrink: 0;
+            width: 77px;
+        }
+
+        .season-row-score-cell.trophy {
+            gap: 8px;
+            line-height: normal;
+        }
+
+        .season-row-score {
+            font-family: 'Noto Sans', sans-serif;
+            font-weight: 700;
+            line-height: normal;
+            position: relative;
+            flex-shrink: 0;
+            font-size: 16px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .season-row-trophy {
+            position: absolute;
+            font-family: 'Font Awesome 7 Pro', sans-serif;
+            font-weight: 900;
+            left: 0;
+            font-style: normal;
+            font-size: 14px;
+            top: 8px;
+            color: #fdc71c;
+        }
+
+        .season-row-score-cell.season-avg {
+            width: 77px;
+        }
+
+        .season-row-score-cell.season-points {
+            width: 77px;
+        }
+
+        .season-row-score.season-avg-score,
+        .season-row-score.season-points-score {
+            font-size: 24px;
+        }
+
+        .season-row-bottom-divider {
+            background-color: #707070;
+            height: 1px;
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .season-row-bottom-divider.mtythor {
+            background-color: #74a553;
+        }
+
+        .season-row-bottom-divider.kristakay {
+            background-color: #e12c55;
+        }
+
+        .season-row-bottom-divider.mrhattyhat {
+            background-color: #ff7340;
+        }
+
+        .season-row-bottom-divider.atticus {
+            background-color: #3ca1ff;
+        }
+
+        .season-row-bottom-divider.fatrando {
+            background-color: #88584d;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Image -->
+    <div class="background-image">
+        <img src="Images/Masters.jpg" alt="Background" />
+    </div>
+
+    <div class="season-page-container">
+        <!-- Header -->
+        <div class="header-container">
+            <!-- Header Left Side -->
+            <div class="header-left">
+                <div class="nav-bar">
+                    <button class="nav-button unselected">
+                        <p class="nav-button-text">TOURNAMENT</p>
+                    </button>
+                    <button class="nav-button selected">
+                        <p class="nav-button-text">SEASON</p>
+                    </button>
+                </div>
+                <div class="stripe">
+                    <div class="stripe-line-1"></div>
+                    <div class="stripe-line-2"></div>
+                    <div class="stripe-line-3"></div>
+                </div>
+            </div>
+
+            <!-- Center Logo -->
+            <div class="profile-pic-mp-logo">
+                <div class="logo-container">
+                    <div class="logo-image-wrapper">
+                        <img alt="Major Pain Logo" class="logo-image" src="Images/MajorPainLogoTransparent.png" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Header Right Side -->
+            <div class="header-right">
+                <div class="header-right-controls">
+                    <div class="icon-bar" style="visibility: hidden;">
+                        <div class="icon-button selected">
+                            <i class="fa-solid fa-bars"></i>
+                        </div>
+                        <div class="icon-button unselected">
+                            <i class="fa-solid fa-grip"></i>
+                        </div>
+                    </div>
+                    <div class="divider-vertical" style="visibility: hidden;">
+                        <div class="divider-line"></div>
+                    </div>
+                    <div class="profile-pic">
+                        <div class="profile-pic-image-wrapper">
+                            <img alt="Profile Picture" class="profile-pic-image" src="Images/Player_MtyThor.jpg" />
+                        </div>
+                    </div>
+                </div>
+                <div class="stripe">
+                    <div class="stripe-line-1"></div>
+                    <div class="stripe-line-2"></div>
+                    <div class="stripe-line-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Season Picker -->
+        <div class="season-picker">
+            <div class="season-picker-icon">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <div class="season-picker-text">
+                <p data-season-picker-text>2026 SEASON</p>
+            </div>
+            <div class="season-picker-caret">
+                <i class="fa-solid fa-caret-down"></i>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="season-table-container">
+                <!-- Table Header -->
+                <div class="season-table-header">
+                    <div class="season-header-cell player-header">
+                        <p class="season-header-text player-text">PLAYER</p>
+                    </div>
+                    <div class="season-header-cell tournament-header">
+                        <div class="tournament-header-multiline">
+                            <p>PLAYERS</p>
+                            <p>CHAMPIONSHIP</p>
+                        </div>
+                    </div>
+                    <div class="season-header-cell tournament-header">
+                        <div class="tournament-header-multiline">
+                            <p>THE</p>
+                            <p>MASTERS</p>
+                        </div>
+                    </div>
+                    <div class="season-header-cell tournament-header">
+                        <div class="tournament-header-multiline">
+                            <p>PGA</p>
+                            <p>CHAMPIONSHIP</p>
+                        </div>
+                    </div>
+                    <div class="season-header-cell tournament-header">
+                        <div class="tournament-header-multiline">
+                            <p>U.S.</p>
+                            <p>OPEN</p>
+                        </div>
+                    </div>
+                    <div class="season-header-cell tournament-header">
+                        <div class="tournament-header-multiline">
+                            <p>OPEN</p>
+                            <p>CHAMPIONSHIP</p>
+                        </div>
+                    </div>
+                    <div class="season-header-cell tournament-header">
+                        <div class="tournament-header-multiline">
+                            <p>FEDEX</p>
+                            <p>ST. JUDE</p>
+                        </div>
+                    </div>
+                    <div class="season-header-cell tournament-header">
+                        <div class="tournament-header-multiline">
+                            <p>BMW</p>
+                            <p>CHAMPIONSHIP</p>
+                        </div>
+                    </div>
+                    <div class="season-header-cell tournament-header">
+                        <div class="tournament-header-multiline">
+                            <p>TOUR</p>
+                            <p>CHAMPIONSHIP</p>
+                        </div>
+                    </div>
+                    <div class="season-header-cell tournament-header">
+                        <div class="tournament-header-multiline">
+                            <p>RYDER</p>
+                            <p>CUP</p>
+                        </div>
+                    </div>
+                    <div class="season-header-cell season-avg-header">
+                        <p class="season-header-text tournament-text">SEASON<br />AVERAGE</p>
+                    </div>
+                    <div class="season-header-cell tournament-header">
+                        <div class="tournament-header-multiline">
+                            <p>SEASON</p>
+                            <p>POINTS</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MtyThor Row -->
+                <div class="season-table-row" data-season-player-id="1">
+                    <div class="season-row-content">
+                        <div class="season-row-player">
+                            <div class="season-row-profile-pic">
+                                <div class="season-row-profile-pic-wrapper">
+                                    <img alt="MtyThor" class="season-row-profile-pic-image" src="Images/Player_MtyThor.jpg" data-player-image />
+                                </div>
+                            </div>
+                            <p class="season-row-player-name" data-player-name>MtyThor</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell trophy" data-season-tournament-id="1">
+                            <p class="season-row-trophy"><i class="fa-solid fa-trophy"></i></p>
+                            <p class="season-row-score" data-season-tournament-score>242</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="2">
+                            <p class="season-row-score" data-season-tournament-score>259</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell trophy" data-season-tournament-id="3">
+                            <p class="season-row-trophy"><i class="fa-solid fa-trophy"></i></p>
+                            <p class="season-row-score" data-season-tournament-score>215</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="4">
+                            <p class="season-row-score" data-season-tournament-score>191</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="5">
+                            <p class="season-row-score" data-season-tournament-score>211</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="6">
+                            <p class="season-row-score" data-season-tournament-score>265</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell trophy" data-season-tournament-id="7">
+                            <p class="season-row-trophy"><i class="fa-solid fa-trophy"></i></p>
+                            <p class="season-row-score" data-season-tournament-score>292</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell trophy" data-season-tournament-id="8">
+                            <p class="season-row-trophy"><i class="fa-solid fa-trophy"></i></p>
+                            <p class="season-row-score" data-season-tournament-score>309</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="9">
+                            <p class="season-row-score" data-season-tournament-score>205</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-thick mtythor"></div>
+                        </div>
+                        <div class="season-row-score-cell season-avg">
+                            <p class="season-row-score season-avg-score" data-season-avg-score>243</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell season-points">
+                            <p class="season-row-score season-points-score" data-season-total-points>2,189</p>
+                        </div>
+                    </div>
+                    <div class="season-row-bottom-divider mtythor"></div>
+                </div>
+
+                <!-- KristaKay Row -->
+                <div class="season-table-row" data-season-player-id="2">
+                    <div class="season-row-content">
+                        <div class="season-row-player">
+                            <div class="season-row-profile-pic">
+                                <div class="season-row-profile-pic-wrapper">
+                                    <img alt="KristaKay" class="season-row-profile-pic-image" src="Images/Player_KristaKay.jpg" data-player-image />
+                                </div>
+                            </div>
+                            <p class="season-row-player-name" data-player-name>KristaKay</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell">
+                            <p class="season-row-score">200</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell trophy" data-season-tournament-id="1">
+                            <p class="season-row-trophy"><i class="fa-solid fa-trophy"></i></p>
+                            <p class="season-row-score" data-season-tournament-score>269</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="2">
+                            <p class="season-row-score" data-season-tournament-score>155</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="3">
+                            <p class="season-row-score" data-season-tournament-score>159</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell trophy" data-season-tournament-id="4">
+                            <p class="season-row-trophy"><i class="fa-solid fa-trophy"></i></p>
+                            <p class="season-row-score" data-season-tournament-score>261</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="5">
+                            <p class="season-row-score" data-season-tournament-score>264</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="6">
+                            <p class="season-row-score" data-season-tournament-score>248</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="7">
+                            <p class="season-row-score" data-season-tournament-score>280</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="8">
+                            <p class="season-row-score" data-season-tournament-score>265</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-thick kristakay"></div>
+                        </div>
+                        <div class="season-row-score-cell season-avg">
+                            <p class="season-row-score season-avg-score" data-season-avg-score>233</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell season-points">
+                            <p class="season-row-score season-points-score" data-season-total-points>2,101</p>
+                        </div>
+                    </div>
+                    <div class="season-row-bottom-divider kristakay"></div>
+                </div>
+
+                <!-- MrHattyHat Row -->
+                <div class="season-table-row" data-season-player-id="3">
+                    <div class="season-row-content">
+                        <div class="season-row-player">
+                            <div class="season-row-profile-pic">
+                                <div class="season-row-profile-pic-wrapper">
+                                    <img alt="MrHattyHat" class="season-row-profile-pic-image" src="Images/Player_MrHattyhat.jpg" data-player-image />
+                                </div>
+                            </div>
+                            <p class="season-row-player-name" data-player-name>MrHattyHat</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="1">
+                            <p class="season-row-score" data-season-tournament-score>174</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="2">
+                            <p class="season-row-score" data-season-tournament-score>260</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="3">
+                            <p class="season-row-score" data-season-tournament-score>0</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="4">
+                            <p class="season-row-score" data-season-tournament-score>238</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="5">
+                            <p class="season-row-score" data-season-tournament-score>258</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell trophy" data-season-tournament-id="6">
+                            <p class="season-row-trophy"><i class="fa-solid fa-trophy"></i></p>
+                            <p class="season-row-score" data-season-tournament-score>286</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="7">
+                            <p class="season-row-score" data-season-tournament-score>279</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="8">
+                            <p class="season-row-score" data-season-tournament-score>263</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell trophy" data-season-tournament-id="9">
+                            <p class="season-row-trophy"><i class="fa-solid fa-trophy"></i></p>
+                            <p class="season-row-score" data-season-tournament-score>275</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-thick mrhattyhat"></div>
+                        </div>
+                        <div class="season-row-score-cell season-avg">
+                            <p class="season-row-score season-avg-score" data-season-avg-score>226</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell season-points">
+                            <p class="season-row-score season-points-score" data-season-total-points>2,033</p>
+                        </div>
+                    </div>
+                    <div class="season-row-bottom-divider mrhattyhat"></div>
+                </div>
+
+                <!-- Atticus Row -->
+                <div class="season-table-row" data-season-player-id="4">
+                    <div class="season-row-content">
+                        <div class="season-row-player">
+                            <div class="season-row-profile-pic">
+                                <div class="season-row-profile-pic-wrapper">
+                                    <img alt="Atticus" class="season-row-profile-pic-image" src="Images/Player_Atticus.jpg" data-player-image />
+                                </div>
+                            </div>
+                            <p class="season-row-player-name" data-player-name>Atticus</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="1">
+                            <p class="season-row-score" data-season-tournament-score>156</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="2">
+                            <p class="season-row-score" data-season-tournament-score>168</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="3">
+                            <p class="season-row-score" data-season-tournament-score>144</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell trophy" data-season-tournament-id="4">
+                            <p class="season-row-trophy"><i class="fa-solid fa-trophy"></i></p>
+                            <p class="season-row-score" data-season-tournament-score>244</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="5">
+                            <p class="season-row-score" data-season-tournament-score>220</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="6">
+                            <p class="season-row-score" data-season-tournament-score>235</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="7">
+                            <p class="season-row-score" data-season-tournament-score>290</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="8">
+                            <p class="season-row-score" data-season-tournament-score>257</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="9">
+                            <p class="season-row-score" data-season-tournament-score>235</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-thick atticus"></div>
+                        </div>
+                        <div class="season-row-score-cell season-avg">
+                            <p class="season-row-score season-avg-score" data-season-avg-score>217</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell season-points">
+                            <p class="season-row-score season-points-score" data-season-total-points>1,949</p>
+                        </div>
+                    </div>
+                    <div class="season-row-bottom-divider atticus"></div>
+                </div>
+
+                <!-- Fat Rando Row -->
+                <div class="season-table-row" data-season-player-id="5">
+                    <div class="season-row-content">
+                        <div class="season-row-player">
+                            <div class="season-row-profile-pic">
+                                <div class="season-row-profile-pic-wrapper">
+                                    <img alt="Fat Rando" class="season-row-profile-pic-image" src="Images/Player_FatRando.jpg" data-player-image />
+                                </div>
+                            </div>
+                            <p class="season-row-player-name" data-player-name>Fat Rando</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="1">
+                            <p class="season-row-score" data-season-tournament-score>83</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="2">
+                            <p class="season-row-score" data-season-tournament-score>232</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="3">
+                            <p class="season-row-score" data-season-tournament-score>186</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="4">
+                            <p class="season-row-score" data-season-tournament-score>161</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="5">
+                            <p class="season-row-score" data-season-tournament-score>261</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="6">
+                            <p class="season-row-score" data-season-tournament-score>259</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="7">
+                            <p class="season-row-score" data-season-tournament-score>261</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="8">
+                            <p class="season-row-score" data-season-tournament-score>277</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell" data-season-tournament-id="9">
+                            <p class="season-row-score" data-season-tournament-score>--</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-thick fatrando"></div>
+                        </div>
+                        <div class="season-row-score-cell season-avg">
+                            <p class="season-row-score season-avg-score" data-season-avg-score>215</p>
+                        </div>
+                        <div class="season-row-divider">
+                            <div class="season-row-divider-line"></div>
+                        </div>
+                        <div class="season-row-score-cell season-points">
+                            <p class="season-row-score season-points-score" data-season-total-points>1,720</p>
+                        </div>
+                    </div>
+                    <div class="season-row-bottom-divider fatrando"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Nav button navigation
+            const tournamentButton = document.querySelector('.nav-button.unselected');
+            const seasonButton = document.querySelector('.nav-button.selected');
+
+            if (tournamentButton) {
+                tournamentButton.addEventListener('click', function() {
+                    window.location.href = 'tournament-list-view-web.html';
+                });
+            }
+
+            // Icon button navigation
+            const listViewButton = document.querySelector('.icon-button.selected');
+            const tableViewButton = document.querySelector('.icon-button.unselected');
+
+            if (listViewButton) {
+                listViewButton.addEventListener('click', function() {
+                    window.location.href = 'tournament-list-view-web.html';
+                });
+            }
+            if (tableViewButton) {
+                tableViewButton.addEventListener('click', function() {
+                    window.location.href = 'tournament-table-view-web.html';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

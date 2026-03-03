@@ -1,0 +1,147 @@
+[
+  {
+    "id": "1",
+    "name": "PLAYERS CHAMPIONSHIP",
+    "dateRange": "FEB 01 - 04, 2026",
+    "backgroundImage": "/images/Masters.jpg",
+    "state": "completed",
+    "draftStartDate": "2026-01-28",
+    "startDate": "2026-02-01",
+    "endDate": "2026-02-04",
+    "cutLine": 65,
+    "cutLineScore": 4,
+    "venue": {
+      "name": "TPC Sawgrass",
+      "par": 72,
+      "location": "Ponte Vedra Beach, Florida"
+    }
+  },
+  {
+    "id": "2",
+    "name": "THE MASTERS",
+    "dateRange": "MAR 01 - 04, 2026",
+    "backgroundImage": "/images/Masters.jpg",
+    "state": "completed",
+    "draftStartDate": "2026-02-26",
+    "startDate": "2026-03-01",
+    "endDate": "2026-03-04",
+    "cutLine": 50,
+    "venue": {
+      "name": "Augusta National Golf Club",
+      "par": 72,
+      "location": "Augusta, Georgia"
+    }
+  },
+  {
+    "id": "3",
+    "name": "PGA CHAMPIONSHIP",
+    "dateRange": "APR 01 - 04, 2026",
+    "backgroundImage": "/images/Masters.jpg",
+    "state": "completed",
+    "draftStartDate": "2026-03-28",
+    "startDate": "2026-04-01",
+    "endDate": "2026-04-04",
+    "cutLine": 70,
+    "venue": {
+      "name": "Valhalla Golf Club",
+      "par": 72,
+      "location": "Louisville, Kentucky"
+    }
+  },
+  {
+    "id": "4",
+    "name": "U.S. OPEN",
+    "dateRange": "MAY 01 - 04, 2026",
+    "backgroundImage": "/images/Masters.jpg",
+    "state": "draft",
+    "draftStartDate": "2026-04-28",
+    "startDate": "2026-05-01",
+    "endDate": "2026-05-04",
+    "cutLine": 60,
+    "venue": {
+      "name": "Pinehurst No. 2",
+      "par": 70,
+      "location": "Pinehurst, North Carolina"
+    }
+  },
+  {
+    "id": "5",
+    "name": "OPEN CHAMPIONSHIP",
+    "dateRange": "JUN 01 - 04, 2026",
+    "backgroundImage": "/images/Masters.jpg",
+    "state": "pre-draft",
+    "draftStartDate": "2026-05-28",
+    "startDate": "2026-06-01",
+    "endDate": "2026-06-04",
+    "cutLine": 70,
+    "venue": {
+      "name": "Royal Portrush",
+      "par": 71,
+      "location": "Portrush, Northern Ireland"
+    }
+  },
+  {
+    "id": "6",
+    "name": "FEDEX ST. JUDE",
+    "dateRange": "JUL 01 - 04, 2026",
+    "backgroundImage": "/images/Masters.jpg",
+    "state": "pre-draft",
+    "draftStartDate": "2026-06-28",
+    "startDate": "2026-07-01",
+    "endDate": "2026-07-04",
+    "cutLine": 65,
+    "venue": {
+      "name": "TPC Southwind",
+      "par": 70,
+      "location": "Memphis, Tennessee"
+    }
+  },
+  {
+    "id": "7",
+    "name": "BMW CHAMPIONSHIP",
+    "dateRange": "AUG 01 - 04, 2026",
+    "backgroundImage": "/images/Masters.jpg",
+    "state": "pre-draft",
+    "draftStartDate": "2026-07-28",
+    "startDate": "2026-08-01",
+    "endDate": "2026-08-04",
+    "cutLine": 50,
+    "venue": {
+      "name": "Castle Pines Golf Club",
+      "par": 72,
+      "location": "Castle Rock, Colorado"
+    }
+  },
+  {
+    "id": "8",
+    "name": "TOUR CHAMPIONSHIP",
+    "dateRange": "SEP 01 - 04, 2026",
+    "backgroundImage": "/images/Masters.jpg",
+    "state": "pre-draft",
+    "draftStartDate": "2026-08-28",
+    "startDate": "2026-09-01",
+    "endDate": "2026-09-04",
+    "cutLine": null,
+    "venue": {
+      "name": "East Lake Golf Club",
+      "par": 70,
+      "location": "Atlanta, Georgia"
+    }
+  },
+  {
+    "id": "9",
+    "name": "RYDER CUP",
+    "dateRange": "OCT 01 - 04, 2026",
+    "backgroundImage": "/images/Masters.jpg",
+    "state": "pre-draft",
+    "draftStartDate": "2026-09-28",
+    "startDate": "2026-10-01",
+    "endDate": "2026-10-04",
+    "cutLine": null,
+    "venue": {
+      "name": "Adare Manor",
+      "par": 72,
+      "location": "Limerick, Ireland"
+    }
+  }
+]

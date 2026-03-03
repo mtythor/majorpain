@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draft Page - Web</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700;800&family=Noto+Sans:wght@400;700;800&family=Consolas:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0f0f0f;
+            font-family: 'Open Sans', sans-serif;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background Image */
+        .background-image {
+            position: absolute;
+            top: 86px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            z-index: 0;
+        }
+
+        .background-image img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        /* Main Container */
+        .draft-page-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+            width: 100%;
+            min-height: 100vh;
+            z-index: 1;
+        }
+
+        /* Header Styles */
+        .header-container {
+            position: absolute;
+            display: flex;
+            gap: 9px;
+            align-items: flex-start;
+            justify-content: space-between;
+            left: 0;
+            top: 0;
+            width: 100%;
+            padding: 0;
+            z-index: 10;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 29px;
+            height: 97px;
+            align-items: flex-start;
+            justify-content: flex-end;
+            padding-top: 8px;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+            position: relative;
+            flex: 1 1 0;
+            min-width: 595px;
+            max-width: calc(50% - 120px);
+        }
+
+        .nav-bar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding-left: 16px;
+            padding-right: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .nav-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            position: relative;
+            border-radius: 4px;
+            flex-shrink: 0;
+            width: 104px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+        }
+
+        .nav-button.selected {
+            background-color: #262626;
+        }
+
+        .nav-button-text {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .nav-button.selected .nav-button-text {
+            color: #fdc71c;
+        }
+
+        .nav-button.unselected .nav-button-text {
+            color: #ffffff;
+        }
+
+        .stripe {
+            height: 24px;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .stripe-line-1 {
+            position: absolute;
+            background-color: #fdc71c;
+            height: 10px;
+            left: 0;
+            top: 14px;
+            width: 100%;
+            right: 0;
+        }
+
+        .stripe-line-2 {
+            position: absolute;
+            background-color: #fdc71c;
+            height: 4px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            right: 0;
+        }
+
+        .stripe-line-3 {
+            position: absolute;
+            background-color: #00a900;
+            height: 2px;
+            left: 0;
+            top: 8px;
+            width: 100%;
+            right: 0;
+        }
+
+        .profile-pic-mp-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            flex-shrink: 0;
+        }
+
+        .logo-container {
+            height: 160px;
+            position: relative;
+            flex-shrink: 0;
+            width: 232px;
+        }
+
+        .logo-image-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .logo-image {
+            position: absolute;
+            height: 183.18%;
+            left: -15.15%;
+            max-width: none;
+            top: -28.8%;
+            width: 126.11%;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            align-items: flex-end;
+            padding-top: 8px;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+            position: relative;
+            flex: 1 1 0;
+            min-width: 595px;
+            max-width: calc(50% - 120px);
+        }
+
+        .header-right-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding-left: 0;
+            padding-right: 16px;
+            padding-top: 0;
+            padding-bottom: 0;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .icon-bar {
+            height: 34px;
+            position: relative;
+            flex-shrink: 0;
+            width: 72px;
+        }
+
+        .icon-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            position: absolute;
+            border-radius: 4px;
+            top: 0;
+            cursor: pointer;
+        }
+
+        .icon-button.selected {
+            background-color: #262626;
+            left: 0;
+        }
+
+        .icon-button.unselected {
+            background-color: transparent;
+            left: 40px;
+        }
+
+        .icon-button i {
+            font-size: 18px;
+            line-height: normal;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .icon-button.selected i {
+            color: #fdc71c;
+        }
+
+        .icon-button.unselected i {
+            color: #ffffff;
+        }
+
+        .divider-vertical {
+            display: flex;
+            height: 40px;
+            align-items: center;
+            padding: 8px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .divider-line {
+            background-color: #707070;
+            height: 100%;
+            flex-shrink: 0;
+            width: 1px;
+        }
+
+        .profile-pic {
+            overflow: hidden;
+            position: relative;
+            border-radius: 40px;
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+        }
+
+        .profile-pic-image-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .profile-pic-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-start;
+            left: 50%;
+            top: 147px;
+            transform: translateX(-50%);
+            z-index: 5;
+            width: 1006px;
+        }
+
+        /* Tournament Picker */
+        .tournament-picker {
+            position: relative;
+            width: 239px;
+            height: 48px;
+            z-index: 1000;
+        }
+
+        .tournament-picker-header {
+            position: absolute;
+            background-color: #262626;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+            left: 0;
+            padding: 8px;
+            border-radius: 4px 4px 0 0;
+            top: 0.5px;
+            width: 100%;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .tournament-picker-icon {
+            height: 24px;
+            position: relative;
+            flex-shrink: 0;
+            width: 17px;
+            overflow: hidden;
+        }
+
+        .tournament-picker-icon-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .tournament-picker-icon-image {
+            position: absolute;
+            height: 188.24%;
+            left: -75%;
+            max-width: none;
+            top: -44.12%;
+            width: 266.67%;
+        }
+
+        .tournament-picker-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+            flex: 1;
+        }
+
+        .tournament-picker-name {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            color: #ffffff;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .tournament-picker-date {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            font-size: 11px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            color: #ffffff;
+        }
+
+        .tournament-picker-caret {
+            height: 10px;
+            position: relative;
+            flex-shrink: 0;
+            width: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tournament-picker-caret i {
+            font-size: 10px;
+            color: #ffffff;
+        }
+
+        /* Draft Banner */
+        .draft-banner {
+            background-color: rgba(60, 161, 255, 0.2);
+            border: 1px solid #3ca1ff;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 8px;
+            position: relative;
+            border-radius: 4px;
+            flex-shrink: 0;
+            width: 1006px;
+        }
+
+        .draft-banner-profile-pic {
+            overflow: hidden;
+            position: relative;
+            border-radius: 40px;
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+        }
+
+        .draft-banner-profile-pic-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .draft-banner-profile-pic-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .draft-banner-text {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            color: #ffffff;
+        }
+
+        .draft-banner-text .player-name {
+            font-weight: 800;
+        }
+
+        .draft-banner-text .has-next-pick {
+            font-weight: 400;
+        }
+
+        /* Draft Table Container */
+        .draft-table-container {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        /* Draft Table */
+        .draft-table {
+            display: flex;
+            align-items: center;
+            padding-right: 1px;
+            position: relative;
+            flex-shrink: 0;
+            width: 700px;
+        }
+
+        .draft-table-column {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-right: -1px;
+            padding-bottom: 1px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .draft-table-column.golfer-column {
+            flex: 1 0 0;
+            min-width: 0;
+            min-height: 0;
+        }
+
+        .draft-table-column.rank-column,
+        .draft-table-column.odds-column,
+        .draft-table-column.draft-column {
+            width: 108px;
+        }
+
+        .draft-table-cell {
+            display: flex;
+            height: 48px;
+            align-items: center;
+            margin-bottom: -1px;
+            overflow: hidden;
+            padding-left: 16px;
+            padding-right: 16px;
+            position: relative;
+            flex-shrink: 0;
+            width: 100%;
+            border: 1px solid #323232;
+        }
+
+        .draft-table-cell.header-cell {
+            height: 32px;
+            background-color: #151515;
+            justify-content: center;
+            position: relative;
+        }
+
+        .draft-table-cell.header-cell.rank-header {
+            padding-left: 16px;
+            padding-right: 8px;
+            justify-content: center;
+            position: relative;
+        }
+
+        .draft-table-cell.data-cell {
+            justify-content: center;
+        }
+
+        .draft-table-cell.data-cell.alt-row {
+            background-color: #1f1f1f;
+        }
+
+        .draft-table-cell.data-cell.standard-row {
+            background-color: #262626;
+        }
+
+        .draft-table-cell.golfer-cell {
+            justify-content: flex-start;
+        }
+
+        .draft-table-cell-text {
+            font-family: 'Noto Sans', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: normal;
+            position: relative;
+            flex-shrink: 0;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .draft-table-cell-text.header-text {
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .draft-table-cell-text.golfer-text {
+            font-size: 16px;
+        }
+
+        .draft-table-cell-text.header-text.golfer-text {
+            font-size: 12px;
+        }
+
+        .rank-header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .rank-header-text {
+            font-family: 'Noto Sans', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            line-height: normal;
+            position: relative;
+            text-align: center;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .rank-header-caret {
+            height: 10px;
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            flex-shrink: 0;
+            width: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        .rank-header-caret i {
+            font-size: 8px;
+            color: #ffffff;
+        }
+
+        .odds-header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .odds-header-text {
+            font-family: 'Noto Sans', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            line-height: normal;
+            position: relative;
+            text-align: center;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .odds-header-caret {
+            height: 10px;
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            flex-shrink: 0;
+            width: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .odds-header-caret i {
+            font-size: 8px;
+            color: #ffffff;
+        }
+
+        .draft-cell-profile-pic {
+            overflow: hidden;
+            position: relative;
+            border-radius: 40px;
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+        }
+
+        .draft-cell-profile-pic-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .draft-cell-profile-pic-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .draft-select-button {
+            font-family: 'Noto Sans', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: normal;
+            position: relative;
+            flex-shrink: 0;
+            text-align: center;
+            color: #3fa2ff;
+            cursor: pointer;
+        }
+
+        /* Play by Play Panel */
+        .play-by-play-panel {
+            background-color: #070707;
+            display: flex;
+            flex-direction: column;
+            height: 925px;
+            align-items: flex-start;
+            overflow: hidden;
+            padding: 8px;
+            position: relative;
+            flex-shrink: 0;
+            width: 290px;
+        }
+
+        .play-by-play-content {
+            font-family: 'Consolas', monospace;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            font-size: 12px;
+            color: #ffffff;
+            width: 100%;
+        }
+
+        .play-by-play-line {
+            line-height: 18px;
+            margin-bottom: 0;
+        }
+
+        .play-by-play-line .player-name {
+            font-weight: 700;
+        }
+
+        .play-by-play-separator {
+            line-height: 18px;
+            margin-bottom: 0;
+        }
+
+        /* Confirmation Modal */
+        .modal-scrim {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.75);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .modal-scrim.show {
+            display: flex;
+        }
+
+        .confirmation-modal {
+            position: absolute;
+            background-color: #262626;
+            display: flex;
+            flex-direction: column;
+            gap: 36px;
+            align-items: flex-start;
+            overflow: hidden;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+            width: 409px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            line-height: normal;
+            position: relative;
+            flex-shrink: 0;
+            text-align: center;
+            color: #ffffff;
+            width: 377px;
+        }
+
+        .modal-header-title {
+            font-family: 'Noto Sans', sans-serif;
+            font-weight: 800;
+            font-size: 16px;
+            position: relative;
+            flex-shrink: 0;
+            color: #ffffff;
+        }
+
+        .modal-close-button {
+            font-family: 'Font Awesome 7 Pro', sans-serif;
+            font-weight: 300;
+            font-size: 18px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            width: 16px;
+            color: #ffffff;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            font-family: 'Noto Sans', sans-serif;
+            line-height: 24px;
+            position: relative;
+            flex-shrink: 0;
+            font-size: 14px;
+            text-align: center;
+            color: #ffffff;
+            width: 100%;
+        }
+
+        .modal-content-text {
+            margin-bottom: 0;
+            font-weight: 400;
+        }
+
+        .modal-golfer-name {
+            margin-bottom: 0;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .modal-button-bar {
+            border-top: 1px solid #707070;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 16px;
+            position: relative;
+            flex-shrink: 0;
+            width: 377px;
+        }
+
+        .modal-button {
+            background-color: #222;
+            border: 1px solid;
+            display: flex;
+            flex-direction: column;
+            height: 32px;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            position: relative;
+            border-radius: 4px;
+            flex-shrink: 0;
+            width: 100px;
+            cursor: pointer;
+        }
+
+        .modal-button-cancel {
+            border-color: #707070;
+        }
+
+        .modal-button-confirm {
+            border-color: #ffc61c;
+        }
+
+        .modal-button-text {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            font-size: 12px;
+            text-align: center;
+            color: #ffffff;
+            width: 100%;
+        }
+
+        .modal-button-confirm .modal-button-text {
+            font-weight: 800;
+            color: #fdc71c;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Image -->
+    <div class="background-image">
+        <img src="Images/Masters.jpg" alt="Background" />
+    </div>
+
+    <div class="draft-page-container">
+        <!-- Header -->
+        <div class="header-container">
+            <!-- Header Left Side -->
+            <div class="header-left">
+                <div class="nav-bar">
+                    <button class="nav-button selected">
+                        <p class="nav-button-text">TOURNAMENT</p>
+                    </button>
+                    <button class="nav-button unselected">
+                        <p class="nav-button-text">SEASON</p>
+                    </button>
+                </div>
+                <div class="stripe">
+                    <div class="stripe-line-1"></div>
+                    <div class="stripe-line-2"></div>
+                    <div class="stripe-line-3"></div>
+                </div>
+            </div>
+
+            <!-- Center Logo -->
+            <div class="profile-pic-mp-logo">
+                <div class="logo-container">
+                    <div class="logo-image-wrapper">
+                        <img alt="Major Pain Logo" class="logo-image" src="Images/MajorPainLogoTransparent.png" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Header Right Side -->
+            <div class="header-right">
+                <div class="header-right-controls">
+                    <div class="icon-bar">
+                        <div class="icon-button selected">
+                            <i class="fa-solid fa-bars"></i>
+                        </div>
+                        <div class="icon-button unselected">
+                            <i class="fa-solid fa-grip"></i>
+                        </div>
+                    </div>
+                    <div class="divider-vertical">
+                        <div class="divider-line"></div>
+                    </div>
+                    <div class="profile-pic">
+                        <div class="profile-pic-image-wrapper">
+                            <img alt="Profile Picture" class="profile-pic-image" src="Images/Player_MtyThor.jpg" />
+                        </div>
+                    </div>
+                </div>
+                <div class="stripe">
+                    <div class="stripe-line-1"></div>
+                    <div class="stripe-line-2"></div>
+                    <div class="stripe-line-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Tournament Picker -->
+            <div class="tournament-picker">
+                <div class="tournament-picker-header">
+                    <div class="tournament-picker-icon">
+                        <div class="tournament-picker-icon-wrapper">
+                            <img alt="Golfer Icon" class="tournament-picker-icon-image" src="Images/icon_golfer.png" />
+                        </div>
+                    </div>
+                    <div class="tournament-picker-info">
+                        <p class="tournament-picker-name" data-tournament-name>THE OPEN CHAMPIONSHIP</p>
+                        <p class="tournament-picker-date" data-tournament-date>APR 09 - 12, 2026</p>
+                    </div>
+                    <div class="tournament-picker-caret">
+                        <i class="fa-solid fa-caret-down"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Draft Banner -->
+            <div class="draft-banner">
+                <div class="draft-banner-profile-pic">
+                    <div class="draft-banner-profile-pic-wrapper">
+                        <img alt="Atticus Profile" class="draft-banner-profile-pic-image" src="Images/Player_Atticus.jpg" />
+                    </div>
+                </div>
+                <p class="draft-banner-text">
+                    <span class="player-name" data-draft-banner-player-name>Atticus</span> <span class="has-next-pick">has the next pick...</span>
+                </p>
+            </div>
+
+            <!-- Draft Table Container -->
+            <div class="draft-table-container">
+                <!-- Draft Table -->
+                <div class="draft-table">
+                    <!-- Golfer Column -->
+                    <div class="draft-table-column golfer-column">
+                        <div class="draft-table-cell header-cell golfer-cell">
+                            <p class="draft-table-cell-text header-text golfer-text">Golfer</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row golfer-cell" data-golfer-row="0">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Scottie Scheffler</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row golfer-cell" data-golfer-row="1">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Michael Kim</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row golfer-cell" data-golfer-row="2">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Brian Harman</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row golfer-cell" data-golfer-row="3">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Sami Valimaki</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row golfer-cell" data-golfer-row="4">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Kurt Kitayama</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row golfer-cell" data-golfer-row="5">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Max Greyserman</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row golfer-cell" data-golfer-row="6">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Andrew Novak</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row golfer-cell" data-golfer-row="7">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Michael Brennan</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row golfer-cell" data-golfer-row="8">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Patrick Cantlay</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row golfer-cell" data-golfer-row="9">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Matt Fitzpatrick</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row golfer-cell" data-golfer-row="10">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Alexander Noren</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row golfer-cell" data-golfer-row="11">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Sepp Straka</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row golfer-cell" data-golfer-row="12">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Harris English</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row golfer-cell" data-golfer-row="13">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Justin Rose</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row golfer-cell" data-golfer-row="14">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Ben Griffin</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row golfer-cell" data-golfer-row="15">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Robert MacIntyre</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row golfer-cell" data-golfer-row="16">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Russell Henley</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row golfer-cell" data-golfer-row="17">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Sam Burns</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row golfer-cell" data-golfer-row="18">
+                            <p class="draft-table-cell-text golfer-text" data-golfer-name>Ludvig Aberg</p>
+                        </div>
+                    </div>
+
+                    <!-- Rank Column -->
+                    <div class="draft-table-column rank-column">
+                        <div class="draft-table-cell header-cell rank-header">
+                            <div class="rank-header-content">
+                                <p class="rank-header-text">rank</p>
+                                <div class="rank-header-caret">
+                                    <i class="fa-solid fa-caret-down"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="0">
+                            <p class="draft-table-cell-text" data-golfer-rank>11</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="1">
+                            <p class="draft-table-cell-text" data-golfer-rank>12</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="2">
+                            <p class="draft-table-cell-text" data-golfer-rank>13</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="3">
+                            <p class="draft-table-cell-text" data-golfer-rank>18</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="4">
+                            <p class="draft-table-cell-text" data-golfer-rank>21</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="5">
+                            <p class="draft-table-cell-text" data-golfer-rank>5</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="6">
+                            <p class="draft-table-cell-text" data-golfer-rank>8</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="7">
+                            <p class="draft-table-cell-text" data-golfer-rank>24</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="8">
+                            <p class="draft-table-cell-text" data-golfer-rank>25</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="9">
+                            <p class="draft-table-cell-text" data-golfer-rank>1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="10">
+                            <p class="draft-table-cell-text" data-golfer-rank>10</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="11">
+                            <p class="draft-table-cell-text" data-golfer-rank>7</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="12">
+                            <p class="draft-table-cell-text" data-golfer-rank>32</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="13">
+                            <p class="draft-table-cell-text" data-golfer-rank>33</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="14">
+                            <p class="draft-table-cell-text" data-golfer-rank>34</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="15">
+                            <p class="draft-table-cell-text" data-golfer-rank>35</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="16">
+                            <p class="draft-table-cell-text" data-golfer-rank>36</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="17">
+                            <p class="draft-table-cell-text" data-golfer-rank>37</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="18">
+                            <p class="draft-table-cell-text" data-golfer-rank>38</p>
+                        </div>
+                    </div>
+
+                    <!-- Odds Column -->
+                    <div class="draft-table-column odds-column">
+                        <div class="draft-table-cell header-cell odds-header">
+                            <div class="odds-header-content">
+                                <p class="odds-header-text">ODDS</p>
+                                <div class="odds-header-caret" style="display: none;">
+                                    <i class="fa-solid fa-caret-down"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="0">
+                            <p class="draft-table-cell-text" data-golfer-odds>3 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="1">
+                            <p class="draft-table-cell-text" data-golfer-odds>25 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="2">
+                            <p class="draft-table-cell-text" data-golfer-odds>28 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="3">
+                            <p class="draft-table-cell-text" data-golfer-odds>18 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="4">
+                            <p class="draft-table-cell-text" data-golfer-odds>60 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="5">
+                            <p class="draft-table-cell-text" data-golfer-odds>45 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="6">
+                            <p class="draft-table-cell-text" data-golfer-odds>35 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="7">
+                            <p class="draft-table-cell-text" data-golfer-odds>45 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="8">
+                            <p class="draft-table-cell-text" data-golfer-odds>20 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="9">
+                            <p class="draft-table-cell-text" data-golfer-odds>30 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="10">
+                            <p class="draft-table-cell-text" data-golfer-odds>20 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="11">
+                            <p class="draft-table-cell-text" data-golfer-odds>25 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="12">
+                            <p class="draft-table-cell-text" data-golfer-odds>200 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="13">
+                            <p class="draft-table-cell-text" data-golfer-odds>150 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="14">
+                            <p class="draft-table-cell-text" data-golfer-odds>75 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="15">
+                            <p class="draft-table-cell-text" data-golfer-odds>130 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="16">
+                            <p class="draft-table-cell-text" data-golfer-odds>45 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="17">
+                            <p class="draft-table-cell-text" data-golfer-odds>100 / 1</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="18">
+                            <p class="draft-table-cell-text" data-golfer-odds>130 / 1</p>
+                        </div>
+                    </div>
+
+                    <!-- Draft Column -->
+                    <div class="draft-table-column draft-column">
+                        <div class="draft-table-cell header-cell">
+                            <p class="draft-table-cell-text header-text">Draft</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="0" data-draft-selection>
+                            <div class="draft-cell-profile-pic">
+                                <div class="draft-cell-profile-pic-wrapper">
+                                    <img alt="Drafted Player" class="draft-cell-profile-pic-image" src="Images/Player_Atticus.jpg" data-draft-player-image />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="1" data-draft-selection>
+                            <p class="draft-select-button">SELECT</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="2" data-draft-selection>
+                            <p class="draft-select-button">SELECT</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="3" data-draft-selection>
+                            <div class="draft-cell-profile-pic">
+                                <div class="draft-cell-profile-pic-wrapper">
+                                    <img alt="Drafted Player" class="draft-cell-profile-pic-image" src="Images/Player_KristaKay.jpg" data-draft-player-image />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="4" data-draft-selection>
+                            <div class="draft-cell-profile-pic">
+                                <div class="draft-cell-profile-pic-wrapper">
+                                    <img alt="Drafted Player" class="draft-cell-profile-pic-image" src="Images/Player_MtyThor.jpg" data-draft-player-image />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="5" data-draft-selection>
+                            <p class="draft-select-button">SELECT</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="6" data-draft-selection>
+                            <p class="draft-select-button">SELECT</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="7" data-draft-selection>
+                            <p class="draft-select-button">SELECT</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="8" data-draft-selection>
+                            <p class="draft-select-button">SELECT</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="9" data-draft-selection>
+                            <p class="draft-select-button">SELECT</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="10" data-draft-selection>
+                            <p class="draft-select-button">SELECT</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="11" data-draft-selection>
+                            <p class="draft-select-button">SELECT</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="12" data-draft-selection>
+                            <p class="draft-select-button">SELECT</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="13" data-draft-selection>
+                            <p class="draft-select-button">SELECT</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="14" data-draft-selection>
+                            <p class="draft-select-button">SELECT</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="15" data-draft-selection>
+                            <p class="draft-select-button">SELECT</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="16" data-draft-selection>
+                            <p class="draft-select-button">SELECT</p>
+                        </div>
+                        <div class="draft-table-cell data-cell alt-row" data-golfer-row="17" data-draft-selection>
+                            <p class="draft-select-button">SELECT</p>
+                        </div>
+                        <div class="draft-table-cell data-cell standard-row" data-golfer-row="18" data-draft-selection>
+                            <p class="draft-select-button">SELECT</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Play by Play Panel -->
+                <div class="play-by-play-panel">
+                    <div class="play-by-play-content">
+                        <p class="play-by-play-line" data-playbyplay-index="0">
+                            <span class="player-name" data-playbyplay-player-name>FAT RANDO</span> steals #<span data-playbyplay-golfer-rank>1</span> <span data-playbyplay-golfer-name>Scottie Scheffler</span>
+                        </p>
+                        <p class="play-by-play-line" data-playbyplay-index="1">
+                            <span class="player-name" data-playbyplay-player-name>FAT RANDO</span> steals #<span data-playbyplay-golfer-rank>2</span> <span data-playbyplay-golfer-name>Rory McIlroy</span>
+                        </p>
+                        <p class="play-by-play-line" data-playbyplay-index="2">
+                            <span class="player-name" data-playbyplay-player-name>FAT RANDO</span> steals #<span data-playbyplay-golfer-rank>10</span> <span data-playbyplay-golfer-name>Keegan Bradley</span>
+                        </p>
+                        <p class="play-by-play-line" data-playbyplay-index="3">
+                            <span class="player-name" data-playbyplay-player-name>FAT RANDO</span> steals #<span data-playbyplay-golfer-rank>16</span> <span data-playbyplay-golfer-name>Wyndham Clark</span>
+                        </p>
+                        <p class="play-by-play-separator" data-playbyplay-separator>---------------------------------</p>
+                        <p class="play-by-play-line" data-playbyplay-index="4">
+                            <span class="player-name" data-playbyplay-player-name>MTYTHOR</span> selects #<span data-playbyplay-golfer-rank>5</span> <span data-playbyplay-golfer-name>Russell Henley</span>
+                        </p>
+                        <p class="play-by-play-line" data-playbyplay-index="5">
+                            <span class="player-name" data-playbyplay-player-name>KRISTAKAY</span> selects #<span data-playbyplay-golfer-rank>8</span> <span data-playbyplay-golfer-name>Ben Griffin</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal-scrim" id="confirmationModal">
+        <div class="confirmation-modal">
+            <div class="modal-header">
+                <p class="modal-header-title">CONFIRM SELECTION</p>
+                <button class="modal-close-button" id="modalCloseButton">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <p class="modal-content-text">Please confirm your draft selection:</p>
+                <p class="modal-golfer-name" id="modalGolferName"></p>
+            </div>
+            <div class="modal-button-bar">
+                <button class="modal-button modal-button-cancel" id="modalCancelButton">
+                    <p class="modal-button-text">CANCEL</p>
+                </button>
+                <button class="modal-button modal-button-confirm" id="modalConfirmButton">
+                    <p class="modal-button-text">CONFIRM</p>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tournament picker functionality
+            const tournamentPicker = document.querySelector('.tournament-picker');
+            const pickerHeader = document.querySelector('.tournament-picker-header');
+            const caret = document.querySelector('.tournament-picker-caret i');
+
+            if (pickerHeader && caret) {
+                pickerHeader.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    tournamentPicker.classList.toggle('open');
+                    
+                    if (tournamentPicker.classList.contains('open')) {
+                        caret.classList.remove('fa-caret-down');
+                        caret.classList.add('fa-caret-up');
+                    } else {
+                        caret.classList.remove('fa-caret-up');
+                        caret.classList.add('fa-caret-down');
+                    }
+                });
+
+                document.addEventListener('click', function(e) {
+                    if (!tournamentPicker.contains(e.target)) {
+                        tournamentPicker.classList.remove('open');
+                        caret.classList.remove('fa-caret-up');
+                        caret.classList.add('fa-caret-down');
+                    }
+                });
+            }
+
+            // Icon button navigation
+            const listViewButton = document.querySelector('.icon-button.selected');
+            const tableViewButton = document.querySelector('.icon-button.unselected');
+
+            if (listViewButton) {
+                listViewButton.addEventListener('click', function() {
+                    window.location.href = 'tournament-list-view-web.html';
+                });
+            }
+            if (tableViewButton) {
+                tableViewButton.addEventListener('click', function() {
+                    window.location.href = 'tournament-table-view-web.html';
+                });
+            }
+
+            // Table sorting functionality
+            const rankHeader = document.querySelector('.rank-header');
+            const oddsHeader = document.querySelector('.odds-header');
+            const rankCaret = document.querySelector('.rank-header-caret');
+            const oddsCaret = document.querySelector('.odds-header-caret');
+            const golferColumn = document.querySelector('.golfer-column');
+            const rankColumn = document.querySelector('.rank-column');
+            const oddsColumn = document.querySelector('.odds-column');
+            const draftColumn = document.querySelector('.draft-column');
+
+            function sortTable(columnType) {
+                // Hide all carets
+                if (rankCaret) rankCaret.style.display = 'none';
+                if (oddsCaret) oddsCaret.style.display = 'none';
+
+                // Show caret for active column
+                if (columnType === 'rank' && rankCaret) {
+                    rankCaret.style.display = 'flex';
+                } else if (columnType === 'odds' && oddsCaret) {
+                    oddsCaret.style.display = 'flex';
+                }
+                // Get all data cells (excluding headers) from each column
+                const golferCells = Array.from(golferColumn.querySelectorAll('.data-cell'));
+                const rankCells = Array.from(rankColumn.querySelectorAll('.data-cell'));
+                const oddsCells = Array.from(oddsColumn.querySelectorAll('.data-cell'));
+                const draftCells = Array.from(draftColumn.querySelectorAll('.data-cell'));
+
+                // Create array of row objects with all data
+                const rows = golferCells.map((cell, index) => {
+                    const golferText = cell.querySelector('.draft-table-cell-text').textContent.trim();
+                    const rankText = rankCells[index].querySelector('.draft-table-cell-text').textContent.trim();
+                    const oddsText = oddsCells[index].querySelector('.draft-table-cell-text').textContent.trim();
+                    const draftContent = draftCells[index].innerHTML;
+
+                    // Parse rank (simple number)
+                    const rank = parseInt(rankText, 10);
+
+                    // Parse odds (format: "3 / 1" -> extract first number for sorting)
+                    const oddsMatch = oddsText.match(/(\d+)\s*\/\s*\d+/);
+                    const odds = oddsMatch ? parseInt(oddsMatch[1], 10) : 0;
+
+                    return {
+                        golfer: golferText,
+                        rank: rank,
+                        rankText: rankText,
+                        odds: odds,
+                        oddsText: oddsText,
+                        draft: draftContent
+                    };
+                });
+
+                // Sort based on column type
+                if (columnType === 'rank') {
+                    rows.sort((a, b) => a.rank - b.rank);
+                } else if (columnType === 'odds') {
+                    rows.sort((a, b) => a.odds - b.odds);
+                }
+
+                // Rebuild all columns with sorted data, maintaining alternating row colors
+                rows.forEach((row, index) => {
+                    const rowClass = index % 2 === 0 ? 'standard-row' : 'alt-row';
+                    
+                    // Update golfer cell
+                    golferCells[index].className = `draft-table-cell data-cell ${rowClass} golfer-cell`;
+                    golferCells[index].querySelector('.draft-table-cell-text').textContent = row.golfer;
+
+                    // Update rank cell
+                    rankCells[index].className = `draft-table-cell data-cell ${rowClass}`;
+                    rankCells[index].querySelector('.draft-table-cell-text').textContent = row.rankText;
+
+                    // Update odds cell
+                    oddsCells[index].className = `draft-table-cell data-cell ${rowClass}`;
+                    oddsCells[index].querySelector('.draft-table-cell-text').textContent = row.oddsText;
+
+                    // Update draft cell
+                    draftCells[index].className = `draft-table-cell data-cell ${rowClass}`;
+                    draftCells[index].innerHTML = row.draft;
+                });
+            }
+
+            // Add click handlers to headers
+            if (rankHeader) {
+                rankHeader.style.cursor = 'pointer';
+                rankHeader.addEventListener('click', function() {
+                    sortTable('rank');
+                });
+            }
+
+            if (oddsHeader) {
+                oddsHeader.style.cursor = 'pointer';
+                oddsHeader.addEventListener('click', function() {
+                    sortTable('odds');
+                });
+            }
+
+            // Confirmation Modal functionality
+            const confirmationModal = document.getElementById('confirmationModal');
+            const modalCloseButton = document.getElementById('modalCloseButton');
+            const modalCancelButton = document.getElementById('modalCancelButton');
+            const modalConfirmButton = document.getElementById('modalConfirmButton');
+            const modalGolferName = document.getElementById('modalGolferName');
+            const selectButtons = document.querySelectorAll('.draft-select-button');
+
+            function openModal(golferName) {
+                modalGolferName.textContent = golferName;
+                confirmationModal.classList.add('show');
+            }
+
+            function closeModal() {
+                confirmationModal.classList.remove('show');
+            }
+
+            // Open modal when clicking SELECT buttons
+            selectButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    // Get the golfer name from the same row
+                    const row = button.closest('.draft-table-cell');
+                    const rowIndex = Array.from(row.parentElement.children).indexOf(row) - 1; // -1 for header
+                    const golferCells = document.querySelectorAll('.golfer-column .data-cell');
+                    if (golferCells[rowIndex]) {
+                        const golferName = golferCells[rowIndex].querySelector('.draft-table-cell-text').textContent.trim();
+                        openModal(golferName);
+                    }
+                });
+            });
+
+            // Close modal handlers
+            if (modalCloseButton) {
+                modalCloseButton.addEventListener('click', closeModal);
+            }
+
+            if (modalCancelButton) {
+                modalCancelButton.addEventListener('click', closeModal);
+            }
+
+            if (modalConfirmButton) {
+                modalConfirmButton.addEventListener('click', function() {
+                    // TODO: Add confirmation logic here when backend is ready
+                    closeModal();
+                });
+            }
+
+            // Close modal when clicking on scrim
+            if (confirmationModal) {
+                confirmationModal.addEventListener('click', function(e) {
+                    if (e.target === confirmationModal) {
+                        closeModal();
+                    }
+                });
+            }
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && confirmationModal.classList.contains('show')) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

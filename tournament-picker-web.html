@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament Picker Component</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            font-family: 'Open Sans', sans-serif;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Tournament Picker Dropdown */
+        .tournament-picker {
+            position: relative;
+            width: 239px;
+            height: 48px;
+            z-index: 1000;
+        }
+
+        .tournament-picker.open {
+            height: 204px;
+        }
+
+        .tournament-picker-header {
+            position: absolute;
+            background-color: #262626;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+            left: 0;
+            padding: 8px;
+            border-radius: 4px 4px 0 0;
+            top: 0.5px;
+            width: 100%;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .tournament-picker.open .tournament-picker-header {
+            border-bottom: 1px solid #707070;
+        }
+
+        .tournament-picker-icon {
+            height: 24px;
+            position: relative;
+            flex-shrink: 0;
+            width: 17px;
+            overflow: hidden;
+        }
+
+        .tournament-picker-icon-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .tournament-picker-icon-image {
+            position: absolute;
+            height: 188.24%;
+            left: -75%;
+            max-width: none;
+            top: -44.12%;
+            width: 266.67%;
+        }
+
+        .tournament-picker-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+            flex: 1;
+        }
+
+        .tournament-picker-name {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            color: #ffffff;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .tournament-picker-date {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            font-size: 11px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            color: #ffffff;
+        }
+
+        .tournament-picker-caret {
+            height: 10px;
+            position: relative;
+            flex-shrink: 0;
+            width: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tournament-picker-caret i {
+            font-size: 10px;
+            color: #ffffff;
+            transition: transform 0.2s ease;
+        }
+
+        .tournament-picker-dropdown {
+            position: absolute;
+            background-color: #262626;
+            border-top: 1px solid #707070;
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-start;
+            left: 0;
+            overflow: hidden;
+            padding: 16px 16px 16px 41px;
+            top: 47px;
+            width: 239px;
+            z-index: 1002;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .tournament-picker.open .tournament-picker-dropdown {
+            display: flex;
+        }
+
+        .tournament-picker-option {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+            width: 100%;
+            cursor: pointer;
+            padding: 8px;
+            margin: -8px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .tournament-picker-option:hover {
+            background-color: #333333;
+        }
+
+        .tournament-picker-option-name {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            color: #ffffff;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .tournament-picker-option-date {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            font-size: 11px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="tournament-picker" data-name="Tournament Picker" data-node-id="469:82">
+        <div class="tournament-picker-header" data-name="Tournament Picker Header" data-node-id="469:84">
+            <div class="tournament-picker-icon" data-name="icon_golfer" data-node-id="469:75">
+                <div class="tournament-picker-icon-wrapper">
+                    <img alt="Golfer Icon" class="tournament-picker-icon-image" src="Images/icon_golfer.png" />
+                </div>
+            </div>
+            <div class="tournament-picker-info" data-name="Tournament Info" data-node-id="469:77">
+                <p class="tournament-picker-name" data-node-id="469:78">THE OPEN CHAMPIONSHIP</p>
+                <p class="tournament-picker-date" data-node-id="469:79">APR 09 - 12, 2026</p>
+            </div>
+            <div class="tournament-picker-caret" data-name="icon_caret-down" data-node-id="469:87">
+                <i class="fa-solid fa-caret-down"></i>
+            </div>
+        </div>
+        <div class="tournament-picker-dropdown" data-name="Tournament Picker Flyout" data-node-id="469:93">
+            <div class="tournament-picker-option" data-name="Tournament Info" data-node-id="469:94">
+                <p class="tournament-picker-option-name" data-node-id="I469:94;51:390">THE MASTERS</p>
+                <p class="tournament-picker-option-date" data-node-id="I469:94;51:391">APR 09 - 12, 2026</p>
+            </div>
+            <div class="tournament-picker-option" data-name="Tournament Info" data-node-id="469:95">
+                <p class="tournament-picker-option-name" data-node-id="I469:95;51:390">THE U.S. OPEN</p>
+                <p class="tournament-picker-option-date" data-node-id="I469:95;51:391">APR 09 - 12, 2026</p>
+            </div>
+            <div class="tournament-picker-option" data-name="Tournament Info" data-node-id="469:96">
+                <p class="tournament-picker-option-name" data-node-id="I469:96;51:390">THE U.S. OPEN</p>
+                <p class="tournament-picker-option-date" data-node-id="I469:96;51:391">APR 09 - 12, 2026</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tournamentPicker = document.querySelector('.tournament-picker');
+            const header = document.querySelector('.tournament-picker-header');
+            const caret = document.querySelector('.tournament-picker-caret i');
+            const options = document.querySelectorAll('.tournament-picker-option');
+            const currentName = document.querySelector('.tournament-picker-name');
+            const currentDate = document.querySelector('.tournament-picker-date');
+
+            // Toggle dropdown on header click
+            header.addEventListener('click', function(e) {
+                e.stopPropagation();
+                tournamentPicker.classList.toggle('open');
+                
+                // Update caret icon
+                if (tournamentPicker.classList.contains('open')) {
+                    caret.classList.remove('fa-caret-down');
+                    caret.classList.add('fa-caret-up');
+                } else {
+                    caret.classList.remove('fa-caret-up');
+                    caret.classList.add('fa-caret-down');
+                }
+            });
+
+            // Handle option selection
+            options.forEach(function(option) {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const name = option.querySelector('.tournament-picker-option-name').textContent;
+                    const date = option.querySelector('.tournament-picker-option-date').textContent;
+                    
+                    // Update current selection
+                    currentName.textContent = name;
+                    currentDate.textContent = date;
+                    
+                    // Close dropdown
+                    tournamentPicker.classList.remove('open');
+                    caret.classList.remove('fa-caret-up');
+                    caret.classList.add('fa-caret-down');
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!tournamentPicker.contains(e.target)) {
+                    tournamentPicker.classList.remove('open');
+                    caret.classList.remove('fa-caret-up');
+                    caret.classList.add('fa-caret-down');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

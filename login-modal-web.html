@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Modal Component</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            font-family: 'Open Sans', sans-serif;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Login Modal */
+        .login-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .login-modal {
+            background-color: #262626;
+            border-radius: 20px;
+            box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: center;
+            overflow: hidden;
+            padding: 32px;
+            position: relative;
+            width: 600px;
+        }
+
+        .login-input {
+            background-color: #141414;
+            border: none;
+            color: #aaa;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            font-size: 18px;
+            height: 60px;
+            line-height: normal;
+            padding: 0 24px;
+            text-transform: uppercase;
+            width: 536px;
+        }
+
+        .login-input:focus {
+            outline: none;
+        }
+
+        .login-input::placeholder {
+            color: #aaa;
+            text-transform: uppercase;
+        }
+
+        .login-button {
+            background-color: #222;
+            border: 1px solid #ffc61c;
+            border-radius: 4px;
+            color: #fdc71c;
+            cursor: pointer;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            height: 48px;
+            line-height: normal;
+            padding: 8px;
+            text-align: center;
+            text-transform: uppercase;
+            width: 200px;
+        }
+
+        .login-button:hover {
+            opacity: 0.9;
+        }
+
+        .login-button:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-modal-overlay" data-name="Login Modal Overlay" data-node-id="481:484">
+        <div class="login-modal" data-name="Login Modal" data-node-id="481:484">
+            <input 
+                type="text" 
+                id="username" 
+                name="username" 
+                class="login-input" 
+                placeholder="Username"
+                autocomplete="username"
+                data-name="Input"
+                data-node-id="481:466"
+            />
+            <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                class="login-input" 
+                placeholder="PASSWORD"
+                autocomplete="current-password"
+                data-name="Input"
+                data-node-id="481:486"
+            />
+            <button type="button" class="login-button" data-name="CtaButton" data-node-id="481:471">
+                <p data-node-id="481:472">LOG IN</p>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const overlay = document.querySelector('.login-modal-overlay');
+            const loginButton = document.querySelector('.login-button');
+            const usernameInput = document.querySelector('#username');
+            const passwordInput = document.querySelector('#password');
+
+            // Close modal when clicking outside
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
+                    overlay.style.display = 'none';
+                }
+            });
+
+            // Handle login button click
+            loginButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                const username = usernameInput.value;
+                const password = passwordInput.value;
+                
+                // Add your login logic here
+                console.log('Login attempt:', { username, password });
+                
+                // Example: Close modal on successful login
+                // overlay.style.display = 'none';
+            });
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && overlay.style.display !== 'none') {
+                    overlay.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

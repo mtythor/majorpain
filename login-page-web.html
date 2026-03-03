@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page - Web</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0f0f0f;
+            font-family: 'Open Sans', sans-serif;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background Image */
+        .background-image {
+            position: absolute;
+            top: 100px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            z-index: 0;
+        }
+
+        .background-image img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        /* Header Styles */
+        .header-container {
+            position: absolute;
+            display: flex;
+            gap: 9px;
+            align-items: flex-start;
+            justify-content: space-between;
+            left: 0;
+            top: 10px;
+            width: 100%;
+            padding: 0;
+            z-index: 10;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            height: 97px;
+            align-items: flex-start;
+            justify-content: flex-end;
+            padding-top: 8px;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+            position: relative;
+            flex: 1 1 0;
+            min-width: 595px;
+            max-width: calc(50% - 120px);
+        }
+
+        .stripe {
+            height: 24px;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .stripe-line-1 {
+            position: absolute;
+            background-color: #fdc71c;
+            height: 10px;
+            left: 0;
+            right: 0;
+            top: 14px;
+            width: 100%;
+        }
+
+        .stripe-line-2 {
+            position: absolute;
+            background-color: #fdc71c;
+            height: 4px;
+            left: 0;
+            right: 0;
+            top: 0;
+            width: 100%;
+        }
+
+        .stripe-line-3 {
+            position: absolute;
+            background-color: #00a900;
+            height: 2px;
+            left: 0;
+            right: 0;
+            top: 8px;
+            width: 100%;
+        }
+
+        .profile-pic-mp-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            flex-shrink: 0;
+        }
+
+        .logo-container {
+            height: 160px;
+            position: relative;
+            flex-shrink: 0;
+            width: 232px;
+        }
+
+        .logo-image-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .logo-image {
+            position: absolute;
+            height: 183.18%;
+            left: -15.15%;
+            max-width: none;
+            top: -28.8%;
+            width: 126.11%;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            height: 97px;
+            align-items: flex-end;
+            justify-content: flex-end;
+            padding-top: 8px;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+            position: relative;
+            flex: 1 1 0;
+            min-width: 595px;
+            max-width: calc(50% - 120px);
+        }
+
+        /* Login Modal */
+        .login-modal {
+            position: absolute;
+            background-color: #262626;
+            border-radius: 20px;
+            box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: center;
+            left: 50%;
+            overflow: hidden;
+            padding: 32px;
+            top: 289px;
+            transform: translateX(-50%);
+            width: 600px;
+            z-index: 5;
+        }
+
+        .login-input {
+            background-color: #141414;
+            border: none;
+            color: #fff;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            font-size: 18px;
+            height: 60px;
+            line-height: normal;
+            padding: 0 24px;
+            text-transform: uppercase;
+            width: 536px;
+        }
+
+        .login-input:focus {
+            outline: none;
+        }
+
+        .login-input::placeholder {
+            color: #aaaaaa;
+            text-transform: uppercase;
+        }
+
+        .login-button {
+            background-color: #222;
+            border: 1px solid #ffc61c;
+            border-radius: 4px;
+            color: #fdc71c;
+            cursor: pointer;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            height: 48px;
+            line-height: normal;
+            padding: 8px;
+            text-align: center;
+            text-transform: uppercase;
+            width: 200px;
+        }
+
+        .login-button:hover {
+            opacity: 0.9;
+        }
+
+        .login-button:active {
+            transform: scale(0.98);
+        }
+
+        .login-button p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Image -->
+    <div class="background-image" data-name="Masters" data-node-id="482:578">
+        <img alt="Background" src="Images/masters.jpg" />
+    </div>
+
+
+    <!-- Header - External State (no nav buttons or icon controls) -->
+    <div class="header-container" data-name="Header Web" data-node-id="481:398">
+        <div class="header-left" data-name="Header Left Side" data-node-id="481:399">
+            <div class="stripe" data-name="Stripe">
+                <div class="stripe-line-1"></div>
+                <div class="stripe-line-2"></div>
+                <div class="stripe-line-3"></div>
+            </div>
+        </div>
+
+        <div class="profile-pic-mp-logo" data-name="Profile Pic/MPLogo">
+            <div class="logo-container" data-name="MajorPainLogoTransparent 1">
+                <div class="logo-image-wrapper">
+                    <img alt="Major Pain Logo" class="logo-image" src="Images/MajorPainLogoTransparent.png" />
+                </div>
+            </div>
+        </div>
+
+        <div class="header-right" data-name="Header Right Side" data-node-id="481:402">
+            <div class="stripe" data-name="Stripe">
+                <div class="stripe-line-1"></div>
+                <div class="stripe-line-2"></div>
+                <div class="stripe-line-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="login-modal" data-name="Login Modal" data-node-id="481:411">
+        <input 
+            type="text" 
+            id="username" 
+            name="username" 
+            class="login-input" 
+            placeholder="Username"
+            autocomplete="username"
+            data-name="Input"
+            data-node-id="481:466"
+        />
+        <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            class="login-input" 
+            placeholder="PASSWORD"
+            autocomplete="current-password"
+            data-name="Input"
+            data-node-id="481:486"
+        />
+        <button type="button" class="login-button" data-name="CtaButton" data-node-id="481:471">
+            <p data-node-id="481:472">LOG IN</p>
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginButton = document.querySelector('.login-button');
+            const usernameInput = document.querySelector('#username');
+            const passwordInput = document.querySelector('#password');
+
+            // Handle login button click
+            loginButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                const username = usernameInput.value.trim();
+                const password = passwordInput.value.trim();
+                
+                // Dummy login: username "test" and password "test"
+                if (username === 'test' && password === 'test') {
+                    // Redirect to tournament list view
+                    window.location.href = 'tournament-list-view-web.html';
+                } else {
+                    // Show error (you can customize this)
+                    alert('Invalid username or password. Use "test" / "test" to login.');
+                }
+            });
+
+            // Handle Enter key on inputs
+            [usernameInput, passwordInput].forEach(function(input) {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        loginButton.click();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

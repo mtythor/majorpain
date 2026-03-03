@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1",
+    "name": "MtyThor",
+    "imageUrl": "/images/Player_MtyThor.jpg"
+  },
+  {
+    "id": "2",
+    "name": "Atticus",
+    "imageUrl": "/images/Player_Atticus.jpg"
+  },
+  {
+    "id": "3",
+    "name": "KristaKay",
+    "imageUrl": "/images/Player_KristaKay.jpg"
+  },
+  {
+    "id": "4",
+    "name": "MrHattyhat",
+    "imageUrl": "/images/Player_MrHattyhat.jpg"
+  }
+]

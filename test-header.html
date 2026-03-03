@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header Component Test</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Font+Awesome+6+Pro:wght@900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            font-family: 'Open Sans', sans-serif;
+            padding: 20px;
+        }
+
+        .header-container {
+            display: flex;
+            gap: 9px;
+            align-items: flex-start;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        /* Header Left Side */
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 29px;
+            height: 97px;
+            align-items: flex-start;
+            justify-content: flex-end;
+            padding-top: 8px;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+            position: relative;
+            flex-shrink: 0;
+            width: 595px;
+        }
+
+        .nav-bar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding-left: 16px;
+            padding-right: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .nav-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            position: relative;
+            border-radius: 4px;
+            flex-shrink: 0;
+            width: 104px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .nav-button.selected {
+            background-color: #262626;
+        }
+
+        .nav-button.unselected {
+            background-color: transparent;
+        }
+
+        .nav-button-text {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .nav-button.selected .nav-button-text {
+            color: #fdc71c;
+        }
+
+        .nav-button.unselected .nav-button-text {
+            color: #ffffff;
+        }
+
+        .stripe {
+            height: 24px;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .stripe-line-1 {
+            position: absolute;
+            background-color: #fdc71c;
+            height: 10px;
+            left: 0;
+            top: 14px;
+            width: 1399px;
+        }
+
+        .stripe-line-2 {
+            position: absolute;
+            background-color: #fdc71c;
+            height: 4px;
+            left: 0;
+            top: 0;
+            width: 1399px;
+        }
+
+        .stripe-line-3 {
+            position: absolute;
+            background-color: #00a900;
+            height: 2px;
+            left: 0;
+            top: 8px;
+            width: 1399px;
+        }
+
+        /* Center Logo */
+        .profile-pic-mp-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .logo-container {
+            height: 160px;
+            position: relative;
+            flex-shrink: 0;
+            width: 232px;
+        }
+
+        .logo-image-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .logo-image {
+            position: absolute;
+            height: 183.18%;
+            left: -15.15%;
+            max-width: none;
+            top: -28.8%;
+            width: 126.11%;
+        }
+
+        /* Header Right Side */
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            align-items: flex-end;
+            padding-top: 8px;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+            position: relative;
+            flex-shrink: 0;
+            width: 595px;
+        }
+
+        .header-right-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding-left: 0;
+            padding-right: 16px;
+            padding-top: 0;
+            padding-bottom: 0;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .icon-bar {
+            height: 34px;
+            position: relative;
+            flex-shrink: 0;
+            width: 72px;
+        }
+
+        .icon-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            position: absolute;
+            border-radius: 4px;
+            top: 0;
+        }
+
+        .icon-button.selected {
+            background-color: #262626;
+            left: 0;
+        }
+
+        .icon-button.unselected {
+            background-color: transparent;
+            left: 40px;
+        }
+
+        .icon-button-text {
+            font-family: 'Font Awesome 6 Pro', sans-serif;
+            font-weight: 900;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            font-size: 18px;
+            width: 100%;
+        }
+
+        .icon-button.selected .icon-button-text {
+            color: #fdc71c;
+        }
+
+        .icon-button.unselected .icon-button-text {
+            color: #ffffff;
+        }
+
+        .divider-vertical {
+            display: flex;
+            height: 40px;
+            align-items: center;
+            padding: 8px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .divider-line {
+            background-color: #707070;
+            height: 100%;
+            flex-shrink: 0;
+            width: 1px;
+        }
+
+        .profile-pic {
+            overflow: hidden;
+            position: relative;
+            border-radius: 40px;
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+        }
+
+        .profile-pic-image-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .profile-pic-image {
+            position: absolute;
+            height: 100%;
+            left: -25.28%;
+            max-width: none;
+            top: -0.29%;
+            width: 156.88%;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container" data-name="Header Web" data-node-id="459:28">
+        <!-- Header Left Side -->
+        <div class="header-left" data-name="Header Left Side" data-node-id="459:29">
+            <div class="nav-bar" data-name="Nav Bar" data-node-id="459:30">
+                <button class="nav-button selected" data-name="State=Selected" data-node-id="459:4">
+                    <p class="nav-button-text">TOURNAMENT</p>
+                </button>
+                <button class="nav-button unselected" data-name="State=Unselected" data-node-id="459:6">
+                    <p class="nav-button-text">SEASON</p>
+                </button>
+            </div>
+            <div class="stripe" data-name="Stripe" data-node-id="459:31">
+                <div class="stripe-line-1" data-node-id="459:32"></div>
+                <div class="stripe-line-2" data-node-id="459:33"></div>
+                <div class="stripe-line-3" data-node-id="459:34"></div>
+            </div>
+        </div>
+
+        <!-- Center Logo -->
+        <div class="profile-pic-mp-logo" data-name="Profile Pic/MPLogo" data-node-id="459:11">
+            <div class="logo-container" data-name="MajorPainLogoTransparent 1" data-node-id="459:12">
+                <div class="logo-image-wrapper">
+                    <img alt="Major Pain Logo" class="logo-image" src="http://localhost:3845/assets/ead3db723c696aaafec091c057f5655a95445c1d.png" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Header Right Side -->
+        <div class="header-right" data-name="Neader Right Side" data-node-id="459:36">
+            <div class="header-right-controls" data-name="Header Right Controls" data-node-id="459:37">
+                <div class="icon-bar" data-name="Icon Bar" data-node-id="459:18">
+                    <div class="icon-button selected" data-name="State=Selected" data-node-id="459:14">
+                        <p class="icon-button-text">☰</p>
+                    </div>
+                    <div class="icon-button unselected" data-name="State=Unselected" data-node-id="459:16">
+                        <p class="icon-button-text">☷</p>
+                    </div>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical" data-node-id="459:21">
+                    <div class="divider-line" data-node-id="459:22"></div>
+                </div>
+                <div class="profile-pic" data-name="Size=Sm Round" data-node-id="459:26">
+                    <div class="profile-pic-image-wrapper">
+                        <img alt="Profile Picture" class="profile-pic-image" src="http://localhost:3845/assets/07f3651da7b81b59aa38acd312bcc1b4afb96633.png" />
+                    </div>
+                </div>
+            </div>
+            <div class="stripe" data-name="Stripe" data-node-id="459:41">
+                <div class="stripe-line-1" data-node-id="459:42"></div>
+                <div class="stripe-line-2" data-node-id="459:43"></div>
+                <div class="stripe-line-3" data-node-id="459:44"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

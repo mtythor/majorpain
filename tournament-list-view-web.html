@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament List View - Web</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0f0f0f;
+            font-family: 'Open Sans', sans-serif;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background Image */
+        .background-image {
+            position: absolute;
+            top: 86px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            z-index: 0;
+        }
+
+        .background-image img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        /* Header Styles */
+        .header-container {
+            position: absolute;
+            display: flex;
+            gap: 9px;
+            align-items: flex-start;
+            justify-content: space-between;
+            left: 0;
+            top: 0;
+            width: 100%;
+            padding: 0;
+            z-index: 10;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 29px;
+            height: 97px;
+            align-items: flex-start;
+            justify-content: flex-end;
+            padding-top: 8px;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+            position: relative;
+            flex: 1 1 0;
+            min-width: 595px;
+            max-width: calc(50% - 120px);
+        }
+
+        .nav-bar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding-left: 16px;
+            padding-right: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .nav-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            position: relative;
+            border-radius: 4px;
+            flex-shrink: 0;
+            width: 104px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+        }
+
+        .nav-button.selected {
+            background-color: #262626;
+        }
+
+        .nav-button-text {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .nav-button.selected .nav-button-text {
+            color: #fdc71c;
+        }
+
+        .nav-button.unselected .nav-button-text {
+            color: #ffffff;
+        }
+
+        .stripe {
+            height: 24px;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .stripe-line-1 {
+            position: absolute;
+            background-color: #fdc71c;
+            height: 10px;
+            left: 0;
+            right: 0;
+            top: 14px;
+            width: 100%;
+        }
+
+        .stripe-line-2 {
+            position: absolute;
+            background-color: #fdc71c;
+            height: 4px;
+            left: 0;
+            right: 0;
+            top: 0;
+            width: 100%;
+        }
+
+        .stripe-line-3 {
+            position: absolute;
+            background-color: #00a900;
+            height: 2px;
+            left: 0;
+            right: 0;
+            top: 8px;
+            width: 100%;
+        }
+
+        .profile-pic-mp-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            flex-shrink: 0;
+        }
+
+        .logo-container {
+            height: 160px;
+            position: relative;
+            flex-shrink: 0;
+            width: 232px;
+        }
+
+        .logo-image-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .logo-image {
+            position: absolute;
+            height: 183.18%;
+            left: -15.15%;
+            max-width: none;
+            top: -28.8%;
+            width: 126.11%;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            align-items: flex-end;
+            padding-top: 8px;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+            position: relative;
+            flex: 1 1 0;
+            min-width: 595px;
+            max-width: calc(50% - 120px);
+        }
+
+        .header-right-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding-left: 0;
+            padding-right: 16px;
+            padding-top: 0;
+            padding-bottom: 0;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .icon-bar {
+            height: 34px;
+            position: relative;
+            flex-shrink: 0;
+            width: 72px;
+        }
+
+        .icon-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            position: absolute;
+            border-radius: 4px;
+            top: 0;
+            cursor: pointer;
+        }
+
+        .icon-button.selected {
+            background-color: #262626;
+            left: 0;
+        }
+
+        .icon-button.unselected {
+            background-color: transparent;
+            left: 40px;
+        }
+
+        .icon-button i {
+            font-size: 18px;
+            line-height: normal;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .icon-button.selected i {
+            color: #fdc71c;
+        }
+
+        .icon-button.unselected i {
+            color: #ffffff;
+        }
+
+        .divider-vertical {
+            display: flex;
+            height: 40px;
+            align-items: center;
+            padding: 8px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .divider-line {
+            background-color: #707070;
+            height: 100%;
+            flex-shrink: 0;
+            width: 1px;
+        }
+
+        .profile-pic {
+            overflow: hidden;
+            position: relative;
+            border-radius: 40px;
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+        }
+
+        .profile-pic-image-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .profile-pic-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        /* Tournament Picker */
+        .tournament-picker {
+            position: absolute;
+            height: 48px;
+            left: 50%;
+            top: 147px;
+            width: 239px;
+            z-index: 1000;
+            transform: translateX(-400px);
+        }
+
+        .tournament-picker.open {
+            height: 204px;
+        }
+
+        .tournament-picker-header {
+            position: absolute;
+            background-color: #262626;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+            left: 0;
+            padding: 8px;
+            border-radius: 4px 4px 0 0;
+            top: 0.5px;
+            width: 100%;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .tournament-picker.open .tournament-picker-header {
+            border-bottom: 1px solid #707070;
+        }
+
+        .tournament-picker-icon {
+            height: 24px;
+            position: relative;
+            flex-shrink: 0;
+            width: 17px;
+            overflow: hidden;
+        }
+
+        .tournament-picker-icon-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .tournament-picker-icon-image {
+            position: absolute;
+            height: 188.24%;
+            left: -75%;
+            max-width: none;
+            top: -44.12%;
+            width: 266.67%;
+        }
+
+        .tournament-picker-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+            flex: 1;
+        }
+
+        .tournament-picker-name {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            color: #ffffff;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .tournament-picker-date {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            font-size: 11px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            color: #ffffff;
+        }
+
+        .tournament-picker-caret {
+            height: 10px;
+            position: relative;
+            flex-shrink: 0;
+            width: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tournament-picker-caret i {
+            font-size: 10px;
+            color: #ffffff;
+            transition: transform 0.2s ease;
+        }
+
+        .tournament-picker-dropdown {
+            position: absolute;
+            background-color: #262626;
+            border-top: 1px solid #707070;
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-start;
+            left: 0;
+            overflow: hidden;
+            padding: 16px 16px 16px 41px;
+            top: 47px;
+            width: 239px;
+            z-index: 1002;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .tournament-picker.open .tournament-picker-dropdown {
+            display: flex;
+        }
+
+        .tournament-picker-option {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+            width: 100%;
+            cursor: pointer;
+            padding: 8px;
+            margin: -8px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .tournament-picker-option:hover {
+            background-color: #333333;
+        }
+
+        .tournament-picker-option-name {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            color: #ffffff;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .tournament-picker-option-date {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            font-size: 11px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            color: #ffffff;
+        }
+
+        /* Player Cards Container */
+        .player-cards-container {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: flex-start;
+            left: 50%;
+            top: 208px;
+            transform: translateX(-50%);
+            z-index: 5;
+        }
+
+        .player-card-header-row {
+            margin-bottom: -16px;
+        }
+
+        .player-score-card-web:first-of-type {
+            margin-top: 0;
+        }
+
+        /* Player Card Header Row */
+        .player-card-header-row {
+            display: flex;
+            gap: 17px;
+            align-items: flex-start;
+            padding: 0 8px;
+            position: relative;
+            border-radius: 20px 20px 0 0;
+            flex-shrink: 0;
+            width: 800px;
+        }
+
+        .player-card-header-label {
+            display: flex;
+            height: 32px;
+            align-items: center;
+            overflow: hidden;
+            padding: 0 16px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .player-card-header-label.player {
+            width: 348px;
+            justify-content: flex-start;
+        }
+
+        .player-card-header-label.other {
+            width: 92px;
+            justify-content: center;
+        }
+
+        .player-card-header-text {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            line-height: normal;
+            position: relative;
+            flex-shrink: 0;
+            font-size: 12px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        /* Player Score Card */
+        .player-score-card-web {
+            background-color: #262626;
+            border: 1px solid #323232;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 8px;
+            position: relative;
+            border-radius: 8px;
+            width: 800px;
+        }
+
+        .player-score-bar {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            position: relative;
+            border-radius: 20px 20px 0 0;
+            flex-shrink: 0;
+            width: 784px;
+        }
+
+        .player-score-bar .divider-vertical {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-left: 0;
+            padding-right: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            position: relative;
+            flex-shrink: 0;
+            width: 1px;
+            align-self: stretch;
+            height: 64px;
+        }
+
+        .player-score-bar .divider-vertical .divider-line {
+            height: 48px;
+            width: 1px;
+        }
+
+        .player-tag {
+            display: flex;
+            gap: 16px;
+            height: 64px;
+            align-items: center;
+            overflow: hidden;
+            padding-left: 10px;
+            padding-right: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            position: relative;
+            flex-shrink: 0;
+            width: 348px;
+        }
+
+        .profile-pic-container {
+            position: relative;
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            overflow: hidden;
+        }
+
+        .profile-pic-container-image-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .profile-pic-container-image {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+        }
+
+        .player-name {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            line-height: normal;
+            position: relative;
+            flex-shrink: 0;
+            font-size: 24px;
+            text-align: center;
+            white-space: nowrap;
+            color: #ffffff;
+        }
+
+        .player-score {
+            display: flex;
+            flex-direction: column;
+            height: 64px;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding-left: 16px;
+            padding-right: 16px;
+            padding-top: 0;
+            padding-bottom: 0;
+            position: relative;
+            flex-shrink: 0;
+            width: 92px;
+        }
+
+        .player-score-text {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            line-height: normal;
+            position: relative;
+            flex-shrink: 0;
+            font-size: 16px;
+            text-align: center;
+            white-space: nowrap;
+            color: #ffffff;
+        }
+
+        .player-score-total {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            line-height: normal;
+            position: relative;
+            flex-shrink: 0;
+            font-size: 24px;
+            text-align: center;
+            white-space: nowrap;
+            color: #ffffff;
+        }
+
+        .player-color-divider {
+            height: 1px;
+            flex-shrink: 0;
+            width: 784px;
+        }
+
+        .golfer-name-bar {
+            display: flex;
+            gap: 8px;
+            height: 20px;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+            width: 784px;
+        }
+
+        .golfer-name-bar .divider-vertical-small {
+            display: flex;
+            height: 100%;
+            align-items: center;
+            padding-left: 0;
+            padding-right: 0;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            position: relative;
+            flex-shrink: 0;
+            width: 1px;
+            align-self: stretch;
+        }
+
+        .golfer-name-tag {
+            height: 20px;
+            position: relative;
+            flex-shrink: 0;
+            width: 183.25px;
+        }
+
+        .golfer-name-tag-content {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            inset: 0;
+            justify-content: center;
+            line-height: 0;
+            font-size: 14px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .golfer-name-tag-content p {
+            line-height: normal;
+        }
+
+        .golfer-name-tag.out .golfer-name-tag-content {
+            color: #707070;
+        }
+
+        .golfer-name-tag.alt .golfer-name-tag-content {
+            color: #ae9661;
+        }
+
+        .golfer-name-tag.cut .golfer-name-tag-content {
+            color: #ae6161;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Image -->
+    <div class="background-image" data-name="image 2" data-node-id="471:180">
+        <img alt="Background" src="Images/Masters.jpg" />
+    </div>
+
+    <!-- Header -->
+    <div class="header-container" data-name="Header Web" data-node-id="471:190">
+        <div class="header-left" data-name="Header Left Side">
+            <div class="nav-bar" data-name="Nav Bar">
+                <button class="nav-button selected" data-name="State=Selected">
+                    <p class="nav-button-text">TOURNAMENT</p>
+                </button>
+                <button class="nav-button unselected" data-name="State=Unselected">
+                    <p class="nav-button-text">SEASON</p>
+                </button>
+            </div>
+            <div class="stripe" data-name="Stripe">
+                <div class="stripe-line-1"></div>
+                <div class="stripe-line-2"></div>
+                <div class="stripe-line-3"></div>
+            </div>
+        </div>
+
+        <div class="profile-pic-mp-logo" data-name="Profile Pic/MPLogo">
+            <div class="logo-container" data-name="MajorPainLogoTransparent 1">
+                <div class="logo-image-wrapper">
+                    <img alt="Major Pain Logo" class="logo-image" src="Images/MajorPainLogoTransparent.png" />
+                </div>
+            </div>
+        </div>
+
+        <div class="header-right" data-name="Header Right Side">
+            <div class="header-right-controls" data-name="Header Right Controls">
+                <div class="icon-bar" data-name="Icon Bar">
+                    <div class="icon-button selected" data-name="State=Selected">
+                        <i class="fa-solid fa-bars"></i>
+                    </div>
+                    <div class="icon-button unselected" data-name="State=Unselected">
+                        <i class="fa-solid fa-grip"></i>
+                    </div>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="profile-pic" data-name="Size=Sm Round">
+                    <div class="profile-pic-image-wrapper">
+                        <img alt="Profile Picture" class="profile-pic-image" src="Images/Player_MtyThor.jpg" />
+                    </div>
+                </div>
+            </div>
+            <div class="stripe" data-name="Stripe">
+                <div class="stripe-line-1"></div>
+                <div class="stripe-line-2"></div>
+                <div class="stripe-line-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tournament Picker -->
+    <div class="tournament-picker" data-name="Tournament Picker" data-node-id="471:140">
+        <div class="tournament-picker-header" data-name="Tournament Picker Header">
+            <div class="tournament-picker-icon" data-name="icon_golfer">
+                <div class="tournament-picker-icon-wrapper">
+                    <img alt="Golfer Icon" class="tournament-picker-icon-image" src="Images/icon_golfer.png" />
+                </div>
+            </div>
+            <div class="tournament-picker-info" data-name="Tournament Info">
+                <p class="tournament-picker-name" data-tournament-name>PLAYERS CHAMPIONSHIP</p>
+                <p class="tournament-picker-date" data-tournament-date>FEB 01 - 04, 2026</p>
+            </div>
+            <div class="tournament-picker-caret" data-name="icon_caret-down">
+                <i class="fa-solid fa-caret-down"></i>
+            </div>
+        </div>
+        <div class="tournament-picker-dropdown" data-name="Tournament Picker Flyout">
+            <div class="tournament-picker-option" data-name="Tournament Info" data-tournament-option-id="1">
+                <p class="tournament-picker-option-name" data-tournament-option-name>PLAYERS CHAMPIONSHIP</p>
+                <p class="tournament-picker-option-date" data-tournament-option-date>FEB 01 - 04, 2026</p>
+            </div>
+            <div class="tournament-picker-option" data-name="Tournament Info" data-tournament-option-id="2">
+                <p class="tournament-picker-option-name" data-tournament-option-name>THE MASTERS</p>
+                <p class="tournament-picker-option-date" data-tournament-option-date>MAR 01 - 04, 2026</p>
+            </div>
+            <div class="tournament-picker-option" data-name="Tournament Info" data-tournament-option-id="3">
+                <p class="tournament-picker-option-name" data-tournament-option-name>PGA CHAMPIONSHIP</p>
+                <p class="tournament-picker-option-date" data-tournament-option-date>APR 01 - 04, 2026</p>
+            </div>
+            <div class="tournament-picker-option" data-name="Tournament Info" data-tournament-option-id="4">
+                <p class="tournament-picker-option-name" data-tournament-option-name>U.S. OPEN</p>
+                <p class="tournament-picker-option-date" data-tournament-option-date>MAY 01 - 04, 2026</p>
+            </div>
+            <div class="tournament-picker-option" data-name="Tournament Info" data-tournament-option-id="5">
+                <p class="tournament-picker-option-name" data-tournament-option-name>OPEN CHAMPIONSHIP</p>
+                <p class="tournament-picker-option-date" data-tournament-option-date>JUN 01 - 04, 2026</p>
+            </div>
+            <div class="tournament-picker-option" data-name="Tournament Info" data-tournament-option-id="6">
+                <p class="tournament-picker-option-name" data-tournament-option-name>FEDEX ST. JUDE</p>
+                <p class="tournament-picker-option-date" data-tournament-option-date>JUL 01 - 04, 2026</p>
+            </div>
+            <div class="tournament-picker-option" data-name="Tournament Info" data-tournament-option-id="7">
+                <p class="tournament-picker-option-name" data-tournament-option-name>BMW CHAMPIONSHIP</p>
+                <p class="tournament-picker-option-date" data-tournament-option-date>AUG 01 - 04, 2026</p>
+            </div>
+            <div class="tournament-picker-option" data-name="Tournament Info" data-tournament-option-id="8">
+                <p class="tournament-picker-option-name" data-tournament-option-name>TOUR CHAMPIONSHIP</p>
+                <p class="tournament-picker-option-date" data-tournament-option-date>SEP 01 - 04, 2026</p>
+            </div>
+            <div class="tournament-picker-option" data-name="Tournament Info" data-tournament-option-id="9">
+                <p class="tournament-picker-option-name" data-tournament-option-name>RYDER CUP</p>
+                <p class="tournament-picker-option-date" data-tournament-option-date>OCT 01 - 04, 2026</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Cards Container -->
+    <div class="player-cards-container" data-name="Player Cards" data-node-id="471:181">
+        <!-- Header Row -->
+        <div class="player-card-header-row" data-name="Player Card Header Label Row" data-node-id="471:183">
+            <div class="player-card-header-label player" data-name="Player Card Header Label">
+                <p class="player-card-header-text">PLAYER</p>
+            </div>
+            <div class="player-card-header-label other" data-name="Player Card Header Label">
+                <p class="player-card-header-text">AVG POS</p>
+            </div>
+            <div class="player-card-header-label other" data-name="Player Card Header Label">
+                <p class="player-card-header-text">POINTS</p>
+            </div>
+            <div class="player-card-header-label other" data-name="Player Card Header Label">
+                <p class="player-card-header-text">BONUS</p>
+            </div>
+            <div class="player-card-header-label other" data-name="Player Card Header Label">
+                <p class="player-card-header-text">TOTAL</p>
+            </div>
+        </div>
+
+        <!-- Player Card 1: MtyThor -->
+        <div class="player-score-card-web" data-name="Player Score Card Web" data-node-id="471:184" data-player-card-id="1">
+            <div class="player-score-bar" data-name="Player Score Bar">
+                <div class="player-tag" data-name="Player Tag">
+                    <div class="profile-pic-container" data-name="Profile Pic">
+                        <div class="profile-pic-container-image-wrapper">
+                            <img alt="Player Avatar" class="profile-pic-container-image" src="Images/Player_MtyThor.jpg" data-player-image />
+                        </div>
+                    </div>
+                    <p class="player-name" data-player-name>MtyThor</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-text" data-player-avg-pos>2</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-text" data-player-points>293</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-text" data-player-bonus>16</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-total" data-player-total>309</p>
+                </div>
+            </div>
+            <div class="player-color-divider" style="background-color: #74a553;" data-name="Player Color Divider"></div>
+            <div class="golfer-name-bar" data-name="Golfer Name Bar">
+                <div class="golfer-name-tag" data-name="Golfer Name Tag" data-golfer-tag-index="0">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>1: Tommy Fleetwood</p>
+                    </div>
+                </div>
+                <div class="divider-vertical-small" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="golfer-name-tag" data-name="Golfer Name Tag" data-golfer-tag-index="1">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>2: Russell Henley</p>
+                    </div>
+                </div>
+                <div class="divider-vertical-small" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="golfer-name-tag" data-name="Golfer Name Tag" data-golfer-tag-index="2">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>3: Cameron Young</p>
+                    </div>
+                </div>
+                <div class="divider-vertical-small" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="golfer-name-tag out" data-name="Golfer Name Tag" data-golfer-tag-index="3">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>13: Brian Harman</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Card 2: KristaKay -->
+        <div class="player-score-card-web" data-name="Player Score Card Web" data-node-id="471:185" data-player-card-id="2">
+            <div class="player-score-bar" data-name="Player Score Bar">
+                <div class="player-tag" data-name="Player Tag">
+                    <div class="profile-pic-container" data-name="Profile Pic">
+                        <div class="profile-pic-container-image-wrapper">
+                            <img alt="Player Avatar" class="profile-pic-container-image" src="Images/Player_KristaKay.jpg" data-player-image />
+                        </div>
+                    </div>
+                    <p class="player-name" data-player-name>KristaKay</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-text" data-player-avg-pos>10</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-text" data-player-points>269</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-text" data-player-bonus>11</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-total" data-player-total>280</p>
+                </div>
+            </div>
+            <div class="player-color-divider" style="background-color: #e12c55;" data-name="Player Color Divider"></div>
+            <div class="golfer-name-bar" data-name="Golfer Name Bar">
+                <div class="golfer-name-tag" data-name="Golfer Name Tag" data-golfer-tag-index="0">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>7: Sam Burns</p>
+                    </div>
+                </div>
+                <div class="divider-vertical-small" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="golfer-name-tag" data-name="Golfer Name Tag" data-golfer-tag-index="1">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>17: Robert MacIntyre</p>
+                    </div>
+                </div>
+                <div class="divider-vertical-small" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="golfer-name-tag" data-name="Golfer Name Tag" data-golfer-tag-index="2">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>7: Keegan Bradley</p>
+                    </div>
+                </div>
+                <div class="divider-vertical-small" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="golfer-name-tag out" data-name="Golfer Name Tag" data-golfer-tag-index="3">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>10: Chris Gotterup</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Card 3: MrHattyHat -->
+        <div class="player-score-card-web" data-name="Player Score Card Web" data-node-id="471:186" data-player-card-id="3">
+            <div class="player-score-bar" data-name="Player Score Bar">
+                <div class="player-tag" data-name="Player Tag">
+                    <div class="profile-pic-container" data-name="Profile Pic">
+                        <div class="profile-pic-container-image-wrapper">
+                            <img alt="Player Avatar" class="profile-pic-container-image" src="Images/Player_MrHattyhat.jpg" data-player-image />
+                        </div>
+                    </div>
+                    <p class="player-name" data-player-name>MrHattyHat</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-text" data-player-avg-pos>15</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-text" data-player-points>256</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-text" data-player-bonus>7</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-total" data-player-total>263</p>
+                </div>
+            </div>
+            <div class="player-color-divider" style="background-color: #ff7340;" data-name="Player Color Divider"></div>
+            <div class="golfer-name-bar" data-name="Golfer Name Bar">
+                <div class="golfer-name-tag" data-name="Golfer Name Tag" data-golfer-tag-index="0">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>13: Harris English</p>
+                    </div>
+                </div>
+                <div class="divider-vertical-small" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="golfer-name-tag" data-name="Golfer Name Tag" data-golfer-tag-index="1">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>21: Justin Rose</p>
+                    </div>
+                </div>
+                <div class="divider-vertical-small" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="golfer-name-tag" data-name="Golfer Name Tag" data-golfer-tag-index="2">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>10: Ben Griffin</p>
+                    </div>
+                </div>
+                <div class="divider-vertical-small" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="golfer-name-tag out" data-name="Golfer Name Tag" data-golfer-tag-index="3">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>30: Sepp Straka</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Card 4: Atticus -->
+        <div class="player-score-card-web" data-name="Player Score Card Web" data-node-id="471:187" data-player-card-id="4">
+            <div class="player-score-bar" data-name="Player Score Bar">
+                <div class="player-tag" data-name="Player Tag">
+                    <div class="profile-pic-container" data-name="Profile Pic">
+                        <div class="profile-pic-container-image-wrapper">
+                            <img alt="Player Avatar" class="profile-pic-container-image" src="Images/Player_Atticus.jpg" data-player-image />
+                        </div>
+                    </div>
+                    <p class="player-name" data-player-name>Atticus</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-text" data-player-avg-pos>16</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-text" data-player-points>252</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-text" data-player-bonus>5</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-total" data-player-total>257</p>
+                </div>
+            </div>
+            <div class="player-color-divider" style="background-color: #3ca1ff;" data-name="Player Color Divider"></div>
+            <div class="golfer-name-bar" data-name="Golfer Name Bar">
+                <div class="golfer-name-tag" data-name="Golfer Name Tag" data-golfer-tag-index="0">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>23: Rory McIlroy</p>
+                    </div>
+                </div>
+                <div class="divider-vertical-small" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="golfer-name-tag" data-name="Golfer Name Tag" data-golfer-tag-index="1">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>2: Patrick Cantlay</p>
+                    </div>
+                </div>
+                <div class="divider-vertical-small" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="golfer-name-tag" data-name="Golfer Name Tag" data-golfer-tag-index="2">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>23: Maverick McNealy</p>
+                    </div>
+                </div>
+                <div class="divider-vertical-small" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="golfer-name-tag alt" data-name="Golfer Name Tag" data-golfer-tag-index="3">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>25: J.J. Spaun</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Card 5: Fat Rando -->
+        <div class="player-score-card-web" data-name="Player Score Card Web" data-node-id="471:188" data-player-card-id="5">
+            <div class="player-score-bar" data-name="Player Score Bar">
+                <div class="player-tag" data-name="Player Tag">
+                    <div class="profile-pic-container" data-name="Profile Pic">
+                        <div class="profile-pic-container-image-wrapper">
+                            <img alt="Player Avatar" class="profile-pic-container-image" src="Images/Player_FatRando.jpg" data-player-image />
+                        </div>
+                    </div>
+                    <p class="player-name" data-player-name>Fat Rando</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-text" data-player-avg-pos>11</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-text" data-player-points>268</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-text" data-player-bonus>9</p>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="player-score" data-name="Player Score">
+                    <p class="player-score-total" data-player-total>277</p>
+                </div>
+            </div>
+            <div class="player-color-divider" style="background-color: #88584d;" data-name="Player Color Divider"></div>
+            <div class="golfer-name-bar" data-name="Golfer Name Bar">
+                <div class="golfer-name-tag" data-name="Golfer Name Tag" data-golfer-tag-index="0">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>4: Scottie Scheffler</p>
+                    </div>
+                </div>
+                <div class="divider-vertical-small" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="golfer-name-tag" data-name="Golfer Name Tag" data-golfer-tag-index="1">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>7: Justin Thomas</p>
+                    </div>
+                </div>
+                <div class="divider-vertical-small" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="golfer-name-tag" data-name="Golfer Name Tag" data-golfer-tag-index="2">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>21: Ludvig Aberg</p>
+                    </div>
+                </div>
+                <div class="divider-vertical-small" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="golfer-name-tag cut" data-name="Golfer Name Tag" data-golfer-tag-index="3">
+                    <div class="golfer-name-tag-content">
+                        <p data-golfer-position-name>CUT: Harry Hall</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tournamentPicker = document.querySelector('.tournament-picker');
+            const header = document.querySelector('.tournament-picker-header');
+            const caret = document.querySelector('.tournament-picker-caret i');
+            const options = document.querySelectorAll('.tournament-picker-option');
+            const currentName = document.querySelector('.tournament-picker-name');
+            const currentDate = document.querySelector('.tournament-picker-date');
+
+            // Toggle dropdown on header click
+            header.addEventListener('click', function(e) {
+                e.stopPropagation();
+                tournamentPicker.classList.toggle('open');
+                
+                // Update caret icon
+                if (tournamentPicker.classList.contains('open')) {
+                    caret.classList.remove('fa-caret-down');
+                    caret.classList.add('fa-caret-up');
+                } else {
+                    caret.classList.remove('fa-caret-up');
+                    caret.classList.add('fa-caret-down');
+                }
+            });
+
+            // Handle option selection
+            options.forEach(function(option) {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const name = option.querySelector('.tournament-picker-option-name').textContent;
+                    const date = option.querySelector('.tournament-picker-option-date').textContent;
+                    
+                    // Update current selection
+                    currentName.textContent = name;
+                    currentDate.textContent = date;
+                    
+                    // Close dropdown
+                    tournamentPicker.classList.remove('open');
+                    caret.classList.remove('fa-caret-up');
+                    caret.classList.add('fa-caret-down');
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!tournamentPicker.contains(e.target)) {
+                    tournamentPicker.classList.remove('open');
+                    caret.classList.remove('fa-caret-up');
+                    caret.classList.add('fa-caret-down');
+                }
+            });
+
+            // Icon button navigation
+            const tableViewButton = document.querySelector('.icon-button.unselected');
+            
+            if (tableViewButton) {
+                tableViewButton.addEventListener('click', function() {
+                    window.location.href = 'tournament-table-view-web.html';
+                });
+            }
+
+            // Nav button navigation
+            const seasonButton = document.querySelector('.nav-button.unselected');
+            
+            if (seasonButton) {
+                seasonButton.addEventListener('click', function() {
+                    window.location.href = 'season-view-web.html';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

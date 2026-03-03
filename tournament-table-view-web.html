@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament Table View - Web</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0f0f0f;
+            font-family: 'Open Sans', sans-serif;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        html {
+            min-height: 100%;
+        }
+
+        /* Background Image */
+        .background-image {
+            position: absolute;
+            top: 86px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            z-index: 0;
+        }
+
+        .background-image img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        /* Header Styles - Same as tournament-list-view */
+        .header-container {
+            position: absolute;
+            display: flex;
+            gap: 9px;
+            align-items: flex-start;
+            justify-content: space-between;
+            left: 0;
+            top: 0;
+            width: 100%;
+            padding: 0;
+            z-index: 10;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 29px;
+            height: 97px;
+            align-items: flex-start;
+            justify-content: flex-end;
+            padding-top: 8px;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+            position: relative;
+            flex: 1 1 0;
+            min-width: 595px;
+            max-width: calc(50% - 120px);
+        }
+
+        .nav-bar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding-left: 16px;
+            padding-right: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .nav-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            position: relative;
+            border-radius: 4px;
+            flex-shrink: 0;
+            width: 104px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+        }
+
+        .nav-button.selected {
+            background-color: #262626;
+        }
+
+        .nav-button-text {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .nav-button.selected .nav-button-text {
+            color: #fdc71c;
+        }
+
+        .nav-button.unselected .nav-button-text {
+            color: #ffffff;
+        }
+
+        .stripe {
+            height: 24px;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .stripe-line-1 {
+            position: absolute;
+            background-color: #fdc71c;
+            height: 10px;
+            left: 0;
+            right: 0;
+            top: 14px;
+            width: 100%;
+        }
+
+        .stripe-line-2 {
+            position: absolute;
+            background-color: #fdc71c;
+            height: 4px;
+            left: 0;
+            right: 0;
+            top: 0;
+            width: 100%;
+        }
+
+        .stripe-line-3 {
+            position: absolute;
+            background-color: #00a900;
+            height: 2px;
+            left: 0;
+            right: 0;
+            top: 8px;
+            width: 100%;
+        }
+
+        .profile-pic-mp-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            flex-shrink: 0;
+        }
+
+        .logo-container {
+            height: 160px;
+            position: relative;
+            flex-shrink: 0;
+            width: 232px;
+        }
+
+        .logo-image-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .logo-image {
+            position: absolute;
+            height: 183.18%;
+            left: -15.15%;
+            max-width: none;
+            top: -28.8%;
+            width: 126.11%;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            align-items: flex-end;
+            padding-top: 8px;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+            position: relative;
+            flex: 1 1 0;
+            min-width: 595px;
+            max-width: calc(50% - 120px);
+        }
+
+        .header-right-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding-left: 0;
+            padding-right: 16px;
+            padding-top: 0;
+            padding-bottom: 0;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .icon-bar {
+            height: 34px;
+            position: relative;
+            flex-shrink: 0;
+            width: 72px;
+        }
+
+        .icon-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            position: absolute;
+            border-radius: 4px;
+            top: 0;
+            cursor: pointer;
+        }
+
+        .icon-button.selected {
+            background-color: #262626;
+        }
+
+        .icon-button.unselected {
+            background-color: transparent;
+        }
+
+        .icon-bar .icon-button:first-child {
+            left: 0;
+        }
+
+        .icon-bar .icon-button:last-child {
+            left: 40px;
+        }
+
+        .icon-button i {
+            font-size: 18px;
+            line-height: normal;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .icon-button.selected i {
+            color: #fdc71c;
+        }
+
+        .icon-button.unselected i {
+            color: #ffffff;
+        }
+
+        .divider-vertical {
+            display: flex;
+            height: 40px;
+            align-items: center;
+            padding: 8px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .divider-line {
+            background-color: #707070;
+            height: 100%;
+            flex-shrink: 0;
+            width: 1px;
+        }
+
+        .profile-pic {
+            overflow: hidden;
+            position: relative;
+            border-radius: 40px;
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+        }
+
+        .profile-pic-image-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .profile-pic-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* Tournament Picker */
+        .tournament-picker {
+            position: absolute;
+            height: 48px;
+            left: calc(50% - 528.5px);
+            top: 147px;
+            width: 239px;
+            z-index: 1000;
+        }
+
+        .tournament-picker.open {
+            height: 204px;
+        }
+
+        .tournament-picker-header {
+            position: absolute;
+            background-color: #262626;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+            left: 0;
+            padding: 8px;
+            border-radius: 4px 4px 0 0;
+            top: 0.5px;
+            width: 100%;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .tournament-picker.open .tournament-picker-header {
+            border-bottom: 1px solid #707070;
+        }
+
+        .tournament-picker-icon {
+            height: 24px;
+            position: relative;
+            flex-shrink: 0;
+            width: 17px;
+            overflow: hidden;
+        }
+
+        .tournament-picker-icon-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .tournament-picker-icon-image {
+            position: absolute;
+            height: 188.24%;
+            left: -75%;
+            max-width: none;
+            top: -44.12%;
+            width: 266.67%;
+        }
+
+        .tournament-picker-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+            flex: 1;
+        }
+
+        .tournament-picker-name {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            color: #ffffff;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .tournament-picker-date {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            font-size: 11px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            color: #ffffff;
+        }
+
+        .tournament-picker-caret {
+            height: 10px;
+            position: relative;
+            flex-shrink: 0;
+            width: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tournament-picker-caret i {
+            font-size: 10px;
+            color: #ffffff;
+            transition: transform 0.2s ease;
+        }
+
+        .tournament-picker-dropdown {
+            position: absolute;
+            background-color: #262626;
+            border-top: 1px solid #707070;
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-start;
+            left: 0;
+            overflow: hidden;
+            padding: 16px 16px 16px 41px;
+            top: 47px;
+            width: 239px;
+            z-index: 1002;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .tournament-picker.open .tournament-picker-dropdown {
+            display: flex;
+        }
+
+        .tournament-picker-option {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+            width: 100%;
+            cursor: pointer;
+            padding: 8px;
+            margin: -8px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .tournament-picker-option:hover {
+            background-color: #333333;
+        }
+
+        .tournament-picker-option-name {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            font-size: 12px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            color: #ffffff;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .tournament-picker-option-date {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            font-size: 11px;
+            line-height: normal;
+            font-style: normal;
+            position: relative;
+            flex-shrink: 0;
+            color: #ffffff;
+        }
+
+        /* Player Tables Container */
+        .player-tables-container {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: flex-start;
+            left: 50%;
+            top: 208px;
+            transform: translateX(-50%);
+            z-index: 5;
+            max-height: calc(100vh - 208px - 50px);
+            overflow-y: auto;
+            overflow-x: hidden;
+            width: 1057px;
+        }
+
+        /* Custom Scrollbar Styling */
+        .player-tables-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .player-tables-container::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 4px;
+        }
+
+        .player-tables-container::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 4px;
+        }
+
+        .player-tables-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Firefox scrollbar */
+        .player-tables-container {
+            scrollbar-width: thin;
+            scrollbar-color: #444 #1a1a1a;
+        }
+
+        /* Player Score Table Styles */
+        .player-score-table-web {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            width: 1057px;
+        }
+
+        .table-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 1057px;
+        }
+
+        .table-column {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            margin-right: -1px;
+            padding-bottom: 1px;
+        }
+
+        .table-column.pos-column {
+            width: 92px;
+        }
+
+        .table-column.player-column {
+            width: 238px;
+        }
+
+        .table-column.score-column {
+            width: 92px;
+        }
+
+        /* Header Cell */
+        .header-cell {
+            background-color: #151515;
+            border: 1px solid #323232;
+            display: flex;
+            height: 32px;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 0 16px;
+            position: relative;
+            width: 100%;
+            margin-bottom: -1px;
+        }
+
+        .header-cell.player-header {
+            justify-content: flex-start;
+        }
+
+        .header-cell.player-header .cell-text {
+            text-align: left;
+        }
+
+        .header-text {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            line-height: normal;
+            text-align: center;
+            text-transform: uppercase;
+            color: #ffffff;
+        }
+
+        /* Player Color Divider */
+        .player-color-divider {
+            background-color: #74a553;
+            height: 2px;
+            width: 100%;
+            flex-shrink: 0;
+            display: block;
+        }
+
+        /* Score Cell */
+        .score-cell {
+            border: 1px solid #323232;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 0 16px;
+            position: relative;
+            width: 100%;
+            margin-bottom: -1px;
+        }
+
+        .score-cell.active-player {
+            background-color: #000000;
+            height: 64px;
+            padding-top: 12px;
+        }
+
+        .score-cell.standard-row {
+            background-color: #262626;
+            height: 48px;
+        }
+
+        .score-cell.alternate-row {
+            background-color: #1a1a1a;
+            height: 48px;
+        }
+
+        .score-cell.pos-avg {
+            flex-direction: column;
+            gap: 0;
+            align-items: center;
+            justify-content: center;
+            padding-top: 0;
+        }
+
+        .score-cell.pos-avg .cell-text {
+            margin: 0;
+        }
+
+        .score-cell.pos-avg .cell-text.pos-avg-value {
+            margin-top: 4px;
+        }
+
+        .score-cell.player-cell {
+            gap: 16px;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 0;
+        }
+
+        .table-column.player-column .score-cell.standard-row,
+        .table-column.player-column .score-cell.alternate-row {
+            justify-content: flex-start;
+            padding: 0 16px 0 16px;
+        }
+
+        .table-column.player-column .score-cell.standard-row .cell-text,
+        .table-column.player-column .score-cell.alternate-row .cell-text {
+            text-align: left;
+        }
+
+        .score-cell.aggregate {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-top: 0;
+        }
+
+        /* Cell Text */
+        .cell-text {
+            font-family: 'Open Sans', sans-serif;
+            line-height: normal;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .cell-text.header {
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .cell-text.standard {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .cell-text.aggregate {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .cell-text.total-aggregate {
+            font-weight: 700;
+            font-size: 24px;
+        }
+
+        .cell-text.player-name {
+            font-weight: 800;
+            font-size: 24px;
+            line-height: normal;
+        }
+
+        .cell-text.pos-avg-label {
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 1;
+        }
+
+        .cell-text.pos-avg-value {
+            font-weight: 800;
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        .cell-text.alternate {
+            opacity: 0.5;
+        }
+
+        /* Profile Pic - Table version (scoped to avoid conflicts with header) */
+        .player-score-table-web .profile-pic-container {
+            position: relative;
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .player-score-table-web .profile-pic-container .profile-pic-image-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            margin: 0;
+        }
+
+        .player-score-table-web .profile-pic-container .profile-pic-image {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            object-position: center;
+            top: 0;
+            left: 0;
+        }
+
+        /* Empty cells for active player rounds */
+        .score-cell.empty {
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Image -->
+    <div class="background-image" data-name="image 2" data-node-id="471:180">
+        <img alt="Background" src="Images/Masters.jpg" />
+    </div>
+
+    <!-- Header -->
+    <div class="header-container" data-name="Header Web" data-node-id="471:190">
+        <div class="header-left" data-name="Header Left Side">
+            <div class="nav-bar" data-name="Nav Bar">
+                <button class="nav-button selected" data-name="State=Selected">
+                    <p class="nav-button-text">TOURNAMENT</p>
+                </button>
+                <button class="nav-button unselected" data-name="State=Unselected">
+                    <p class="nav-button-text">SEASON</p>
+                </button>
+            </div>
+            <div class="stripe" data-name="Stripe">
+                <div class="stripe-line-1"></div>
+                <div class="stripe-line-2"></div>
+                <div class="stripe-line-3"></div>
+            </div>
+        </div>
+
+        <div class="profile-pic-mp-logo" data-name="Profile Pic/MPLogo">
+            <div class="logo-container" data-name="MajorPainLogoTransparent 1">
+                <div class="logo-image-wrapper">
+                    <img alt="Major Pain Logo" class="logo-image" src="Images/MajorPainLogoTransparent.png" />
+                </div>
+            </div>
+        </div>
+
+        <div class="header-right" data-name="Header Right Side">
+            <div class="header-right-controls" data-name="Header Right Controls">
+                <div class="icon-bar" data-name="Icon Bar">
+                    <div class="icon-button unselected" data-name="State=Unselected">
+                        <i class="fa-solid fa-bars"></i>
+                    </div>
+                    <div class="icon-button selected" data-name="State=Selected">
+                        <i class="fa-solid fa-grip"></i>
+                    </div>
+                </div>
+                <div class="divider-vertical" data-name="Divider Vertical">
+                    <div class="divider-line"></div>
+                </div>
+                <div class="profile-pic" data-name="Size=Sm Round">
+                    <div class="profile-pic-image-wrapper">
+                        <img alt="Profile Picture" class="profile-pic-image" src="Images/Player_MtyThor.jpg" />
+                    </div>
+                </div>
+            </div>
+            <div class="stripe" data-name="Stripe">
+                <div class="stripe-line-1"></div>
+                <div class="stripe-line-2"></div>
+                <div class="stripe-line-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tournament Picker -->
+    <div class="tournament-picker" data-name="Tournament Picker" data-node-id="471:140">
+        <div class="tournament-picker-header" data-name="Tournament Picker Header">
+            <div class="tournament-picker-icon" data-name="icon_golfer">
+                <div class="tournament-picker-icon-wrapper">
+                    <img alt="Golfer Icon" class="tournament-picker-icon-image" src="Images/icon_golfer.png" />
+                </div>
+            </div>
+            <div class="tournament-picker-info" data-name="Tournament Info">
+                <p class="tournament-picker-name" data-tournament-name>THE OPEN CHAMPIONSHIP</p>
+                <p class="tournament-picker-date" data-tournament-date>APR 09 - 12, 2026</p>
+            </div>
+            <div class="tournament-picker-caret" data-name="icon_caret-down">
+                <i class="fa-solid fa-caret-down"></i>
+            </div>
+        </div>
+        <div class="tournament-picker-dropdown" data-name="Tournament Picker Flyout">
+            <div class="tournament-picker-option" data-name="Tournament Info">
+                <p class="tournament-picker-option-name">THE MASTERS</p>
+                <p class="tournament-picker-option-date">APR 09 - 12, 2026</p>
+            </div>
+            <div class="tournament-picker-option" data-name="Tournament Info">
+                <p class="tournament-picker-option-name">THE U.S. OPEN</p>
+                <p class="tournament-picker-option-date">APR 09 - 12, 2026</p>
+            </div>
+            <div class="tournament-picker-option" data-name="Tournament Info">
+                <p class="tournament-picker-option-name">THE U.S. OPEN</p>
+                <p class="tournament-picker-option-date">APR 09 - 12, 2026</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Tables Container -->
+    <div class="player-tables-container" data-name="Player Tables" data-node-id="471:181">
+        <!-- Player Table 1: MtyThor -->
+        <div class="player-score-table-web" data-name="Player Score Table Web" data-node-id="489:565" data-player-table-id="1">
+            <div class="table-container" data-node-id="489:566">
+                <!-- POS Column -->
+                <div class="table-column pos-column" data-node-id="489:567">
+                    <div class="header-cell" data-node-id="489:568">
+                        <p class="cell-text header">POS</p>
+                    </div>
+                    <div class="player-color-divider" style="background-color: #74a553;"></div>
+                    <div class="score-cell active-player pos-avg" data-node-id="489:570">
+                        <p class="cell-text pos-avg-label">AVG</p>
+                        <p class="cell-text pos-avg-value" data-player-avg-pos>24</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:571" data-golfer-row="0">
+                        <p class="cell-text standard" data-golfer-position>1</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:572" data-golfer-row="1">
+                        <p class="cell-text standard" data-golfer-position>2</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:573" data-golfer-row="2">
+                        <p class="cell-text standard" data-golfer-position>3</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:574" data-golfer-row="3">
+                        <p class="cell-text standard alternate" data-golfer-position>ALT</p>
+                    </div>
+                </div>
+
+                <!-- PLAYER Column -->
+                <div class="table-column player-column" data-node-id="489:575">
+                    <div class="header-cell player-header" data-node-id="489:576">
+                        <p class="cell-text header">PLAYER</p>
+                    </div>
+                    <div class="player-color-divider" style="background-color: #74a553;"></div>
+                    <div class="score-cell active-player player-cell" data-node-id="489:579">
+                        <div class="profile-pic-container">
+                            <div class="profile-pic-image-wrapper">
+                                <img alt="Player Avatar" class="profile-pic-image" src="Images/Player_MtyThor.jpg" data-player-image />
+                            </div>
+                        </div>
+                        <p class="cell-text player-name" data-player-name>MtyThor</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:580" data-golfer-row="0">
+                        <p class="cell-text standard" data-golfer-name>Tommy Fleetwood</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:581" data-golfer-row="1">
+                        <p class="cell-text standard" data-golfer-name>Russell Henley</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:582" data-golfer-row="2">
+                        <p class="cell-text standard" data-golfer-name>Cameron Young</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:583" data-golfer-row="3">
+                        <p class="cell-text standard alternate" data-golfer-name>Brian Harman</p>
+                    </div>
+                </div>
+
+                <!-- STROKES Column -->
+                <div class="table-column score-column" data-node-id="489:584">
+                    <div class="header-cell" data-node-id="489:585">
+                        <p class="cell-text header">STROKES</p>
+                    </div>
+                    <div class="player-color-divider" style="background-color: #74a553;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:587">
+                        <p class="cell-text aggregate" data-player-strokes-total>-47</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:588" data-golfer-row="0">
+                        <p class="cell-text standard" data-golfer-strokes>-18</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:589" data-golfer-row="1">
+                        <p class="cell-text standard" data-golfer-strokes>-15</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:590" data-golfer-row="2">
+                        <p class="cell-text standard" data-golfer-strokes>-14</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:591" data-golfer-row="3">
+                        <p class="cell-text standard alternate" data-golfer-strokes>-10</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 1 Column -->
+                <div class="table-column score-column" data-node-id="489:592">
+                    <div class="header-cell" data-node-id="489:593">
+                        <p class="cell-text header">ROUND 1</p>
+                    </div>
+                    <div class="player-color-divider" style="background-color: #74a553;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:595"></div>
+                    <div class="score-cell standard-row" data-node-id="489:596" data-golfer-row="0">
+                        <p class="cell-text standard" data-golfer-round="1">64</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:597" data-golfer-row="1">
+                        <p class="cell-text standard" data-golfer-round="1">61</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:598" data-golfer-row="2">
+                        <p class="cell-text standard" data-golfer-round="1">67</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:599" data-golfer-row="3">
+                        <p class="cell-text standard alternate" data-golfer-round="1">67</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 2 Column -->
+                <div class="table-column score-column" data-node-id="489:600">
+                    <div class="header-cell" data-node-id="489:601">
+                        <p class="cell-text header">ROUND 2</p>
+                    </div>
+                    <div class="player-color-divider" style="background-color: #74a553;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:603"></div>
+                    <div class="score-cell standard-row" data-node-id="489:604" data-golfer-row="0">
+                        <p class="cell-text standard" data-golfer-round="2">64</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:605" data-golfer-row="1">
+                        <p class="cell-text standard" data-golfer-round="2">61</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:606" data-golfer-row="2">
+                        <p class="cell-text standard" data-golfer-round="2">67</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:607" data-golfer-row="3">
+                        <p class="cell-text standard alternate" data-golfer-round="2">67</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 3 Column -->
+                <div class="table-column score-column" data-node-id="489:608">
+                    <div class="header-cell" data-node-id="489:609">
+                        <p class="cell-text header">ROUND 3</p>
+                    </div>
+                    <div class="player-color-divider" style="background-color: #74a553;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:611"></div>
+                    <div class="score-cell standard-row" data-node-id="489:612" data-golfer-row="0">
+                        <p class="cell-text standard" data-golfer-round="3">64</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:613" data-golfer-row="1">
+                        <p class="cell-text standard" data-golfer-round="3">61</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:614" data-golfer-row="2">
+                        <p class="cell-text standard" data-golfer-round="3">67</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:615" data-golfer-row="3">
+                        <p class="cell-text standard alternate" data-golfer-round="3">67</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 4 Column -->
+                <div class="table-column score-column" data-node-id="489:616">
+                    <div class="header-cell" data-node-id="489:617">
+                        <p class="cell-text header">ROUND 4</p>
+                    </div>
+                    <div class="player-color-divider" style="background-color: #74a553;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:619"></div>
+                    <div class="score-cell standard-row" data-node-id="489:620" data-golfer-row="0">
+                        <p class="cell-text standard" data-golfer-round="4">64</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:621" data-golfer-row="1">
+                        <p class="cell-text standard" data-golfer-round="4">61</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:622" data-golfer-row="2">
+                        <p class="cell-text standard" data-golfer-round="4">67</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:623" data-golfer-row="3">
+                        <p class="cell-text standard alternate" data-golfer-round="4">67</p>
+                    </div>
+                </div>
+
+                <!-- POINTS Column -->
+                <div class="table-column score-column" data-node-id="489:624">
+                    <div class="header-cell" data-node-id="489:625">
+                        <p class="cell-text header">Points</p>
+                    </div>
+                    <div class="player-color-divider" style="background-color: #74a553;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:627">
+                        <p class="cell-text aggregate" data-player-points>293</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:628" data-golfer-row="0">
+                        <p class="cell-text standard" data-golfer-points>99</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:629" data-golfer-row="1">
+                        <p class="cell-text standard" data-golfer-points>98</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:630" data-golfer-row="2">
+                        <p class="cell-text standard" data-golfer-points>96</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:631" data-golfer-row="3">
+                        <p class="cell-text standard alternate" data-golfer-points>87</p>
+                    </div>
+                </div>
+
+                <!-- BONUS Column -->
+                <div class="table-column score-column" data-node-id="489:632">
+                    <div class="header-cell" data-node-id="489:633">
+                        <p class="cell-text header">bonus</p>
+                    </div>
+                    <div class="player-color-divider" style="background-color: #74a553;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:635">
+                        <p class="cell-text aggregate" data-player-bonus>16</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:636" data-golfer-row="0">
+                        <p class="cell-text standard" data-golfer-bonus>6</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:637" data-golfer-row="1">
+                        <p class="cell-text standard" data-golfer-bonus>5</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:638" data-golfer-row="2">
+                        <p class="cell-text standard" data-golfer-bonus>5</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:639" data-golfer-row="3">
+                        <p class="cell-text standard alternate" data-golfer-bonus>3</p>
+                    </div>
+                </div>
+
+                <!-- TOTAL Column -->
+                <div class="table-column score-column" data-node-id="489:640">
+                    <div class="header-cell" data-node-id="489:641">
+                        <p class="cell-text header">Total</p>
+                    </div>
+                    <div class="player-color-divider" style="background-color: #74a553;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:643">
+                        <p class="cell-text total-aggregate" data-player-total>309</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:644" data-golfer-row="0">
+                        <p class="cell-text standard" data-golfer-total>105</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:645" data-golfer-row="1">
+                        <p class="cell-text standard" data-golfer-total>103</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:646" data-golfer-row="2">
+                        <p class="cell-text standard" data-golfer-total>101</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:647" data-golfer-row="3">
+                        <p class="cell-text standard alternate" data-golfer-total>90</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Table 2: KristaKay -->
+        <div class="player-score-table-web" data-name="Player Score Table Web" data-node-id="489:565">
+            <div class="table-container" data-node-id="489:566">
+                <!-- POS Column -->
+                <div class="table-column pos-column" data-node-id="489:567">
+                    <div class="player-color-divider" style="background-color: #e12c55;"></div>
+                    <div class="score-cell active-player pos-avg" data-node-id="489:570">
+                        <p class="cell-text pos-avg-label">AVG</p>
+                        <p class="cell-text pos-avg-value">10</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:571">
+                        <p class="cell-text standard">7</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:572">
+                        <p class="cell-text standard">17</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:573">
+                        <p class="cell-text standard">7</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:574">
+                        <p class="cell-text standard alternate">10</p>
+                    </div>
+                </div>
+
+                <!-- PLAYER Column -->
+                <div class="table-column player-column" data-node-id="489:575">
+                    <div class="player-color-divider" style="background-color: #e12c55;"></div>
+                    <div class="score-cell active-player player-cell" data-node-id="489:579">
+                        <div class="profile-pic-container">
+                            <div class="profile-pic-image-wrapper">
+                                <img alt="Player Avatar" class="profile-pic-image" src="Images/Player_KristaKay.jpg" />
+                            </div>
+                        </div>
+                        <p class="cell-text player-name">KristaKay</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:580">
+                        <p class="cell-text standard">Sam Burns</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:581">
+                        <p class="cell-text standard">Robert MacIntyre</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:582">
+                        <p class="cell-text standard">Keegan Bradley</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:583">
+                        <p class="cell-text standard alternate">Chris Gotterup</p>
+                    </div>
+                </div>
+
+                <!-- STROKES Column -->
+                <div class="table-column score-column" data-node-id="489:584">
+                    <div class="player-color-divider" style="background-color: #e12c55;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:587">
+                        <p class="cell-text aggregate">-41</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:588">
+                        <p class="cell-text standard">-15</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:589">
+                        <p class="cell-text standard">-12</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:590">
+                        <p class="cell-text standard">-14</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:591">
+                        <p class="cell-text standard alternate">-10</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 1 Column -->
+                <div class="table-column score-column" data-node-id="489:592">
+                    <div class="player-color-divider" style="background-color: #e12c55;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:595"></div>
+                    <div class="score-cell standard-row" data-node-id="489:596">
+                        <p class="cell-text standard">65</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:597">
+                        <p class="cell-text standard">68</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:598">
+                        <p class="cell-text standard">66</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:599">
+                        <p class="cell-text standard alternate">70</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 2 Column -->
+                <div class="table-column score-column" data-node-id="489:600">
+                    <div class="player-color-divider" style="background-color: #e12c55;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:603"></div>
+                    <div class="score-cell standard-row" data-node-id="489:604">
+                        <p class="cell-text standard">65</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:605">
+                        <p class="cell-text standard">68</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:606">
+                        <p class="cell-text standard">66</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:607">
+                        <p class="cell-text standard alternate">70</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 3 Column -->
+                <div class="table-column score-column" data-node-id="489:608">
+                    <div class="player-color-divider" style="background-color: #e12c55;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:611"></div>
+                    <div class="score-cell standard-row" data-node-id="489:612">
+                        <p class="cell-text standard">65</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:613">
+                        <p class="cell-text standard">68</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:614">
+                        <p class="cell-text standard">66</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:615">
+                        <p class="cell-text standard alternate">70</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 4 Column -->
+                <div class="table-column score-column" data-node-id="489:616">
+                    <div class="player-color-divider" style="background-color: #e12c55;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:619"></div>
+                    <div class="score-cell standard-row" data-node-id="489:620">
+                        <p class="cell-text standard">65</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:621">
+                        <p class="cell-text standard">68</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:622">
+                        <p class="cell-text standard">66</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:623">
+                        <p class="cell-text standard alternate">70</p>
+                    </div>
+                </div>
+
+                <!-- POINTS Column -->
+                <div class="table-column score-column" data-node-id="489:624">
+                    <div class="player-color-divider" style="background-color: #e12c55;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:627">
+                        <p class="cell-text aggregate">269</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:628">
+                        <p class="cell-text standard">95</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:629">
+                        <p class="cell-text standard">88</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:630">
+                        <p class="cell-text standard">86</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:631">
+                        <p class="cell-text standard alternate">80</p>
+                    </div>
+                </div>
+
+                <!-- BONUS Column -->
+                <div class="table-column score-column" data-node-id="489:632">
+                    <div class="player-color-divider" style="background-color: #e12c55;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:635">
+                        <p class="cell-text aggregate">11</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:636">
+                        <p class="cell-text standard">5</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:637">
+                        <p class="cell-text standard">3</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:638">
+                        <p class="cell-text standard">3</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:639">
+                        <p class="cell-text standard alternate">2</p>
+                    </div>
+                </div>
+
+                <!-- TOTAL Column -->
+                <div class="table-column score-column" data-node-id="489:640">
+                    <div class="player-color-divider" style="background-color: #e12c55;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:643">
+                        <p class="cell-text total-aggregate">280</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:644">
+                        <p class="cell-text standard">100</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:645">
+                        <p class="cell-text standard">91</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:646">
+                        <p class="cell-text standard">89</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:647">
+                        <p class="cell-text standard alternate">82</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Table 3: MrHattyHat -->
+        <div class="player-score-table-web" data-name="Player Score Table Web" data-node-id="489:565">
+            <div class="table-container" data-node-id="489:566">
+                <!-- POS Column -->
+                <div class="table-column pos-column" data-node-id="489:567">
+                    <div class="player-color-divider" style="background-color: #ff7340;"></div>
+                    <div class="score-cell active-player pos-avg" data-node-id="489:570">
+                        <p class="cell-text pos-avg-label">AVG</p>
+                        <p class="cell-text pos-avg-value">15</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:571">
+                        <p class="cell-text standard">13</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:572">
+                        <p class="cell-text standard">21</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:573">
+                        <p class="cell-text standard">10</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:574">
+                        <p class="cell-text standard alternate">30</p>
+                    </div>
+                </div>
+
+                <!-- PLAYER Column -->
+                <div class="table-column player-column" data-node-id="489:575">
+                    <div class="player-color-divider" style="background-color: #ff7340;"></div>
+                    <div class="score-cell active-player player-cell" data-node-id="489:579">
+                        <div class="profile-pic-container">
+                            <div class="profile-pic-image-wrapper">
+                                <img alt="Player Avatar" class="profile-pic-image" src="Images/Player_MrHattyhat.jpg" />
+                            </div>
+                        </div>
+                        <p class="cell-text player-name">MrHattyHat</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:580">
+                        <p class="cell-text standard">Harris English</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:581">
+                        <p class="cell-text standard">Justin Rose</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:582">
+                        <p class="cell-text standard">Ben Griffin</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:583">
+                        <p class="cell-text standard alternate">Sepp Straka</p>
+                    </div>
+                </div>
+
+                <!-- STROKES Column -->
+                <div class="table-column score-column" data-node-id="489:584">
+                    <div class="player-color-divider" style="background-color: #ff7340;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:587">
+                        <p class="cell-text aggregate">-37</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:588">
+                        <p class="cell-text standard">-13</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:589">
+                        <p class="cell-text standard">-9</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:590">
+                        <p class="cell-text standard">-10</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:591">
+                        <p class="cell-text standard alternate">-5</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 1 Column -->
+                <div class="table-column score-column" data-node-id="489:592">
+                    <div class="player-color-divider" style="background-color: #ff7340;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:595"></div>
+                    <div class="score-cell standard-row" data-node-id="489:596">
+                        <p class="cell-text standard">67</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:597">
+                        <p class="cell-text standard">69</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:598">
+                        <p class="cell-text standard">70</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:599">
+                        <p class="cell-text standard alternate">75</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 2 Column -->
+                <div class="table-column score-column" data-node-id="489:600">
+                    <div class="player-color-divider" style="background-color: #ff7340;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:603"></div>
+                    <div class="score-cell standard-row" data-node-id="489:604">
+                        <p class="cell-text standard">67</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:605">
+                        <p class="cell-text standard">69</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:606">
+                        <p class="cell-text standard">70</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:607">
+                        <p class="cell-text standard alternate">75</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 3 Column -->
+                <div class="table-column score-column" data-node-id="489:608">
+                    <div class="player-color-divider" style="background-color: #ff7340;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:611"></div>
+                    <div class="score-cell standard-row" data-node-id="489:612">
+                        <p class="cell-text standard">67</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:613">
+                        <p class="cell-text standard">69</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:614">
+                        <p class="cell-text standard">70</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:615">
+                        <p class="cell-text standard alternate">75</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 4 Column -->
+                <div class="table-column score-column" data-node-id="489:616">
+                    <div class="player-color-divider" style="background-color: #ff7340;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:619"></div>
+                    <div class="score-cell standard-row" data-node-id="489:620">
+                        <p class="cell-text standard">67</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:621">
+                        <p class="cell-text standard">69</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:622">
+                        <p class="cell-text standard">70</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:623">
+                        <p class="cell-text standard alternate">75</p>
+                    </div>
+                </div>
+
+                <!-- POINTS Column -->
+                <div class="table-column score-column" data-node-id="489:624">
+                    <div class="player-color-divider" style="background-color: #ff7340;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:627">
+                        <p class="cell-text aggregate">256</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:628">
+                        <p class="cell-text standard">87</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:629">
+                        <p class="cell-text standard">79</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:630">
+                        <p class="cell-text standard">80</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:631">
+                        <p class="cell-text standard alternate">70</p>
+                    </div>
+                </div>
+
+                <!-- BONUS Column -->
+                <div class="table-column score-column" data-node-id="489:632">
+                    <div class="player-color-divider" style="background-color: #ff7340;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:635">
+                        <p class="cell-text aggregate">7</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:636">
+                        <p class="cell-text standard">3</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:637">
+                        <p class="cell-text standard">2</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:638">
+                        <p class="cell-text standard">2</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:639">
+                        <p class="cell-text standard alternate">1</p>
+                    </div>
+                </div>
+
+                <!-- TOTAL Column -->
+                <div class="table-column score-column" data-node-id="489:640">
+                    <div class="player-color-divider" style="background-color: #ff7340;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:643">
+                        <p class="cell-text total-aggregate">263</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:644">
+                        <p class="cell-text standard">90</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:645">
+                        <p class="cell-text standard">81</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:646">
+                        <p class="cell-text standard">82</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:647">
+                        <p class="cell-text standard alternate">71</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Table 4: Atticus -->
+        <div class="player-score-table-web" data-name="Player Score Table Web" data-node-id="489:565">
+            <div class="table-container" data-node-id="489:566">
+                <!-- POS Column -->
+                <div class="table-column pos-column" data-node-id="489:567">
+                    <div class="player-color-divider" style="background-color: #3ca1ff;"></div>
+                    <div class="score-cell active-player pos-avg" data-node-id="489:570">
+                        <p class="cell-text pos-avg-label">AVG</p>
+                        <p class="cell-text pos-avg-value">16</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:571">
+                        <p class="cell-text standard">23</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:572">
+                        <p class="cell-text standard">2</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:573">
+                        <p class="cell-text standard">23</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:574">
+                        <p class="cell-text standard alternate">25</p>
+                    </div>
+                </div>
+
+                <!-- PLAYER Column -->
+                <div class="table-column player-column" data-node-id="489:575">
+                    <div class="player-color-divider" style="background-color: #3ca1ff;"></div>
+                    <div class="score-cell active-player player-cell" data-node-id="489:579">
+                        <div class="profile-pic-container">
+                            <div class="profile-pic-image-wrapper">
+                                <img alt="Player Avatar" class="profile-pic-image" src="Images/Player_Atticus.jpg" />
+                            </div>
+                        </div>
+                        <p class="cell-text player-name">Atticus</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:580">
+                        <p class="cell-text standard">Rory McIlroy</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:581">
+                        <p class="cell-text standard">Patrick Cantlay</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:582">
+                        <p class="cell-text standard">Maverick McNealy</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:583">
+                        <p class="cell-text standard alternate">J.J. Spaun</p>
+                    </div>
+                </div>
+
+                <!-- STROKES Column -->
+                <div class="table-column score-column" data-node-id="489:584">
+                    <div class="player-color-divider" style="background-color: #3ca1ff;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:587">
+                        <p class="cell-text aggregate">-36</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:588">
+                        <p class="cell-text standard">-7</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:589">
+                        <p class="cell-text standard">-18</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:590">
+                        <p class="cell-text standard">-7</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:591">
+                        <p class="cell-text standard alternate">-4</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 1 Column -->
+                <div class="table-column score-column" data-node-id="489:592">
+                    <div class="player-color-divider" style="background-color: #3ca1ff;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:595"></div>
+                    <div class="score-cell standard-row" data-node-id="489:596">
+                        <p class="cell-text standard">73</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:597">
+                        <p class="cell-text standard">62</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:598">
+                        <p class="cell-text standard">73</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:599">
+                        <p class="cell-text standard alternate">76</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 2 Column -->
+                <div class="table-column score-column" data-node-id="489:600">
+                    <div class="player-color-divider" style="background-color: #3ca1ff;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:603"></div>
+                    <div class="score-cell standard-row" data-node-id="489:604">
+                        <p class="cell-text standard">73</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:605">
+                        <p class="cell-text standard">62</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:606">
+                        <p class="cell-text standard">73</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:607">
+                        <p class="cell-text standard alternate">76</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 3 Column -->
+                <div class="table-column score-column" data-node-id="489:608">
+                    <div class="player-color-divider" style="background-color: #3ca1ff;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:611"></div>
+                    <div class="score-cell standard-row" data-node-id="489:612">
+                        <p class="cell-text standard">73</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:613">
+                        <p class="cell-text standard">62</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:614">
+                        <p class="cell-text standard">73</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:615">
+                        <p class="cell-text standard alternate">76</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 4 Column -->
+                <div class="table-column score-column" data-node-id="489:616">
+                    <div class="player-color-divider" style="background-color: #3ca1ff;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:619"></div>
+                    <div class="score-cell standard-row" data-node-id="489:620">
+                        <p class="cell-text standard">73</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:621">
+                        <p class="cell-text standard">62</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:622">
+                        <p class="cell-text standard">73</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:623">
+                        <p class="cell-text standard alternate">76</p>
+                    </div>
+                </div>
+
+                <!-- POINTS Column -->
+                <div class="table-column score-column" data-node-id="489:624">
+                    <div class="player-color-divider" style="background-color: #3ca1ff;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:627">
+                        <p class="cell-text aggregate">252</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:628">
+                        <p class="cell-text standard">77</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:629">
+                        <p class="cell-text standard">98</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:630">
+                        <p class="cell-text standard">77</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:631">
+                        <p class="cell-text standard alternate">70</p>
+                    </div>
+                </div>
+
+                <!-- BONUS Column -->
+                <div class="table-column score-column" data-node-id="489:632">
+                    <div class="player-color-divider" style="background-color: #3ca1ff;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:635">
+                        <p class="cell-text aggregate">5</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:636">
+                        <p class="cell-text standard">2</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:637">
+                        <p class="cell-text standard">6</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:638">
+                        <p class="cell-text standard">2</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:639">
+                        <p class="cell-text standard alternate">1</p>
+                    </div>
+                </div>
+
+                <!-- TOTAL Column -->
+                <div class="table-column score-column" data-node-id="489:640">
+                    <div class="player-color-divider" style="background-color: #3ca1ff;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:643">
+                        <p class="cell-text total-aggregate">257</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:644">
+                        <p class="cell-text standard">79</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:645">
+                        <p class="cell-text standard">104</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:646">
+                        <p class="cell-text standard">79</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:647">
+                        <p class="cell-text standard alternate">71</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Table 5: Fat Rando -->
+        <div class="player-score-table-web" data-name="Player Score Table Web" data-node-id="489:565">
+            <div class="table-container" data-node-id="489:566">
+                <!-- POS Column -->
+                <div class="table-column pos-column" data-node-id="489:567">
+                    <div class="player-color-divider" style="background-color: #88584d;"></div>
+                    <div class="score-cell active-player pos-avg" data-node-id="489:570">
+                        <p class="cell-text pos-avg-label">AVG</p>
+                        <p class="cell-text pos-avg-value">11</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:571">
+                        <p class="cell-text standard">4</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:572">
+                        <p class="cell-text standard">7</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:573">
+                        <p class="cell-text standard">21</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:574">
+                        <p class="cell-text standard alternate">CUT</p>
+                    </div>
+                </div>
+
+                <!-- PLAYER Column -->
+                <div class="table-column player-column" data-node-id="489:575">
+                    <div class="player-color-divider" style="background-color: #88584d;"></div>
+                    <div class="score-cell active-player player-cell" data-node-id="489:579">
+                        <div class="profile-pic-container">
+                            <div class="profile-pic-image-wrapper">
+                                <img alt="Player Avatar" class="profile-pic-image" src="Images/Player_FatRando.jpg" />
+                            </div>
+                        </div>
+                        <p class="cell-text player-name">Fat Rando</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:580">
+                        <p class="cell-text standard">Scottie Scheffler</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:581">
+                        <p class="cell-text standard">Justin Thomas</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:582">
+                        <p class="cell-text standard">Ludvig Aberg</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:583">
+                        <p class="cell-text standard alternate">Harry Hall</p>
+                    </div>
+                </div>
+
+                <!-- STROKES Column -->
+                <div class="table-column score-column" data-node-id="489:584">
+                    <div class="player-color-divider" style="background-color: #88584d;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:587">
+                        <p class="cell-text aggregate">-42</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:588">
+                        <p class="cell-text standard">-16</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:589">
+                        <p class="cell-text standard">-13</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:590">
+                        <p class="cell-text standard">-9</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:591">
+                        <p class="cell-text standard alternate">CUT</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 1 Column -->
+                <div class="table-column score-column" data-node-id="489:592">
+                    <div class="player-color-divider" style="background-color: #88584d;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:595"></div>
+                    <div class="score-cell standard-row" data-node-id="489:596">
+                        <p class="cell-text standard">64</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:597">
+                        <p class="cell-text standard">67</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:598">
+                        <p class="cell-text standard">71</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:599">
+                        <p class="cell-text standard alternate">-</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 2 Column -->
+                <div class="table-column score-column" data-node-id="489:600">
+                    <div class="player-color-divider" style="background-color: #88584d;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:603"></div>
+                    <div class="score-cell standard-row" data-node-id="489:604">
+                        <p class="cell-text standard">64</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:605">
+                        <p class="cell-text standard">67</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:606">
+                        <p class="cell-text standard">71</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:607">
+                        <p class="cell-text standard alternate">-</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 3 Column -->
+                <div class="table-column score-column" data-node-id="489:608">
+                    <div class="player-color-divider" style="background-color: #88584d;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:611"></div>
+                    <div class="score-cell standard-row" data-node-id="489:612">
+                        <p class="cell-text standard">64</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:613">
+                        <p class="cell-text standard">67</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:614">
+                        <p class="cell-text standard">71</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:615">
+                        <p class="cell-text standard alternate">-</p>
+                    </div>
+                </div>
+
+                <!-- ROUND 4 Column -->
+                <div class="table-column score-column" data-node-id="489:616">
+                    <div class="player-color-divider" style="background-color: #88584d;"></div>
+                    <div class="score-cell active-player empty" data-node-id="489:619"></div>
+                    <div class="score-cell standard-row" data-node-id="489:620">
+                        <p class="cell-text standard">64</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:621">
+                        <p class="cell-text standard">67</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:622">
+                        <p class="cell-text standard">71</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:623">
+                        <p class="cell-text standard alternate">-</p>
+                    </div>
+                </div>
+
+                <!-- POINTS Column -->
+                <div class="table-column score-column" data-node-id="489:624">
+                    <div class="player-color-divider" style="background-color: #88584d;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:627">
+                        <p class="cell-text aggregate">268</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:628">
+                        <p class="cell-text standard">96</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:629">
+                        <p class="cell-text standard">93</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:630">
+                        <p class="cell-text standard">79</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:631">
+                        <p class="cell-text standard alternate">0</p>
+                    </div>
+                </div>
+
+                <!-- BONUS Column -->
+                <div class="table-column score-column" data-node-id="489:632">
+                    <div class="player-color-divider" style="background-color: #88584d;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:635">
+                        <p class="cell-text aggregate">9</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:636">
+                        <p class="cell-text standard">6</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:637">
+                        <p class="cell-text standard">3</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:638">
+                        <p class="cell-text standard">2</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:639">
+                        <p class="cell-text standard alternate">0</p>
+                    </div>
+                </div>
+
+                <!-- TOTAL Column -->
+                <div class="table-column score-column" data-node-id="489:640">
+                    <div class="player-color-divider" style="background-color: #88584d;"></div>
+                    <div class="score-cell active-player aggregate" data-node-id="489:643">
+                        <p class="cell-text total-aggregate">277</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:644">
+                        <p class="cell-text standard">102</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:645">
+                        <p class="cell-text standard">96</p>
+                    </div>
+                    <div class="score-cell standard-row" data-node-id="489:646">
+                        <p class="cell-text standard">81</p>
+                    </div>
+                    <div class="score-cell alternate-row" data-node-id="489:647">
+                        <p class="cell-text standard alternate">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tournamentPicker = document.querySelector('.tournament-picker');
+            const header = document.querySelector('.tournament-picker-header');
+            const caret = document.querySelector('.tournament-picker-caret i');
+            const options = document.querySelectorAll('.tournament-picker-option');
+            const currentName = document.querySelector('.tournament-picker-name');
+            const currentDate = document.querySelector('.tournament-picker-date');
+
+            // Toggle dropdown on header click
+            header.addEventListener('click', function(e) {
+                e.stopPropagation();
+                tournamentPicker.classList.toggle('open');
+                
+                // Update caret icon
+                if (tournamentPicker.classList.contains('open')) {
+                    caret.classList.remove('fa-caret-down');
+                    caret.classList.add('fa-caret-up');
+                } else {
+                    caret.classList.remove('fa-caret-up');
+                    caret.classList.add('fa-caret-down');
+                }
+            });
+
+            // Handle option selection
+            options.forEach(function(option) {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const name = option.querySelector('.tournament-picker-option-name').textContent;
+                    const date = option.querySelector('.tournament-picker-option-date').textContent;
+                    
+                    // Update current selection
+                    currentName.textContent = name;
+                    currentDate.textContent = date;
+                    
+                    // Close dropdown
+                    tournamentPicker.classList.remove('open');
+                    caret.classList.remove('fa-caret-up');
+                    caret.classList.add('fa-caret-down');
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!tournamentPicker.contains(e.target)) {
+                    tournamentPicker.classList.remove('open');
+                    caret.classList.remove('fa-caret-up');
+                    caret.classList.add('fa-caret-down');
+                }
+            });
+
+            // Icon button navigation
+            const listViewButton = document.querySelector('.icon-button.unselected');
+            
+            if (listViewButton) {
+                listViewButton.addEventListener('click', function() {
+                    window.location.href = 'tournament-list-view-web.html';
+                });
+            }
+
+            // Nav button navigation
+            const seasonButton = document.querySelector('.nav-button.unselected');
+            
+            if (seasonButton) {
+                seasonButton.addEventListener('click', function() {
+                    window.location.href = 'season-view-web.html';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

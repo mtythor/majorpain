@@ -1,0 +1,289 @@
+/* PlayerCards - container query driven for graceful responsive sizing */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  z-index: 5;
+  width: 100%;
+}
+.root.positionRelative {
+  position: relative;
+}
+.root.positionAbsolute {
+  position: absolute;
+  left: 50%;
+  top: 252px;
+  transform: translateX(-400px);
+}
+
+.headerRow {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 0 8px;
+  position: relative;
+  border-radius: 20px 20px 0 0;
+  flex-shrink: 0;
+  width: 100%;
+  margin-bottom: 0;
+}
+@container playerCards (min-width: 768px) {
+  .headerRow {
+    margin-bottom: -16px;
+  }
+}
+
+.headerCell {
+  display: flex;
+  height: 20px;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  width: 70px;
+  justify-content: center;
+}
+@container playerCards (min-width: 768px) {
+  .headerCell {
+    height: 32px;
+    width: 348px;
+    justify-content: flex-start;
+    padding: 0 0 0 10px;
+  }
+}
+
+.headerCellPlayer {
+  /* inherits headerCell, PLAYER has different padding */
+}
+@container playerCards (min-width: 768px) {
+  .headerCellPlayer {
+    padding: 0 0 0 10px;
+  }
+}
+
+.headerCellData {
+  flex: 1 0 0;
+  min-width: 0;
+  padding: 0 8px;
+}
+@container playerCards (min-width: 768px) {
+  .headerCellData {
+    flex: none;
+    width: 92px;
+    padding: 0 16px;
+  }
+}
+
+.headerSpacer {
+  flex-shrink: 0;
+  width: 1px;
+  height: 20px;
+}
+@container playerCards (min-width: 768px) {
+  .headerSpacer {
+    height: 32px;
+  }
+}
+
+.headerText {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  line-height: normal;
+  color: #ffffff;
+  margin: 0;
+  font-size: 10px;
+  text-align: center;
+}
+@container playerCards (min-width: 768px) {
+  .headerText {
+    font-size: 12px;
+    text-align: left;
+  }
+}
+.headerCellPlayer .headerText {
+  text-align: center;
+}
+@container playerCards (min-width: 768px) {
+  .headerCellPlayer .headerText {
+    text-align: left;
+  }
+}
+
+.card {
+  background-color: #262626;
+  border: 1px solid #323232;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 8px;
+  position: relative;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.scoreBar {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  position: relative;
+  border-radius: 20px 20px 0 0;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.playerTag {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 64px;
+  align-items: center;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  flex-shrink: 0;
+  width: 70px;
+}
+@container playerCards (min-width: 768px) {
+  .playerTag {
+    flex-direction: row;
+    gap: 16px;
+    padding-left: 10px;
+    width: 348px;
+  }
+}
+
+.avatar {
+  position: relative;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+}
+@container playerCards (min-width: 768px) {
+  .avatar {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.playerName {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 800;
+  line-height: normal;
+  color: #ffffff;
+  margin: 0;
+  font-size: 11px;
+  text-align: center;
+  white-space: nowrap;
+}
+@container playerCards (min-width: 768px) {
+  .playerName {
+    font-size: 24px;
+  }
+}
+
+.dataCell {
+  display: flex;
+  flex-direction: column;
+  height: 64px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0 8px;
+  position: relative;
+  flex-shrink: 0;
+  flex: 1 0 0;
+  min-width: 0;
+}
+@container playerCards (min-width: 768px) {
+  .dataCell {
+    flex: none;
+    width: 92px;
+    padding: 0 16px;
+  }
+}
+
+.dataValue {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  line-height: normal;
+  color: #ffffff;
+  margin: 0;
+  font-size: 12px;
+  text-align: center;
+  white-space: nowrap;
+}
+@container playerCards (min-width: 768px) {
+  .dataValue {
+    font-size: 16px;
+  }
+}
+
+.dataValueTotal {
+  font-size: 18px;
+}
+@container playerCards (min-width: 768px) {
+  .dataValueTotal {
+    font-size: 24px;
+  }
+}
+
+.colorDivider {
+  height: 1px;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.golferBar {
+  display: flex;
+  gap: 8px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.golferSlot {
+  flex: 1 0 0;
+  min-width: 0;
+}
+@container playerCards (min-width: 768px) {
+  .golferSlot {
+    flex: none;
+    width: 183.25px;
+  }
+}
+
+.golferText {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  text-align: center;
+}
+@container playerCards (min-width: 768px) {
+  .golferText {
+    font-size: 14px;
+  }
+}
+
+.golferNameShort {
+  display: inline;
+}
+.golferNameFull {
+  display: none;
+}
+@container playerCards (min-width: 768px) {
+  .golferNameShort {
+    display: none;
+  }
+  .golferNameFull {
+    display: inline;
+  }
+}
