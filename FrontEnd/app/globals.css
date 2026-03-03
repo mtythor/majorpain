@@ -8,6 +8,7 @@
 }
 
 :root {
+  /* Colors */
   --color-background: #0f0f0f;
   --color-background-alt: #151515;
   --color-background-row-alt: #1f1f1f;
@@ -19,6 +20,34 @@
   --color-border: #323232;
   --color-border-divider: #707070;
   --color-draft-blue: #3ca1ff;
+
+  /* Layout - from Figma design spec */
+  --max-content-width: 1006px;
+  --table-width: 790px;
+  --tournament-list-width: 800px;
+  --tournament-list-width-half: 400px;
+
+  /* Header stripe positioning (mobile) */
+  --stripe-offset: 277px;
+  --stripe-width: 390px;
+  --stripe-top: 47px;
+
+  /* Tournament picker offsets by view mode (half-width for translateX centering) */
+  --picker-offset-list: 400px;
+  --picker-offset-draft: 503px;
+  --picker-offset-table: 528.5px;
+
+  /* Results page header alignment */
+  --results-header-offset-x: 395px;
+
+  /* Results table columns */
+  --results-col-pos: 92px;
+  --results-col-player: 238px;
+  --results-col-score: 92px;
+
+  /* Breakpoints - single source of truth */
+  --breakpoint-mobile: 767px;
+  --breakpoint-desktop-picker: 816px;
 }
 
 body {
@@ -114,7 +143,7 @@ body {
   align-items: flex-start;
   left: 50%;
   top: clamp(220px, 28vh, 252px);
-  width: min(100% - 16px, 800px);
+  width: min(100% - 16px, var(--tournament-list-width));
   padding: 0 8px;
   box-sizing: border-box;
   z-index: 5;
@@ -129,7 +158,7 @@ body {
 }
 .tournament-list-footer {
   width: 100%;
-  max-width: 800px;
+  max-width: var(--tournament-list-width);
 }
 
 /* Tournament picker - fluid layout */
@@ -147,7 +176,7 @@ body {
     left: 50%;
     right: auto;
     width: 239px;
-    transform: translateX(var(--picker-offset, -400px));
+    transform: translateX(var(--picker-offset, calc(-1 * var(--tournament-list-width-half))));
   }
 }
 

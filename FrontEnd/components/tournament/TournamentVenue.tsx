@@ -1,6 +1,7 @@
 'use client';
 
 import { Tournament } from '@/lib/types';
+import { PICKER_OFFSETS } from '@/lib/design-tokens';
 
 interface TournamentVenueProps {
   tournament: Tournament;
@@ -14,13 +15,7 @@ export default function TournamentVenue({ tournament, viewMode }: TournamentVenu
 
   const { name, par, location } = tournament.venue;
 
-  // Calculate right edge alignment based on view mode
-  // List view: PlayerCards is 800px wide, positioned at left: 50%, transform: translateX(-400px)
-  //   Right edge is at: 50% + 400px
-  // Table view: PlayerTables is 1057px wide, positioned at left: 50%, transform: translateX(-50%)
-  //   Right edge is at: 50% + 528.5px (1057px / 2)
-  // Draft view: PlayByPlay right edge aligns with MainContainer right edge at 50% + 503px (1006px / 2)
-  const rightEdgeOffset = viewMode === 'list' ? 400 : viewMode === 'draft' ? 503 : 528.5;
+  const rightEdgeOffset = viewMode === 'list' ? PICKER_OFFSETS.list : viewMode === 'draft' ? PICKER_OFFSETS.draft : PICKER_OFFSETS.table;
 
   return (
     <div

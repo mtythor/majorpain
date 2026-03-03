@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { Tournament } from '@/lib/types';
+import { PICKER_OFFSETS } from '@/lib/design-tokens';
 
 interface TournamentPickerProps {
   tournaments: Tournament[];
@@ -36,7 +37,7 @@ export default function TournamentPicker({
     };
   }, [isOpen]);
 
-  const leftEdgeOffset = viewMode === 'list' ? 400 : viewMode === 'draft' ? 503 : 528.5;
+  const leftEdgeOffset = viewMode === 'list' ? PICKER_OFFSETS.list : viewMode === 'draft' ? PICKER_OFFSETS.draft : PICKER_OFFSETS.table;
 
   return (
     <div

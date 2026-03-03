@@ -253,7 +253,7 @@ export default function TournamentResultsPage({ params }: { params: { id: string
             position: 'absolute',
             left: '50%',
             top: '184px',
-            transform: 'translateX(-395px)',
+            transform: 'translateX(calc(-1 * var(--results-header-offset-x)))',
             zIndex: 1000,
           }}
         >
@@ -277,7 +277,7 @@ export default function TournamentResultsPage({ params }: { params: { id: string
             position: 'absolute',
             right: '50%',
             top: '184px',
-            transform: 'translateX(395px)',
+            transform: 'translateX(var(--results-header-offset-x))',
             zIndex: 1000,
           }}
         >
@@ -304,11 +304,13 @@ export default function TournamentResultsPage({ params }: { params: { id: string
           ) : (
             <div
               style={{
-                width: '790px',
+                width: 'var(--table-width)',
+                minWidth: 'var(--table-width)',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 0,
                 alignSelf: 'center',
+                overflowX: 'auto',
               }}
             >
               {/* Table Header */}
@@ -324,7 +326,7 @@ export default function TournamentResultsPage({ params }: { params: { id: string
                 {/* POS Column */}
                 <div
                   style={{
-                    width: '92px',
+                    width: 'var(--results-col-pos)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -350,7 +352,7 @@ export default function TournamentResultsPage({ params }: { params: { id: string
                 {/* PLAYER Column */}
                 <div
                   style={{
-                    width: '238px',
+                    width: 'var(--results-col-player)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'flex-start',
@@ -376,7 +378,7 @@ export default function TournamentResultsPage({ params }: { params: { id: string
                 {/* STROKES Column */}
                 <div
                   style={{
-                    width: '92px',
+                    width: 'var(--results-col-pos)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -404,7 +406,7 @@ export default function TournamentResultsPage({ params }: { params: { id: string
                   <div
                     key={roundNum}
                     style={{
-                      width: '92px',
+                      width: 'var(--results-col-pos)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -446,7 +448,7 @@ export default function TournamentResultsPage({ params }: { params: { id: string
                   {/* POS */}
                   <div
                     style={{
-                      width: '92px',
+                      width: 'var(--results-col-pos)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -471,7 +473,7 @@ export default function TournamentResultsPage({ params }: { params: { id: string
                   {/* PLAYER */}
                   <div
                     style={{
-                      width: '238px',
+                      width: 'var(--results-col-player)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'flex-start',
@@ -496,7 +498,7 @@ export default function TournamentResultsPage({ params }: { params: { id: string
                   {/* STROKES */}
                   <div
                     style={{
-                      width: '92px',
+                      width: 'var(--results-col-pos)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -528,7 +530,7 @@ export default function TournamentResultsPage({ params }: { params: { id: string
                     <div
                       key={roundNum}
                       style={{
-                        width: '92px',
+                        width: 'var(--results-col-pos)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',

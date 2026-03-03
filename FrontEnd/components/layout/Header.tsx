@@ -26,12 +26,8 @@ export default function Header({
 }: HeaderProps) {
   const isMobile = useIsMobile();
 
-  // Mobile: Figma spec - logo centered at top, two stripes left/right. Logo scales with viewport via CSS.
+  // Mobile: design tokens for stripe positioning
   if (isMobile) {
-    const stripeTop = 47;
-    const stripeOffset = 277;
-    const stripeWidth = 390;
-
     return (
       <div
         style={{
@@ -56,27 +52,27 @@ export default function Header({
         >
           <Logo className="header-logo" size={{ width: 140, height: 97 }} />
         </div>
-        {/* Left stripe - Figma 7:1885 */}
+        {/* Left stripe */}
         <div
           style={{
             position: 'absolute',
-            left: `calc(50% - ${stripeOffset}px)`,
-            top: `${stripeTop}px`,
+            left: 'calc(50% - var(--stripe-offset))',
+            top: 'var(--stripe-top)',
             transform: 'translateX(-50%)',
-            width: `${stripeWidth}px`,
+            width: 'var(--stripe-width)',
             overflow: 'hidden',
           }}
         >
           <Stripe width="100%" compact />
         </div>
-        {/* Right stripe - Figma 7:1889 */}
+        {/* Right stripe */}
         <div
           style={{
             position: 'absolute',
-            left: `calc(50% + ${stripeOffset}px)`,
-            top: `${stripeTop}px`,
+            left: 'calc(50% + var(--stripe-offset))',
+            top: 'var(--stripe-top)',
             transform: 'translateX(-50%)',
-            width: `${stripeWidth}px`,
+            width: 'var(--stripe-width)',
             overflow: 'hidden',
           }}
         >

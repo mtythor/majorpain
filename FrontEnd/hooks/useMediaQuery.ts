@@ -1,8 +1,7 @@
 'use client';
 
 import { useSyncExternalStore, useCallback } from 'react';
-
-const MOBILE_BREAKPOINT = '(max-width: 767px)';
+import { MOBILE_MEDIA_QUERY } from '@/lib/design-tokens';
 
 /**
  * Hook to detect if viewport matches a media query.
@@ -35,7 +34,7 @@ export function useMediaQuery(query: string): boolean {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }
 
-/** true when viewport is below md (768px) - mobile layout */
+/** true when viewport is below 768px - mobile layout. Uses design token. */
 export function useIsMobile(): boolean {
-  return useMediaQuery(MOBILE_BREAKPOINT);
+  return useMediaQuery(MOBILE_MEDIA_QUERY);
 }

@@ -26,7 +26,7 @@ export default function MainContainer({ children, className = '', top = '147px',
         top: isMobile ? '122px' : top,
         transform: 'translateX(-50%)',
         zIndex: 5,
-        width: isMobile ? '100%' : '1006px',
+        width: isMobile ? '100%' : 'var(--max-content-width)',
         maxWidth: '100%',
         padding: noPadding ? '0' : isMobile ? '0 8px' : '0 16px',
       }}
