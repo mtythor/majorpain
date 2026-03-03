@@ -130,6 +130,7 @@ body {
 .player-tables-container {
   scrollbar-width: thin;
   scrollbar-color: #444 #1a1a1a;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Custom Scrollbar Styling for Tournament Picker Dropdown */

@@ -29,9 +29,185 @@ interface PlayerTableData {
 interface PlayerTablesProps {
   players: PlayerTableData[];
   position?: 'absolute' | 'relative';
+  isMobile?: boolean;
 }
 
-export default function PlayerTables({ players, position = 'absolute' }: PlayerTablesProps) {
+function formatStrokes(val: number, hasResults: boolean | undefined): string {
+  if (hasResults === false && val === 0) return '--';
+  if (val === 0) return 'E';
+  return (val > 0 ? '+' : '') + val;
+}
+
+function getLastName(fullName: string): string {
+  const parts = fullName.trim().split(/\s+/);
+  return parts.length > 1 ? parts[parts.length - 1]! : fullName;
+}
+
+function MobilePlayerTableCard({ player }: { player: PlayerTableData }) {
+  const textStyle = { fontFamily: "'Open Sans', sans-serif" as const, color: '#ffffff', margin: 0 };
+  const borderColor = '#323232';
+  const dividerColor = '#707070';
+  const nameColWidth = 92;
+  const dataColStyle = {
+    flex: 1,
+    minWidth: 40,
+    padding: '8px 4px',
+    display: 'flex' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'center' as const,
+  };
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        backgroundColor: '#262626',
+        overflow: 'hidden',
+      }}
+      data-player-table-id={player.id}
+    >
+      {/* Colored bar at top */}
+      <div style={{ height: 2, backgroundColor: player.color, width: '100%' }} />
+      {/* Single header row */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'stretch',
+          backgroundColor: '#151515',
+          borderBottom: `1px solid ${borderColor}`,
+        }}
+      >
+        <div style={{ width: nameColWidth, flexShrink: 0, padding: '8px 6px 8px 10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <p style={{ ...textStyle, fontWeight: 700, fontSize: '10px', textTransform: 'uppercase', textAlign: 'center' }}>PLAYER</p>
+        </div>
+        <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
+        <div style={{ ...dataColStyle }}>
+          <p style={{ ...textStyle, fontWeight: 700, fontSize: '10px', textTransform: 'uppercase' }}>POS</p>
+        </div>
+        <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
+        <div style={{ ...dataColStyle }}>
+          <p style={{ ...textStyle, fontWeight: 700, fontSize: '10px', textTransform: 'uppercase' }}>PTS</p>
+        </div>
+        <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
+        <div style={{ ...dataColStyle }}>
+          <p style={{ ...textStyle, fontWeight: 700, fontSize: '10px', textTransform: 'uppercase' }}>BNS</p>
+        </div>
+        <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
+        <div style={{ ...dataColStyle }}>
+          <p style={{ ...textStyle, fontWeight: 700, fontSize: '10px', textTransform: 'uppercase' }}>TOT</p>
+        </div>
+      </div>
+      {/* Player row: avatar+name | avg | pts | bns | tot */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'stretch',
+          backgroundColor: '#000000',
+        }}
+      >
+        <div
+          style={{
+            width: nameColWidth,
+            flexShrink: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '8px 4px 8px 8px',
+            gap: 4,
+          }}
+        >
+          <div style={{ position: 'relative', width: 44, height: 44, flexShrink: 0, borderRadius: '4px', overflow: 'hidden' }}>
+            <Image src={player.imageUrl} alt="" fill style={{ objectFit: 'cover' }} />
+          </div>
+          <p style={{ ...textStyle, fontWeight: 800, fontSize: '11px', textAlign: 'center', lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%' }}>{player.name}</p>
+        </div>
+        <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
+        <div style={{ ...dataColStyle }}>
+          <p style={{ ...textStyle, fontWeight: 700, fontSize: '16px' }}>{player.hasResults === false && player.avgPos === 0 ? '--' : player.avgPos}</p>
+        </div>
+        <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
+        <div style={{ ...dataColStyle }}>
+          <p style={{ ...textStyle, fontWeight: 700, fontSize: '16px' }}>{player.hasResults === false && player.points === 0 ? '--' : player.points}</p>
+        </div>
+        <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
+        <div style={{ ...dataColStyle }}>
+          <p style={{ ...textStyle, fontWeight: 700, fontSize: '16px' }}>{player.hasResults === false && player.bonus === 0 ? '--' : player.bonus}</p>
+        </div>
+        <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
+        <div style={{ ...dataColStyle }}>
+          <p style={{ ...textStyle, fontWeight: 700, fontSize: '18px' }}>{player.hasResults === false && player.total === 0 ? '--' : player.total}</p>
+        </div>
+      </div>
+      {/* Divider between player row and first golfer */}
+      <div style={{ height: 2, backgroundColor: '#121212', width: '100%' }} />
+      {/* Golfer rows - one header removed, each golfer: main row + detail row with same column alignment */}
+      {player.golfers.map((golfer, index) => (
+        <div key={index} data-golfer-row={index} style={{ borderBottom: index < player.golfers.length - 1 ? '2px solid #121212' : 'none' }}>
+          {/* Golfer main row: Name | POS | PTS | BNS | TOT */}
+          <div style={{ display: 'flex', alignItems: 'stretch', backgroundColor: index % 2 === 0 ? '#262626' : '#1f1f1f' }}>
+            <div style={{ width: nameColWidth, flexShrink: 0, padding: '8px 6px 8px 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+              <p style={{ ...textStyle, fontWeight: 700, fontSize: '13px', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{getLastName(golfer.name)}</p>
+            </div>
+            <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
+            <div style={{ ...dataColStyle }}>
+              <p style={{ ...textStyle, fontWeight: 700, fontSize: '14px' }}>
+                {player.hasResults === false && (golfer.position === 0 || golfer.position === '--') && golfer.rounds.length === 0 ? '--' : typeof golfer.position === 'number' && golfer.position === 0 && golfer.rounds.length > 0 ? '--' : golfer.position}
+              </p>
+            </div>
+            <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
+            <div style={{ ...dataColStyle }}>
+              <p style={{ ...textStyle, fontWeight: 700, fontSize: '14px' }}>{player.hasResults === false && golfer.points === 0 ? '--' : golfer.points}</p>
+            </div>
+            <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
+            <div style={{ ...dataColStyle }}>
+              <p style={{ ...textStyle, fontWeight: 700, fontSize: '14px' }}>{player.hasResults === false && golfer.bonus === 0 ? '--' : golfer.bonus}</p>
+            </div>
+            <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
+            <div style={{ ...dataColStyle }}>
+              <p style={{ ...textStyle, fontWeight: 700, fontSize: '14px' }}>{player.hasResults === false && golfer.total === 0 ? '--' : golfer.total}</p>
+            </div>
+          </div>
+          {/* Detail row: one contiguous area, rounds and strokes centered with light divider */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, backgroundColor: '#1a1a1a', padding: '6px 12px' }}>
+            <span style={{ ...textStyle, fontWeight: 400, fontSize: '12px', color: '#b0b0b0' }}>
+              {golfer.rounds.length > 0 ? [1, 2, 3, 4].map((i) => golfer.rounds[i - 1] ?? '–').join(' / ') : '--'}
+            </span>
+            <div style={{ width: 1, height: 14, backgroundColor: '#505050', flexShrink: 0 }} />
+            <span style={{ ...textStyle, fontWeight: 400, fontSize: '12px', color: '#b0b0b0' }}>{player.hasResults === false && golfer.rounds.length === 0 ? '--' : formatStrokes(golfer.strokes, player.hasResults)}</span>
+          </div>
+        </div>
+      ))}
+      {/* Colored bar at bottom */}
+      <div style={{ height: 2, backgroundColor: player.color, width: '100%' }} />
+    </div>
+  );
+}
+
+export default function PlayerTables({ players, position = 'absolute', isMobile = false }: PlayerTablesProps) {
+  if (isMobile) {
+    return (
+      <div
+        className="player-tables-container player-tables-mobile"
+        style={{
+          position: position === 'relative' ? 'relative' : 'absolute',
+          ...(position === 'absolute' && { left: '50%', top: '252px', transform: 'translateX(-50%)' }),
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '16px',
+          width: '100%',
+          maxWidth: '100%',
+          minWidth: 0,
+          zIndex: 5,
+        }}
+      >
+        {players.map((player) => (
+          <MobilePlayerTableCard key={player.id} player={player} />
+        ))}
+      </div>
+    );
+  }
+
   const tableWidth = 'min(1057px, 100%)';
   const baseStyle = position === 'relative'
     ? {

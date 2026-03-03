@@ -773,7 +773,7 @@ export default function TournamentTableView({ params }: { params: { id: string }
             transform: isMobile ? 'none' : 'translateX(-50%)',
             zIndex: 5,
             width: isMobile ? '100%' : '1057px',
-            padding: isMobile ? '0 8px' : 0,
+            padding: 0,
             boxSizing: 'border-box',
             color: '#ffffff',
           }}
@@ -793,7 +793,7 @@ export default function TournamentTableView({ params }: { params: { id: string }
             transform: isMobile ? 'none' : 'translateX(-50%)',
             zIndex: 5,
             width: isMobile ? '100%' : '1057px',
-            padding: isMobile ? '0 8px' : 0,
+            padding: 0,
             boxSizing: 'border-box',
           }}
         >
@@ -812,12 +812,12 @@ export default function TournamentTableView({ params }: { params: { id: string }
             transform: isMobile ? 'none' : 'translateX(-50%)',
             zIndex: 5,
             width: isMobile ? '100%' : undefined,
-            padding: isMobile ? '0 8px' : 0,
+            padding: 0,
             boxSizing: 'border-box',
             overflowX: isMobile ? 'auto' : 'visible',
           }}
         >
-          <PlayerTables players={playerTableData} position="relative" />
+          <PlayerTables players={playerTableData} position="relative" isMobile={isMobile} />
           {results && results.golferResults && results.golferResults.length > 0 &&
             results.golferResults.some((gr) => gr.rounds && gr.rounds.length > 0) && (
             <div
