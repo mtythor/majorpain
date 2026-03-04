@@ -193,6 +193,23 @@ body {
   max-width: var(--tournament-list-width);
 }
 
+/* Season page - horizontal scroll, container for responsive player layout */
+.season-content {
+  container-type: inline-size;
+  container-name: seasonTable;
+}
+.season-content::-webkit-scrollbar {
+  height: 8px;
+}
+.season-content::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 4px;
+}
+.season-content::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+
 /* Tournament picker - fluid layout, 8px below header, edge to edge on mobile, fixed on desktop */
 .tournament-picker {
   position: absolute;
@@ -236,6 +253,12 @@ body {
     width: 246px;
     left: 50%;
     transform: translateX(calc(-246px / 2));
+  }
+}
+@media (min-width: 816px) {
+  .season-picker {
+    width: 239px;
+    transform: translateX(calc(-1 * var(--tournament-list-width-half)));
   }
 }
 

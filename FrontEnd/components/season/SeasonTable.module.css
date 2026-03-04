@@ -1,0 +1,277 @@
+/* SeasonTable - two-panel layout with explicit row heights for alignment */
+
+.twoPanelWrapper {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  min-width: 0;
+}
+
+.leftPanel {
+  flex-shrink: 0;
+  width: 94px;
+  background: #151515;
+  border-right: 2px solid #121212;
+}
+@container seasonTable (min-width: 768px) {
+  .leftPanel {
+    width: 230px;
+  }
+}
+
+/* Header: 48px total (8+32+8) */
+.leftHeader {
+  display: flex;
+  min-height: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  border-radius: 0;
+  box-sizing: border-box;
+}
+@container seasonTable (min-width: 768px) {
+  .leftHeader {
+    border-radius: 20px 0 0 0;
+  }
+}
+
+/* Card row: 89px (8+64+8+1+8) */
+.leftCell {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 89px;
+  box-sizing: border-box;
+  background-color: #262626;
+  border: 1px solid #323232;
+  border-right: none;
+  padding: 8px;
+  border-radius: 0;
+}
+@container seasonTable (min-width: 768px) {
+  .leftCell {
+    border-radius: 8px 0 0 8px;
+  }
+}
+
+.leftScoreRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 64px;
+  min-height: 64px;
+  flex-shrink: 0;
+}
+
+.leftDivider {
+  height: 1px;
+  flex-shrink: 0;
+}
+
+.rightPanel {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+}
+.rightPanel::-webkit-scrollbar {
+  height: 8px;
+}
+.rightPanel::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 4px;
+}
+.rightPanel::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+
+/* Header: same structure as scoreRow for column alignment (dividers between cells) */
+.headerRow {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 8px;
+  position: relative;
+  border-radius: 0;
+  flex-shrink: 0;
+  width: 100%;
+  background: #151515;
+  box-sizing: border-box;
+}
+@container seasonTable (min-width: 768px) {
+  .headerRow {
+    border-radius: 0 20px 0 0;
+  }
+}
+
+.headerCell {
+  display: flex;
+  height: 32px;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  width: 70px;
+  justify-content: center;
+}
+@container seasonTable (min-width: 768px) {
+  .headerCell {
+    width: 206px;
+    padding-left: 16px;
+    justify-content: flex-start;
+  }
+}
+
+
+.headerCellData {
+  width: 77px;
+  justify-content: center;
+}
+
+.headerText {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  line-height: normal;
+  color: #ffffff;
+  margin: 0;
+  font-size: 10px;
+  text-align: center;
+  white-space: nowrap;
+}
+@container seasonTable (min-width: 768px) {
+  .headerText {
+    font-size: 12px;
+    text-align: left;
+  }
+}
+.headerCellPlayer .headerText {
+  text-align: center;
+}
+@container seasonTable (min-width: 768px) {
+  .headerCellPlayer .headerText {
+    text-align: left;
+  }
+}
+
+/* Player tag - column (pic top, name below) on narrow; row (pic left, name right) on wide */
+.playerTag {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 64px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  flex-shrink: 0;
+  width: 70px;
+}
+@container seasonTable (min-width: 768px) {
+  .playerTag {
+    flex-direction: row;
+    gap: 16px;
+    padding-left: 10px;
+    width: 206px;
+    justify-content: flex-start;
+  }
+}
+
+.avatar {
+  position: relative;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+}
+@container seasonTable (min-width: 768px) {
+  .avatar {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.playerName {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 800;
+  line-height: normal;
+  color: #ffffff;
+  margin: 0;
+  font-size: 11px;
+  text-align: center;
+  white-space: nowrap;
+}
+@container seasonTable (min-width: 768px) {
+  .playerName {
+    font-size: 18px;
+  }
+}
+
+/* Card: 89px min-height to match leftCell */
+.card {
+  background-color: #262626;
+  border: 1px solid #323232;
+  border-left: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: visible;
+  padding: 8px;
+  position: relative;
+  border-radius: 0;
+  flex-shrink: 0;
+  width: 100%;
+  min-width: max-content;
+  min-height: 89px;
+  box-sizing: border-box;
+}
+@container seasonTable (min-width: 768px) {
+  .card {
+    border-radius: 0 8px 8px 0;
+  }
+}
+
+.scoreRow {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  position: relative;
+  border-radius: 0;
+  flex-shrink: 0;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+@container seasonTable (min-width: 768px) {
+  .scoreRow {
+    border-radius: 0 20px 0 0;
+  }
+}
+
+.dataCell {
+  display: flex;
+  flex-direction: column;
+  height: 64px;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  padding: 0 16px;
+  position: relative;
+  flex-shrink: 0;
+  width: 77px;
+}
+
+.dataValue {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  line-height: normal;
+  color: #ffffff;
+  margin: 0;
+  font-size: 16px;
+  text-align: center;
+}
+.dataValueLarge {
+  font-size: 24px;
+}

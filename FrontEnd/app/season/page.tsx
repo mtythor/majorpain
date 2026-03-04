@@ -68,6 +68,7 @@ export default function SeasonPage() {
         />
         <SeasonPicker season="2026 SEASON" />
         <div
+          className="season-content"
           style={{
             position: 'absolute',
             display: 'flex',
@@ -78,10 +79,12 @@ export default function SeasonPage() {
             top: isMobile ? '169px' : '232px',
             transform: isMobile ? 'none' : 'translateX(-50%)',
             zIndex: 5,
-            width: isMobile ? '100%' : undefined,
-            padding: isMobile ? '0 8px' : 0,
+            width: '100%',
+            maxWidth: 'min(100%, var(--tournament-list-width))',
+            padding: 0,
             boxSizing: 'border-box',
-            overflowX: isMobile ? 'auto' : 'visible',
+            overflowX: 'auto',
+            overflowY: 'visible',
           }}
         >
           <SeasonTable
