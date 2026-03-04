@@ -1,45 +1,21 @@
 /**
  * Data layer: single source for all app data.
  *
- * Supports two modes:
- * - Dummy data mode (default): Uses in-memory dummy data
- * - API client mode: Fetches from mock JSON files or real backend API
- *
- * Switch modes using NEXT_PUBLIC_USE_API_CLIENT environment variable.
+ * All data comes from the API (Postgres or file backend via api-db).
+ * Hooks (useApiData, useTournamentData) fetch and populate the cache.
+ * This module exposes synchronous getters that read from the cache.
+ * getCurrentUser falls back to dummyPlayers when no user is loaded.
  */
 
-import {
-  dummyTournaments,
-  dummyGolfers,
-  dummyTournamentResults,
-  dummyPlayers,
-  getTournamentData as getDummyTournamentData,
-  getCurrentTournament as getDummyCurrentTournament,
-  getCompletedTournaments as getDummyCompletedTournaments,
-  getAllTournamentData as getDummyAllTournamentData,
-} from './dummyData';
-import {
-  fetchTournaments as apiFetchTournaments,
-  fetchTournament as apiFetchTournament,
-  fetchGolfers as apiFetchGolfers,
-  fetchTournamentResult as apiFetchTournamentResult,
-  fetchPlayers as apiFetchPlayers,
-  fetchCurrentUser as apiFetchCurrentUser,
-  fetchTournamentData as apiFetchTournamentData,
-  fetchCurrentTournament as apiFetchCurrentTournament,
-  fetchCompletedTournaments as apiFetchCompletedTournaments,
-  fetchAllTournamentData as apiFetchAllTournamentData,
-} from './api-client';
+import { dummyPlayers } from './dummyData';
 import type { Tournament, Golfer, Player, TournamentResult } from './types';
 import { pointsFromPosition } from './constants';
+import { mergeTournamentsWithSchedule } from './tournamentSchedule';
 
 // Re-export types used by pages
 export type { Tournament, Golfer, Player, TournamentResult };
 
-// Check if we should use API client
-const USE_API_CLIENT = process.env.NEXT_PUBLIC_USE_API_CLIENT === 'true';
-
-// Cache for API data (for client components)
+// Cache for API data (populated by useApiData/useTournamentData hooks)
 let dataCache: {
   tournaments?: Tournament[];
   players?: Player[];
@@ -66,90 +42,61 @@ export function clearDataCache() {
 // For backward compatibility, these functions are synchronous when using dummy data
 // and return cached data when using API client (populated by hooks)
 
+export function persistAdminOverrides(_tournaments: Tournament[]) {
+  // No-op: state persisted via API. Kept for compatibility.
+}
+
 export function getTournaments(): Tournament[] {
-  if (USE_API_CLIENT) {
-    // Return cached data or empty array (will be populated by useEffect)
-    return dataCache.tournaments || [];
-  }
-  return dummyTournaments;
+  const stored = dataCache.tournaments || [];
+  return mergeTournamentsWithSchedule(stored.length ? stored : []);
 }
 
 export function getTournament(id: string): Tournament | undefined {
-  if (USE_API_CLIENT) {
-    const tournaments = dataCache.tournaments || [];
-    return tournaments.find((t) => t.id === id);
-  }
-  return dummyTournaments.find((t) => t.id === id);
+  return getTournaments().find((t) => t.id === id);
 }
 
 export function getGolfers(tournamentId: string): Golfer[] {
-  if (USE_API_CLIENT) {
-    // For API client, golfers are fetched per tournament
-    // Return cached data or empty array
-    return dataCache[`golfers-${tournamentId}`] || [];
-  }
-  return dummyGolfers[tournamentId] ?? [];
+  return dataCache[`golfers-${tournamentId}`] || [];
 }
 
 export function getTournamentResult(tournamentId: string): TournamentResult | null {
-  if (USE_API_CLIENT) {
-    return dataCache[`results-${tournamentId}`] || null;
-  }
-  return dummyTournamentResults[tournamentId] ?? null;
+  return dataCache[`results-${tournamentId}`] ?? null;
 }
 
 export function getPlayers(): Player[] {
-  if (USE_API_CLIENT) {
-    return dataCache.players || [];
-  }
-  return dummyPlayers;
+  return dataCache.players || [];
 }
 
 export function getCurrentUser(): Player {
-  if (USE_API_CLIENT) {
-    return dataCache.currentUser || (dataCache.players?.[0] || dummyPlayers[0]);
-  }
-  return dummyPlayers[0];
+  return dataCache.currentUser || dataCache.players?.[0] || dummyPlayers[0];
 }
 
 export function getTournamentData(tournamentId: string) {
-  if (USE_API_CLIENT) {
-    return {
-      tournament: getTournament(tournamentId),
-      golfers: getGolfers(tournamentId),
-      results: getTournamentResult(tournamentId),
-    };
-  }
-  return getDummyTournamentData(tournamentId);
+  return {
+    tournament: getTournament(tournamentId),
+    golfers: getGolfers(tournamentId),
+    results: getTournamentResult(tournamentId),
+  };
 }
 
 export function getCurrentTournament() {
-  if (USE_API_CLIENT) {
-    const tournaments = dataCache.tournaments || [];
-    return tournaments.find(t => t.id === '4') || tournaments[0];
-  }
-  return getDummyCurrentTournament();
+  const tournaments = getTournaments();
+  return tournaments.find(t => t.id === '4') || tournaments[0];
 }
 
 export function getCompletedTournaments() {
-  if (USE_API_CLIENT) {
-    const tournaments = dataCache.tournaments || [];
-    return tournaments.filter(t => t.state === 'completed');
-  }
-  return getDummyCompletedTournaments();
+  const tournaments = getTournaments();
+  return tournaments.filter(t => t.state === 'completed');
 }
 
 // Helper function for getAllTournamentData (used by getSeasonStandings)
 function getAllTournamentData() {
-  if (USE_API_CLIENT) {
-    const tournaments = dataCache.tournaments || [];
-    return tournaments.map(tournament => ({
-      tournament,
-      golfers: dataCache[`golfers-${tournament.id}`] || [],
-      results: dataCache[`results-${tournament.id}`] || null,
-    }));
-  }
-  return getDummyAllTournamentData();
+  const tournaments = getTournaments();
+  return tournaments.map(tournament => ({
+    tournament,
+    golfers: dataCache[`golfers-${tournament.id}`] || [],
+    results: dataCache[`results-${tournament.id}`] ?? null,
+  }));
 }
 
 
@@ -326,25 +273,7 @@ const CARD_COLORS: Record<string, string> = {
 export function getPlayerCardsForTournament(tournamentId: string): PlayerCardRow[] {
   const { golfers, results } = getTournamentData(tournamentId);
   
-  // Check if draft data exists in results JSON
-  let teamDrafts = results?.teamDrafts;
-  
-  // If no draft data in JSON, check localStorage for completed draft
-  if ((!teamDrafts || teamDrafts.length === 0) && typeof window !== 'undefined') {
-    const completedDraftKey = `completed-draft-${tournamentId}`;
-    const completedDraftStr = localStorage.getItem(completedDraftKey);
-    if (completedDraftStr) {
-      try {
-        const completedDraft = JSON.parse(completedDraftStr);
-        if (completedDraft.teamDrafts && completedDraft.teamDrafts.length > 0) {
-          teamDrafts = completedDraft.teamDrafts;
-        }
-      } catch (e) {
-        console.error('Error parsing completed draft from localStorage:', e);
-      }
-    }
-  }
-  
+  const teamDrafts = results?.teamDrafts;
   if (!teamDrafts || teamDrafts.length === 0) return [];
 
   const players = getPlayers();
@@ -545,25 +474,7 @@ export function getPlayerCardsForTournament(tournamentId: string): PlayerCardRow
   }).filter(Boolean) as PlayerCardRow[];
 
   // Add Fat Rando (player ID '5')
-  // Check if results exists and has fatRandoStolenGolfers, or check localStorage
-  let fatRandoStolenGolfers: string[] = [];
-  if (results?.fatRandoStolenGolfers && results.fatRandoStolenGolfers.length > 0) {
-    fatRandoStolenGolfers = results.fatRandoStolenGolfers;
-  } else if (typeof window !== 'undefined') {
-    // Check localStorage for completed draft
-    const completedDraftKey = `completed-draft-${tournamentId}`;
-    const completedDraftStr = localStorage.getItem(completedDraftKey);
-    if (completedDraftStr) {
-      try {
-        const completedDraft = JSON.parse(completedDraftStr);
-        if (completedDraft.fatRandoStolenGolfers && completedDraft.fatRandoStolenGolfers.length > 0) {
-          fatRandoStolenGolfers = completedDraft.fatRandoStolenGolfers;
-        }
-      } catch (e) {
-        console.error('Error parsing completed draft from localStorage:', e);
-      }
-    }
-  }
+  const fatRandoStolenGolfers: string[] = results?.fatRandoStolenGolfers ?? [];
   
   if (fatRandoStolenGolfers.length > 0) {
     const fatRandoGolfers = fatRandoStolenGolfers.slice(0, 4);

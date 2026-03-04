@@ -11,7 +11,7 @@ import {
   updateDataCache,
 } from '@/lib/data';
 import { useTournamentData } from '@/lib/use-api-data';
-import { fetchDraftState, USE_DRAFT_API } from '@/lib/api-client';
+import { fetchDraftState } from '@/lib/api-client';
 import { calculateTeamScoresFromDrafts, isRyderCup } from '@/lib/dummyData';
 import { GolferTypeahead } from '@/components/admin/GolferTypeahead';
 import type {
@@ -40,6 +40,9 @@ export default function AdminTournamentEditorPage({
   const [teamDraftsFromDraft, setTeamDraftsFromDraft] = useState<TeamDraft[] | null>(null);
   const [editableTeamDrafts, setEditableTeamDrafts] = useState<TeamDraft[]>([]);
   const [saving, setSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [saveBtnHover, setSaveBtnHover] = useState(false);
+  const [saveBtnActive, setSaveBtnActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
   const [seedMessage, setSeedMessage] = useState<string | null>(null);
@@ -51,29 +54,10 @@ export default function AdminTournamentEditorPage({
     setResults(r ?? null);
   }, [params.id, loading]);
 
-  // Fetch completed draft from draft API or localStorage when results don't have teamDrafts
+  // Fetch completed draft from API when results don't have teamDrafts
   useEffect(() => {
     if (loading) return;
     if (results?.teamDrafts?.length) {
-      setTeamDraftsFromDraft(null);
-      return;
-    }
-    // Check localStorage first (same source as list page uses)
-    if (typeof window !== 'undefined') {
-      try {
-        const completedDraftStr = localStorage.getItem(`completed-draft-${params.id}`);
-        if (completedDraftStr) {
-          const completedDraft = JSON.parse(completedDraftStr);
-          if (completedDraft.teamDrafts?.length) {
-            setTeamDraftsFromDraft(completedDraft.teamDrafts);
-            return;
-          }
-        }
-      } catch {
-        // ignore
-      }
-    }
-    if (!USE_DRAFT_API) {
       setTeamDraftsFromDraft(null);
       return;
     }
@@ -99,7 +83,58 @@ export default function AdminTournamentEditorPage({
     setEditableTeamDrafts(drafts.map((d) => ({ ...d, activeGolfers: [...(d.activeGolfers ?? [])], alternateGolfer: d.alternateGolfer ?? '' })));
   }, [results?.teamDrafts, teamDraftsFromDraft]);
 
+  // Clear "Saved!" feedback after 2 seconds
+  useEffect(() => {
+    if (!saveSuccess) return;
+    const t = setTimeout(() => setSaveSuccess(false), 2000);
+    return () => clearTimeout(t);
+  }, [saveSuccess]);
+
   const saveTournament = async (updated: Tournament) => {
+    // Safeguard: moving to draft/pre-draft with results present → require erase first
+    const backwardStates = ['draft', 'pre-draft'];
+    const hasResultsWithRounds = results?.golferResults?.some((gr) => (gr.rounds?.length ?? 0) > 0);
+    if (
+      backwardStates.includes(updated.state ?? '') &&
+      hasResultsWithRounds &&
+      !confirm(
+        'This tournament has results. Erase all results before moving to draft/pre-draft?'
+      )
+    ) {
+      return;
+    }
+    if (backwardStates.includes(updated.state ?? '') && hasResultsWithRounds) {
+      // User confirmed: erase results first, then save state
+      setSaving(true);
+      setError(null);
+      try {
+        const stateRes = await fetch(`${API_URL}/admin/state`, { cache: 'no-store' });
+        const fullState = await stateRes.json();
+        const resultsMap = { ...(fullState.results ?? {}) } as Record<string, TournamentResult>;
+        const current = resultsMap[params.id] ?? { tournamentId: params.id, fatRandoStolenGolfers: [], teamDrafts: [], golferResults: [], teamScores: [] };
+        const clearedResults: TournamentResult = { ...current, golferResults: [], teamScores: [] };
+        resultsMap[params.id] = clearedResults;
+
+        const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+        const secret = getWriteSecret();
+        if (secret) headers['X-Major-Pain-Write-Secret'] = secret;
+
+        const res = await fetch(`${API_URL}/admin/state`, {
+          method: 'PATCH',
+          headers,
+          body: JSON.stringify({ results: resultsMap }),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || 'Failed to erase results');
+        updateDataCache(`results-${params.id}`, clearedResults);
+        setResults(clearedResults);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : 'Failed to erase results');
+        setSaving(false);
+        return;
+      }
+    }
+
     setSaving(true);
     setError(null);
     try {
@@ -124,6 +159,7 @@ export default function AdminTournamentEditorPage({
       if (!res.ok) throw new Error(json.error || 'Failed to save');
       updateDataCache('tournaments', newTournaments);
       setTournament(updated);
+      setSaveSuccess(true);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to save');
     } finally {
@@ -195,15 +231,6 @@ export default function AdminTournamentEditorPage({
       setResults(updated);
       setTeamDraftsFromDraft(null);
       setEditableTeamDrafts(drafts.map((d) => ({ ...d, activeGolfers: [...(d.activeGolfers ?? [])], alternateGolfer: d.alternateGolfer ?? '' })));
-      if (typeof window !== 'undefined') {
-        try {
-          const existing = localStorage.getItem(`completed-draft-${params.id}`);
-          const parsed = existing ? JSON.parse(existing) : {};
-          localStorage.setItem(`completed-draft-${params.id}`, JSON.stringify({ ...parsed, teamDrafts: drafts }));
-        } catch {
-          // ignore
-        }
-      }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to save');
     } finally {
@@ -332,14 +359,6 @@ export default function AdminTournamentEditorPage({
       setTournament((prev) => (prev ? { ...prev, state: 'pre-draft' } : null));
       setTeamDraftsFromDraft(null);
       setEditableTeamDrafts([]);
-
-      if (typeof window !== 'undefined') {
-        try {
-          localStorage.removeItem(`completed-draft-${params.id}`);
-        } catch {
-          // ignore
-        }
-      }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to reset drafts');
     } finally {
@@ -508,18 +527,32 @@ export default function AdminTournamentEditorPage({
           <button
             onClick={() => saveTournament(tournament)}
             disabled={saving}
+            onMouseEnter={() => setSaveBtnHover(true)}
+            onMouseLeave={() => { setSaveBtnHover(false); setSaveBtnActive(false); }}
+            onMouseDown={() => setSaveBtnActive(true)}
+            onMouseUp={() => setSaveBtnActive(false)}
             style={{
               padding: '10px 20px',
-              backgroundColor: '#74a553',
+              backgroundColor: saveSuccess
+                ? '#5a8f3e'
+                : saving
+                  ? '#555'
+                  : saveBtnActive
+                    ? '#5a8f3e'
+                    : saveBtnHover
+                      ? '#8bc96f'
+                      : '#74a553',
               color: '#fff',
               border: 'none',
               borderRadius: '4px',
               cursor: saving ? 'not-allowed' : 'pointer',
               fontWeight: 700,
               alignSelf: 'flex-start',
+              transform: saveBtnActive ? 'scale(0.98)' : 'scale(1)',
+              transition: 'background-color 0.15s ease, transform 0.1s ease',
             }}
           >
-            Save Metadata
+            {saving ? 'Saving...' : saveSuccess ? 'Saved!' : 'Save Metadata'}
           </button>
           <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid #444' }}>
             <div style={{ fontSize: '13px', fontWeight: 700, marginBottom: '8px', opacity: 0.9 }}>Seed Test Data</div>
@@ -685,7 +718,7 @@ export default function AdminTournamentEditorPage({
                 Update to Playing
               </button>
             </div>
-            {(!results?.teamDrafts?.length && (teamDraftsFromDraft?.length ?? 0) > 0) && USE_DRAFT_API && (
+            {(!results?.teamDrafts?.length && (teamDraftsFromDraft?.length ?? 0) > 0) && (
               <div style={{ fontSize: '13px', opacity: 0.9 }}>
                 Draft data is in localStorage. Save to database so it persists across devices?
                 <button

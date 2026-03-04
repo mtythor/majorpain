@@ -238,35 +238,13 @@ export function getCurrentPlayer(state: DraftState, players: Player[]): Player |
 }
 
 /**
- * Save completed draft to JSON files
- * Note: This saves to localStorage. To persist to JSON files, run:
- * npx tsx FrontEnd/scripts/save-draft-to-json.ts
- * and pass the draft data from localStorage or as JSON input
+ * Legacy: previously saved completed draft to localStorage.
+ * Drafts now persist via API (saveCompletedDraftToApi). Kept for backward compat.
  */
 export async function completeDraft(
-  tournamentId: string,
-  teamDrafts: TeamDraft[],
-  fatRandoStolenGolfers: string[]
+  _tournamentId: string,
+  _teamDrafts: TeamDraft[],
+  _fatRandoStolenGolfers: string[]
 ): Promise<void> {
-  // Prepare the data structure
-  const draftData = {
-    tournamentId,
-    fatRandoStolenGolfers,
-    teamDrafts,
-  };
-  
-  // Store in localStorage for backup and script access
-  if (typeof window !== 'undefined') {
-    localStorage.setItem(`completed-draft-${tournamentId}`, JSON.stringify(draftData));
-    
-    // Log instructions
-    console.log('✅ Draft completed!');
-    console.log('Draft data saved to localStorage.');
-    console.log('');
-    console.log('To save to JSON files, run:');
-    console.log(`  npx tsx FrontEnd/scripts/save-draft-to-json.ts`);
-    console.log('');
-    console.log('Or copy this JSON and pipe it to the script:');
-    console.log(JSON.stringify(draftData, null, 2));
-  }
+  // No-op: drafts persist via API
 }

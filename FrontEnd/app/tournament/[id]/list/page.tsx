@@ -19,8 +19,7 @@ import {
   getPlayers,
 } from '@/lib/data';
 import { useApiData, useTournamentData } from '@/lib/use-api-data';
-import { getTournamentState } from '@/lib/tournament-utils';
-import { getCurrentDraftState, isDraftComplete } from '@/lib/draft-logic';
+import { getTournamentState, shouldShowPreDraftBanner } from '@/lib/tournament-view';
 import { fetchDraftState, USE_DRAFT_API } from '@/lib/api-client';
 import { updateDataCache } from '@/lib/data';
 import type { Tournament } from '@/lib/types';
@@ -44,26 +43,15 @@ export default function TournamentListView({ params }: { params: { id: string } 
   // Redirect to draft page if tournament is in draft state AND no draft data exists yet
   useEffect(() => {
     if (!loadingData && !loadingTournament && tournament) {
-      const tournamentState = getTournamentState(tournament);
       const { results } = getTournamentData(tournament.id);
+      const tournamentState = getTournamentState(tournament);
       const players = getPlayers();
       
       // Check if draft data exists in results JSON
       const hasDraftDataInResults = results && results.teamDrafts && results.teamDrafts.length > 0;
       
       // Check if draft is complete in localStorage
-      const savedDraftState = getCurrentDraftState(tournament.id);
-      const isDraftCompleteInLocalStorage = savedDraftState && isDraftComplete(savedDraftState, players);
-      
-      // Check if completed draft exists in localStorage
-      let hasCompletedDraftInLocalStorage = false;
-      if (typeof window !== 'undefined') {
-        const completedDraftKey = `completed-draft-${tournament.id}`;
-        const completedDraft = localStorage.getItem(completedDraftKey);
-        hasCompletedDraftInLocalStorage = !!completedDraft;
-      }
-      
-      let hasAnyDraftData = hasDraftDataInResults || isDraftCompleteInLocalStorage || hasCompletedDraftInLocalStorage;
+      const hasAnyDraftData = hasDraftDataInResults;
       if (hasAnyDraftData) {
         setDraftCompleteFromApi(true);
         return;
@@ -90,18 +78,18 @@ export default function TournamentListView({ params }: { params: { id: string } 
               });
             } else {
               setDraftCompleteFromApi(false);
-              router.push('/draft');
+              router.push(`/draft?tournament=${tournament.id}`);
             }
           } catch {
             if (!cancelled) {
               setDraftCompleteFromApi(false);
-              router.push('/draft');
+              router.push(`/draft?tournament=${tournament.id}`);
             }
           }
         })();
         return () => { cancelled = true; };
       }
-      router.push('/draft');
+      router.push(`/draft?tournament=${tournament.id}`);
     }
   }, [loadingData, loadingTournament, tournament, router]);
   
@@ -144,22 +132,8 @@ export default function TournamentListView({ params }: { params: { id: string } 
   // Check if tournament is in draft state with no draft data - if so, show loading while redirecting
   const tournamentState = getTournamentState(tournament);
   
-  // Check if draft data exists in results JSON
   const hasDraftDataInResults = results && results.teamDrafts && results.teamDrafts.length > 0;
-  
-  // Check if draft is complete in localStorage
-  const savedDraftState = getCurrentDraftState(tournament.id);
-  const isDraftCompleteInLocalStorage = savedDraftState && isDraftComplete(savedDraftState, players);
-  
-  // Check if completed draft exists in localStorage
-  let hasCompletedDraftInLocalStorage = false;
-  if (typeof window !== 'undefined') {
-    const completedDraftKey = `completed-draft-${tournament.id}`;
-    const completedDraft = localStorage.getItem(completedDraftKey);
-    hasCompletedDraftInLocalStorage = !!completedDraft;
-  }
-  
-  const hasAnyDraftData = hasDraftDataInResults || isDraftCompleteInLocalStorage || hasCompletedDraftInLocalStorage;
+  const hasAnyDraftData = hasDraftDataInResults;
   const isCheckingDraft = USE_DRAFT_API && tournamentState === 'draft' && !hasAnyDraftData && draftCompleteFromApi === null;
   
   if (tournamentState === 'draft' && !hasAnyDraftData && !isCheckingDraft) {
@@ -230,11 +204,11 @@ export default function TournamentListView({ params }: { params: { id: string } 
       <div className="tournament-venue-desktop">
         <TournamentVenue tournament={tournament} viewMode="list" />
       </div>
-      {playerCards.length === 0 ? (
+      {shouldShowPreDraftBanner(tournamentState) ? (
         <div className="tournament-list-content">
           <PreDraftBanner />
         </div>
-      ) : (
+      ) : playerCards.length > 0 ? (
         <div className="tournament-list-content">
           <PlayerCards players={playerCards} position="relative" />
           {results && results.golferResults && results.golferResults.length > 0 &&
@@ -264,6 +238,10 @@ export default function TournamentListView({ params }: { params: { id: string } 
                 </Link>
               </div>
             )}
+        </div>
+      ) : (
+        <div className="tournament-list-content" style={{ padding: '40px', textAlign: 'center', color: '#ffffff', opacity: 0.9 }}>
+          No draft results for this tournament. Seed test data in admin.
         </div>
       )}
     </div>

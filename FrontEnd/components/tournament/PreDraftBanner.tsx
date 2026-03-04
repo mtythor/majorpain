@@ -1,46 +1,11 @@
 export default function PreDraftBanner({ className }: { className?: string }) {
   return (
     <div
-      className={className}
-      style={{
-        borderBottom: '1px solid #ffffff',
-        borderTop: '1px solid #ffffff',
-        display: 'flex',
-        height: '192px',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingLeft: '8px',
-        paddingRight: '8px',
-        paddingTop: '4px',
-        paddingBottom: '4px',
-        position: 'relative',
-        width: '100%',
-      }}
+      className={`flex items-center justify-center w-full relative border-t border-b border-white px-3 py-4 min-h-[120px] md:min-h-[160px] lg:min-h-[192px] md:px-2 md:py-1 ${className ?? ''}`}
       data-name="Blank Slate"
     >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          justifyContent: 'center',
-          position: 'relative',
-          flexShrink: 0,
-        }}
-        data-name="Draft Text"
-      >
-        <p
-          style={{
-            fontFamily: "'Open Sans', sans-serif",
-            fontWeight: 400,
-            lineHeight: 'normal',
-            position: 'relative',
-            flexShrink: 0,
-            fontSize: '32px',
-            color: '#ffffff',
-            margin: 0,
-          }}
-        >
+      <div className="flex flex-col items-center justify-center relative shrink-0 max-w-full" data-name="Draft Text">
+        <p className="font-sans font-normal text-white m-0 text-center text-base sm:text-lg md:text-2xl lg:text-[32px] leading-normal">
           The draft for this event has not yet started
         </p>
       </div>

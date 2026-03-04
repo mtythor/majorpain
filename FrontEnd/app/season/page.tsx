@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/layout/Header';
 import BackgroundImage from '@/components/layout/BackgroundImage';
 import { useIsMobile } from '@/hooks/useMediaQuery';
-import SeasonPicker from '@/components/season/SeasonPicker';
 import SeasonTable from '@/components/season/SeasonTable';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import {
@@ -66,7 +65,6 @@ export default function SeasonPage() {
           userProfile={getCurrentUser()}
           onViewChange={handleViewChange}
         />
-        <SeasonPicker season="2026 SEASON" />
         <div
           className="season-content"
           style={{
@@ -74,16 +72,16 @@ export default function SeasonPage() {
             display: 'flex',
             flexDirection: 'column',
             gap: '24px',
-            alignItems: 'flex-start',
+            alignItems: isMobile ? 'flex-start' : 'center',
             left: isMobile ? 0 : '50%',
-            top: isMobile ? '169px' : '232px',
+            top: isMobile ? '121px' : '184px',
             transform: isMobile ? 'none' : 'translateX(-50%)',
             zIndex: 5,
             width: '100%',
             maxWidth: 'min(100%, var(--tournament-list-width))',
             padding: 0,
             boxSizing: 'border-box',
-            overflowX: 'auto',
+            overflowX: isMobile ? 'auto' : 'visible',
             overflowY: 'visible',
           }}
         >

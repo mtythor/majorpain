@@ -1,10 +1,6 @@
 /**
- * React hook to load API data into cache for use with sync data functions
- * 
- * When NEXT_PUBLIC_USE_API_CLIENT is true, this hook fetches data and populates
- * the cache so that sync functions in data.ts can access it.
- * 
- * When NEXT_PUBLIC_USE_API_CLIENT is false, this hook does nothing (dummy data is used).
+ * React hook to load API data into cache.
+ * Always fetches from API (backend: Postgres or JSON file when DATABASE_URL not set).
  */
 
 import { useEffect, useState } from 'react';
@@ -16,18 +12,11 @@ import {
   fetchTournamentResult,
 } from './api-client';
 
-const USE_API_CLIENT = process.env.NEXT_PUBLIC_USE_API_CLIENT === 'true';
-
 export function useApiData() {
-  const [loading, setLoading] = useState(USE_API_CLIENT);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!USE_API_CLIENT) {
-      setLoading(false);
-      return;
-    }
-
     async function loadData() {
       try {
         setLoading(true);
@@ -57,15 +46,10 @@ export function useApiData() {
 }
 
 export function useTournamentData(tournamentId: string) {
-  const [loading, setLoading] = useState(USE_API_CLIENT);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!USE_API_CLIENT) {
-      setLoading(false);
-      return;
-    }
-
     async function loadTournamentData() {
       try {
         setLoading(true);
@@ -93,15 +77,10 @@ export function useTournamentData(tournamentId: string) {
 }
 
 export function useAllTournamentData() {
-  const [loading, setLoading] = useState(USE_API_CLIENT);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!USE_API_CLIENT) {
-      setLoading(false);
-      return;
-    }
-
     async function loadAllTournamentData() {
       try {
         setLoading(true);

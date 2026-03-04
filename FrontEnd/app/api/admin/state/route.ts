@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getData, saveData } from '@/lib/api-db';
+import { isResultsComplete } from '@/lib/tournament-utils';
+import type { TournamentResult } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -37,11 +39,25 @@ export async function PATCH(request: Request) {
     const body = await request.json();
     const { data } = await getData();
     const current = data ?? {};
+    let tournaments = body.tournaments !== undefined ? body.tournaments : current.tournaments;
+    const results = body.results !== undefined ? body.results : current.results;
+
+    // Event-triggered state: when results are saved and all rounds complete → completed
+    if (body.results !== undefined && Array.isArray(tournaments) && results && typeof results === 'object') {
+      tournaments = tournaments.map((t: { id: string; state?: string }) => {
+        const res = (results as Record<string, TournamentResult>)[t.id];
+        if (res && isResultsComplete(res)) {
+          return { ...t, state: 'completed' as const };
+        }
+        return t;
+      });
+    }
+
     const merged = {
-      tournaments: body.tournaments !== undefined ? body.tournaments : current.tournaments,
+      tournaments,
       players: body.players !== undefined ? body.players : current.players,
       golfers: body.golfers !== undefined ? body.golfers : current.golfers,
-      results: body.results !== undefined ? body.results : current.results,
+      results,
       draftStates: body.draftStates !== undefined ? body.draftStates : current.draftStates,
     };
     await saveData(merged);

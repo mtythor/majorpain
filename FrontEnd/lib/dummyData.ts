@@ -636,8 +636,14 @@ dummyTournaments.forEach(tournament => {
   const golfers = generateGolfers(tournament.id);
   dummyGolfers[tournament.id] = golfers;
   
-  // Only generate results for completed tournaments
-  const results = generateTournamentResult(tournament.id, golfers);
+  // Generate results for tournaments that have demo config (TEAM_DRAFTS + FAT_RANDO_STOLEN).
+  // Previously we required state==='completed' from the schedule, but the schedule no longer
+  // has hardcoded state (it's date-based + admin override). Use config presence instead so
+  // PLAYERS, MASTERS, PGA (1–3), U.S. OPEN (4), and PRESIDENT'S CUP (9) have dummy results.
+  const hasDemoConfig = FAT_RANDO_STOLEN[tournament.id] && TEAM_DRAFTS[tournament.id];
+  const results = hasDemoConfig
+    ? generateTournamentResult(tournament.id, golfers, true)
+    : generateTournamentResult(tournament.id, golfers);
   if (results) {
     dummyTournamentResults[tournament.id] = results;
   } else {

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getData } from '@/lib/api-db';
+import { mergeTournamentsWithSchedule } from '@/lib/tournamentSchedule';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,7 +10,8 @@ export async function GET(
 ) {
   try {
     const { data, updatedAt } = await getData();
-    const tournaments = (data?.tournaments ?? []) as Array<{ id: string }>;
+    const stored = (data?.tournaments ?? []) as Array<{ id: string; state?: string }>;
+    const tournaments = mergeTournamentsWithSchedule(stored);
     const tournament = tournaments.find((t) => t.id === params.id);
     if (!tournament) {
       return NextResponse.json(null, { status: 404 });

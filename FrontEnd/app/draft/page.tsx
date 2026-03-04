@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Header from '@/components/layout/Header';
 import BackgroundImage from '@/components/layout/BackgroundImage';
 import MainContainer from '@/components/layout/MainContainer';
@@ -22,14 +22,13 @@ import {
   getPlayers,
   getCurrentUser,
 } from '@/lib/data';
-import { getTournamentState } from '@/lib/tournament-utils';
+import { getTournamentState } from '@/lib/tournament-view';
 import {
   getCurrentDraftState,
   saveDraftState,
   initializeDraftState,
   isDraftComplete,
   getCurrentPlayer,
-  completeDraft,
 } from '@/lib/draft-logic';
 import {
   fetchDraftState,
@@ -44,8 +43,13 @@ import { DraftState } from '@/lib/draft-types';
 const mockUser: Player = getCurrentUser();
 const DRAFT_SELECTED_TOURNAMENT_KEY = 'draft-selected-tournament-id';
 
-function getInitialSelectedTournament(): Tournament | undefined {
+function getInitialSelectedTournament(tournamentIdFromUrl?: string | null): Tournament | undefined {
   if (typeof window === 'undefined') return getCurrentTournament();
+  // URL param takes precedence (e.g. from admin "Open draft" link)
+  if (tournamentIdFromUrl) {
+    const t = getTournaments().find(tournament => tournament.id === tournamentIdFromUrl);
+    if (t) return t;
+  }
   const savedId = sessionStorage.getItem(DRAFT_SELECTED_TOURNAMENT_KEY);
   if (savedId) {
     const t = getTournaments().find(tournament => tournament.id === savedId);
@@ -62,10 +66,13 @@ function getPlayerImageUrl(playerId: string, players: Player[]): string {
 
 export default function DraftPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const tournamentIdFromUrl = searchParams.get('tournament');
   const isMobile = useIsMobile();
   const { loading: apiLoading } = useApiData();
   const [selectedTournament, setSelectedTournament] = useState<Tournament | undefined>(undefined);
   useTournamentData(selectedTournament?.id ?? '');
+  const tournamentData = selectedTournament ? getTournamentData(selectedTournament.id) : { results: null };
   const tournamentState = selectedTournament ? getTournamentState(selectedTournament) : 'pre-draft';
 
   // Persist selected tournament so back navigation shows the correct draft
@@ -75,14 +82,14 @@ export default function DraftPage() {
     }
   }, [selectedTournament?.id]);
 
-  // When API cache populates, set selected tournament if not yet set
+  // Set selected tournament when we have it in cache. When arriving with ?tournament=X from list
+  // redirect, the cache is already populated - set immediately. Don't wait for draft's useApiData
+  // to complete, which would cause a second fetch and potential flicker when cache overwrites.
   useEffect(() => {
-    if (!apiLoading && !selectedTournament) {
-      const current = getInitialSelectedTournament();
-      if (current) setSelectedTournament(current);
-    }
-  }, [apiLoading, selectedTournament]);
-  const tournamentData = selectedTournament ? getTournamentData(selectedTournament.id) : { results: null };
+    if (selectedTournament) return;
+    const current = getInitialSelectedTournament(tournamentIdFromUrl);
+    if (current) setSelectedTournament(current);
+  }, [selectedTournament, tournamentIdFromUrl]);
   const golfers = selectedTournament ? getGolfers(selectedTournament.id) : [];
   const players = getPlayers();
   
@@ -230,24 +237,15 @@ export default function DraftPage() {
   useEffect(() => {
     if (!selectedTournament) return;
     
-    const newState = getTournamentState(selectedTournament);
     const newData = getTournamentData(selectedTournament.id);
+    const newState = getTournamentState(selectedTournament);
     const newGolfers = getGolfers(selectedTournament.id);
     
     // Check if draft is complete in results JSON
     const hasDraftDataInResults = newData.results && newData.results.teamDrafts && newData.results.teamDrafts.length > 0;
     
-    // Check localStorage only when not using API
-    const savedDraftState = USE_DRAFT_API ? null : getCurrentDraftState(selectedTournament.id);
-    const isDraftCompleteInLocalStorage = savedDraftState && isDraftComplete(savedDraftState, players);
-    let hasCompletedDraftInLocalStorage = false;
-    if (!USE_DRAFT_API && typeof window !== 'undefined') {
-      const completedDraftKey = `completed-draft-${selectedTournament.id}`;
-      hasCompletedDraftInLocalStorage = !!localStorage.getItem(completedDraftKey);
-    }
-    
-    // If draft is complete (results or localStorage when not using API), redirect to list page
-    if (newState === 'draft' && (hasDraftDataInResults || isDraftCompleteInLocalStorage || hasCompletedDraftInLocalStorage)) {
+    // If draft is complete in API results, redirect to list page
+    if (newState === 'draft' && hasDraftDataInResults) {
       router.push(`/tournament/${selectedTournament.id}/list`);
       return;
     }
@@ -455,16 +453,10 @@ export default function DraftPage() {
   useEffect(() => {
     if (!selectedTournament) return;
     if (USE_DRAFT_API) return; // Load effect handles API mode
-    const state = getTournamentState(selectedTournament);
     const data = getTournamentData(selectedTournament.id);
+    const state = getTournamentState(selectedTournament);
     const hasDraftDataInResults = data.results && data.results.teamDrafts && data.results.teamDrafts.length > 0;
-    const savedDraftState = getCurrentDraftState(selectedTournament.id);
-    const isDraftCompleteInLocalStorage = savedDraftState && isDraftComplete(savedDraftState, players);
-    let hasCompletedDraftInLocalStorage = false;
-    if (typeof window !== 'undefined') {
-      hasCompletedDraftInLocalStorage = !!localStorage.getItem(`completed-draft-${selectedTournament.id}`);
-    }
-    if (state === 'draft' && (hasDraftDataInResults || isDraftCompleteInLocalStorage || hasCompletedDraftInLocalStorage)) {
+    if (state === 'draft' && hasDraftDataInResults) {
       router.push(`/tournament/${selectedTournament.id}/list`);
     }
   }, [selectedTournament, router, players]);
@@ -535,6 +527,7 @@ export default function DraftPage() {
   };
 
   const handleTournamentSelect = (tournament: Tournament) => {
+    const data = getTournamentData(tournament.id);
     const newState = getTournamentState(tournament);
     // If tournament is not in draft state, redirect to its tournament page
     if (newState !== 'draft') {
@@ -681,24 +674,6 @@ export default function DraftPage() {
           .catch((e) => console.error('Failed to save draft state:', e))
           .finally(() => { saveInProgressRef.current = false; });
       }
-    } else {
-      saveDraftState(selectedTournament.id, updatedState);
-      if (draftComplete) {
-        const teamDrafts = players.map(player => {
-          const picks = updatedState.playerPicks[player.id];
-          return {
-            playerId: player.id,
-            activeGolfers: picks?.activeGolfers || [],
-            alternateGolfer: picks?.alternateGolfer || '',
-          };
-        }).filter(draft => draft.activeGolfers.length === 3 && draft.alternateGolfer);
-        completeDraft(selectedTournament.id, teamDrafts, updatedState.fatRandoStolenGolfers)
-          .then(() => router.push(`/tournament/${selectedTournament.id}/list`))
-          .catch((e) => {
-            console.error('Error completing draft:', e);
-            router.push(`/tournament/${selectedTournament.id}/list`);
-          });
-      }
     }
     setInternalDraftState(updatedState);
     
@@ -808,7 +783,7 @@ export default function DraftPage() {
       <MainContainer top="252px" noPadding={true}>
         
         {tournamentState === 'pre-draft' && (
-          <div style={{ padding: '40px', width: '100%' }}>
+          <div className="p-4 md:p-10 w-full">
             <PreDraftBanner />
           </div>
         )}

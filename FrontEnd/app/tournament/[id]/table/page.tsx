@@ -20,8 +20,7 @@ import {
   getPlayers,
 } from '@/lib/data';
 import { useApiData, useTournamentData } from '@/lib/use-api-data';
-import { getTournamentState } from '@/lib/tournament-utils';
-import { getCurrentDraftState, isDraftComplete } from '@/lib/draft-logic';
+import { getTournamentState, shouldShowPreDraftBanner } from '@/lib/tournament-view';
 import { pointsFromPosition } from '@/lib/constants';
 
 // Player colors
@@ -108,30 +107,8 @@ function getPlayerTableData(tournamentId: string) {
 
   const players = getPlayers();
   
-  // Check if draft data exists in results JSON
-  let teamDrafts: TeamDraft[] | undefined = results?.teamDrafts;
-  let fatRandoStolenGolfers: string[] = [];
-  
-  // If no draft data in JSON, check localStorage for completed draft
-  if ((!teamDrafts || teamDrafts.length === 0) && typeof window !== 'undefined') {
-    const completedDraftKey = `completed-draft-${tournamentId}`;
-    const completedDraftStr = localStorage.getItem(completedDraftKey);
-    if (completedDraftStr) {
-      try {
-        const completedDraft = JSON.parse(completedDraftStr);
-        if (completedDraft.teamDrafts && Array.isArray(completedDraft.teamDrafts) && completedDraft.teamDrafts.length > 0) {
-          teamDrafts = completedDraft.teamDrafts;
-        }
-        if (completedDraft.fatRandoStolenGolfers && Array.isArray(completedDraft.fatRandoStolenGolfers) && completedDraft.fatRandoStolenGolfers.length > 0) {
-          fatRandoStolenGolfers = completedDraft.fatRandoStolenGolfers;
-        }
-      } catch (e) {
-        console.error('Error parsing completed draft from localStorage:', e);
-      }
-    }
-  } else if (results?.fatRandoStolenGolfers) {
-    fatRandoStolenGolfers = results.fatRandoStolenGolfers;
-  }
+  const teamDrafts: TeamDraft[] | undefined = results?.teamDrafts;
+  const fatRandoStolenGolfers: string[] = results?.fatRandoStolenGolfers ?? [];
   
   if (!teamDrafts || teamDrafts.length === 0) {
     return [];
@@ -623,25 +600,10 @@ export default function TournamentTableView({ params }: { params: { id: string }
       const tournamentState = getTournamentState(tournament);
       const players = getPlayers();
       
-      // Check if draft data exists in results JSON
       const hasDraftDataInResults = results && results.teamDrafts && results.teamDrafts.length > 0;
-      
-      // Check if draft is complete in localStorage
-      const savedDraftState = getCurrentDraftState(tournament.id);
-      const isDraftCompleteInLocalStorage = savedDraftState && isDraftComplete(savedDraftState, players);
-      
-      // Check if completed draft exists in localStorage
-      let hasCompletedDraftInLocalStorage = false;
-      if (typeof window !== 'undefined') {
-        const completedDraftKey = `completed-draft-${tournament.id}`;
-        const completedDraft = localStorage.getItem(completedDraftKey);
-        hasCompletedDraftInLocalStorage = !!completedDraft;
-      }
-      
-      // Only redirect if in draft state AND no draft data exists (in results OR localStorage)
-      const hasAnyDraftData = hasDraftDataInResults || isDraftCompleteInLocalStorage || hasCompletedDraftInLocalStorage;
+      const hasAnyDraftData = hasDraftDataInResults;
       if (tournamentState === 'draft' && !hasAnyDraftData) {
-        router.push('/draft');
+        router.push(`/draft?tournament=${tournament.id}`);
       }
     }
   }, [loadingData, loadingTournament, tournament, router, results]);
@@ -685,22 +647,8 @@ export default function TournamentTableView({ params }: { params: { id: string }
   // Check if tournament is in draft state with no draft data - if so, show loading while redirecting
   const tournamentState = getTournamentState(tournament);
   
-  // Check if draft data exists in results JSON
   const hasDraftDataInResults = results && results.teamDrafts && results.teamDrafts.length > 0;
-  
-  // Check if draft is complete in localStorage
-  const savedDraftState = getCurrentDraftState(tournament.id);
-  const isDraftCompleteInLocalStorage = savedDraftState && isDraftComplete(savedDraftState, players);
-  
-  // Check if completed draft exists in localStorage
-  let hasCompletedDraftInLocalStorage = false;
-  if (typeof window !== 'undefined') {
-    const completedDraftKey = `completed-draft-${tournament.id}`;
-    const completedDraft = localStorage.getItem(completedDraftKey);
-    hasCompletedDraftInLocalStorage = !!completedDraft;
-  }
-  
-  const hasAnyDraftData = hasDraftDataInResults || isDraftCompleteInLocalStorage || hasCompletedDraftInLocalStorage;
+  const hasAnyDraftData = hasDraftDataInResults;
   
   if (tournamentState === 'draft' && !hasAnyDraftData) {
     return (
@@ -780,7 +728,7 @@ export default function TournamentTableView({ params }: { params: { id: string }
         >
           Loading table data...
         </div>
-      ) : playerTableData.length === 0 ? (
+      ) : shouldShowPreDraftBanner(tournamentState) ? (
         <div
           style={{
             position: 'absolute',
@@ -799,7 +747,7 @@ export default function TournamentTableView({ params }: { params: { id: string }
         >
           <PreDraftBanner />
         </div>
-      ) : (
+      ) : playerTableData.length > 0 ? (
         <div
           style={{
             position: 'absolute',
@@ -845,6 +793,26 @@ export default function TournamentTableView({ params }: { params: { id: string }
               </Link>
             </div>
           )}
+        </div>
+      ) : (
+        <div
+          style={{
+            position: 'absolute',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            left: isMobile ? 0 : '50%',
+            top: isMobile ? '169px' : '232px',
+            transform: isMobile ? 'none' : 'translateX(-50%)',
+            zIndex: 5,
+            width: isMobile ? '100%' : '1057px',
+            padding: 40,
+            color: '#ffffff',
+            opacity: 0.9,
+            textAlign: 'center',
+          }}
+        >
+          No draft results for this tournament. Seed test data in admin.
         </div>
       )}
     </div>

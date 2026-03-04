@@ -1,4 +1,5 @@
 import { Tournament, TournamentState } from './types';
+import type { TournamentResult } from './types';
 
 // Helper function to parse date from dateRange string
 export function parseTournamentDate(dateRange: string): Date | null {
@@ -22,50 +23,52 @@ export function parseTournamentDate(dateRange: string): Date | null {
   return date;
 }
 
-// Determine tournament state based on dates
+/**
+ * Check if all golfers in results have complete rounds:
+ * - Golfers who made cut: 4 rounds
+ * - Golfers who missed cut: 2 rounds
+ * Exported for event-triggered state changes (last round → completed).
+ */
+export function isResultsComplete(results: TournamentResult | null | undefined): boolean {
+  if (!results?.golferResults?.length) return false;
+  for (const gr of results.golferResults) {
+    const expectedRounds = gr.madeCut ? 4 : 2;
+    if (!gr.rounds || gr.rounds.length < expectedRounds) return false;
+  }
+  return true;
+}
+
+/**
+ * Determine tournament state. Order: stored state > date-based.
+ * - Stored (admin override or event-triggered): wins
+ * - Date-based: derive from draftStart, start, end dates when no stored state
+ */
 export function getTournamentState(tournament: Tournament): TournamentState {
   const now = new Date();
   now.setHours(0, 0, 0, 0);
 
-  // If tournament has explicit state, use it (check for undefined/null explicitly)
+  // Stored state (admin override or event-triggered)
   if (tournament.state !== undefined && tournament.state !== null) {
     return tournament.state;
   }
 
-  // Parse dates
-  const startDate = tournament.startDate 
+  // Date-based fallback
+  const startDate = tournament.startDate
     ? new Date(tournament.startDate)
     : parseTournamentDate(tournament.dateRange);
-  
-  const endDate = tournament.endDate 
+
+  const endDate = tournament.endDate
     ? new Date(tournament.endDate)
     : null;
-  
+
   const draftStartDate = tournament.draftStartDate
     ? new Date(tournament.draftStartDate)
     : null;
 
-  // If we can't parse dates, default to pre-draft
-  if (!startDate) {
-    return 'pre-draft';
-  }
-
-  // Check if tournament has ended (must check first)
-  if (endDate && now > endDate) {
-    return 'completed';
-  }
-
-  // Check if tournament is currently playing
-  if (startDate && now >= startDate) {
-    return 'playing';
-  }
-
-  // Check if draft has started (only if tournament hasn't started yet)
-  if (draftStartDate && now >= draftStartDate) {
-    return 'draft';
-  }
-
-  // Tournament is in the future and draft hasn't started
+  if (!startDate) return 'pre-draft';
+  if (endDate && now > endDate) return 'completed';
+  if (startDate && now >= startDate) return 'playing';
+  if (draftStartDate && now >= draftStartDate) return 'draft';
   return 'pre-draft';
 }
 

@@ -14,7 +14,7 @@ import {
   getGolfers,
 } from '@/lib/data';
 import { useApiData, useTournamentData } from '@/lib/use-api-data';
-import { getTournamentState } from '@/lib/tournament-utils';
+import { getTournamentState, shouldShowPreDraftBanner } from '@/lib/tournament-view';
 
 export default function TournamentResultsPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -36,7 +36,7 @@ export default function TournamentResultsPage({ params }: { params: { id: string
       const tournamentState = getTournamentState(tournament);
       // Only redirect if in draft state AND no golfer results exist
       if (tournamentState === 'draft' && !hasGolferResults) {
-        router.push('/draft');
+        router.push(`/draft?tournament=${tournament.id}`);
       }
     }
   }, [loadingData, loadingTournament, tournament, router, hasGolferResults]);
@@ -297,7 +297,7 @@ export default function TournamentResultsPage({ params }: { params: { id: string
           </Link>
         </div>
         <MainContainer top="252px" noPadding={true}>
-          {!results || !hasGolferResults || tournamentState === 'pre-draft' ? (
+          {!results || !hasGolferResults || shouldShowPreDraftBanner(tournamentState) ? (
             <div style={{ padding: '40px', width: '100%', textAlign: 'center', color: '#ffffff' }}>
               <p>No results available for this tournament.</p>
             </div>

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getData, saveData } from '@/lib/api-db';
 import { calculateTeamScoresFromDrafts } from '@/lib/dummyData';
-import type { TournamentResult } from '@/lib/types';
+import type { Tournament, TournamentResult } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -118,8 +118,13 @@ export async function POST(
     const newDraftStates = { ...draftStates };
     delete newDraftStates[tournamentId];
 
+    // Event-triggered state: draft complete → playing
+    const newTournaments = (tournaments as Tournament[]).map((t) =>
+      t.id === tournamentId ? { ...t, state: 'playing' as const } : t
+    );
+
     const newData = {
-      tournaments,
+      tournaments: newTournaments,
       players,
       golfers,
       results: newResults,

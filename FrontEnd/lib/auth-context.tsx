@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { Tournament } from './types';
-import { parseTournamentDate, getTournamentState } from './tournament-utils';
+import { parseTournamentDate, getTournamentState } from './tournament-view';
 import { getTournaments } from './data';
 import { useApiData } from './use-api-data';
 
@@ -51,7 +51,10 @@ export function getLandingPath(): string {
   const target =
     findCurrentPlayingTournament(tournaments) ??
     findNextTournamentAfterLastCompleted(tournaments);
-  return target ? `/tournament/${target.id}/list` : '/season';
+  if (!target) return '/season';
+  // Always land on list page - it will redirect to draft if tournament is in draft state.
+  // This ensures data is loaded before draft page, avoiding flicker from cache race.
+  return `/tournament/${target.id}/list`;
 }
 
 /** Background image for the landing page (used on login to preview destination) */

@@ -1,5 +1,39 @@
-/* SeasonTable - two-panel layout with explicit row heights for alignment */
+/* SeasonTable - mobile: two-panel with fixed column. Desktop: single table. */
 
+/* Desktop: single table, no fixed column */
+.desktopTable {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  min-width: max-content;
+}
+
+.desktopHeaderRow {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 8px;
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+}
+
+.desktopCard {
+  background-color: #262626;
+  border: 1px solid #323232;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.desktopCard .scoreRow {
+  border-radius: 20px 20px 0 0;
+}
+
+/* Mobile: two-panel layout with fixed player column */
 .twoPanelWrapper {
   display: flex;
   align-items: flex-start;
@@ -96,7 +130,6 @@
   border-radius: 0;
   flex-shrink: 0;
   width: 100%;
-  background: #151515;
   box-sizing: border-box;
 }
 @container seasonTable (min-width: 768px) {
@@ -107,14 +140,24 @@
 
 .headerCell {
   display: flex;
-  height: 32px;
+  min-height: 32px;
   align-items: center;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   flex-shrink: 0;
   width: 70px;
   justify-content: center;
 }
+
+.desktopTable .headerCell {
+  width: 206px;
+  padding-left: 16px;
+  justify-content: flex-start;
+}
+.desktopTable .headerCellPlayer {
+  padding-left: 16px;
+}
+
 @container seasonTable (min-width: 768px) {
   .headerCell {
     width: 206px;
@@ -125,8 +168,18 @@
 
 
 .headerCellData {
-  width: 77px;
+  width: 92px;
   justify-content: center;
+  min-width: 92px;
+}
+.desktopTable .headerCellData {
+  width: 92px;
+  min-width: 92px;
+  justify-content: center;
+  padding-left: 0;
+}
+.desktopTable .headerCellData .headerText {
+  text-align: center;
 }
 
 .headerText {
@@ -139,9 +192,16 @@
   text-align: center;
   white-space: nowrap;
 }
+.desktopTable .headerText {
+  font-size: 11px;
+  text-align: left;
+}
+.desktopTable .headerCellPlayer .headerText {
+  text-align: left;
+}
 @container seasonTable (min-width: 768px) {
   .headerText {
-    font-size: 12px;
+    font-size: 11px;
     text-align: left;
   }
 }
@@ -154,7 +214,7 @@
   }
 }
 
-/* Player tag - column (pic top, name below) on narrow; row (pic left, name right) on wide */
+/* Player tag - column on mobile, row on desktop */
 .playerTag {
   display: flex;
   flex-direction: column;
@@ -168,6 +228,15 @@
   flex-shrink: 0;
   width: 70px;
 }
+
+.desktopTable .playerTag {
+  flex-direction: row;
+  gap: 16px;
+  padding-left: 10px;
+  width: 206px;
+  justify-content: flex-start;
+}
+
 @container seasonTable (min-width: 768px) {
   .playerTag {
     flex-direction: row;
@@ -185,6 +254,10 @@
   height: 40px;
   overflow: hidden;
 }
+.desktopTable .avatar {
+  width: 60px;
+  height: 60px;
+}
 @container seasonTable (min-width: 768px) {
   .avatar {
     width: 60px;
@@ -201,6 +274,9 @@
   font-size: 11px;
   text-align: center;
   white-space: nowrap;
+}
+.desktopTable .playerName {
+  font-size: 18px;
 }
 @container seasonTable (min-width: 768px) {
   .playerName {
@@ -260,7 +336,8 @@
   padding: 0 16px;
   position: relative;
   flex-shrink: 0;
-  width: 77px;
+  width: 92px;
+  min-width: 92px;
 }
 
 .dataValue {

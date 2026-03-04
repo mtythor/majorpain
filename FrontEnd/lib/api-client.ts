@@ -10,8 +10,8 @@ import type { Tournament, Golfer, Player, TournamentResult } from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
 
-/** When true, drafts go to the backend. When false (USE_API_CLIENT=false), drafts use localStorage. */
-export const USE_DRAFT_API = process.env.NEXT_PUBLIC_USE_API_CLIENT === 'true';
+/** Drafts always go to the backend (Postgres or file storage). */
+export const USE_DRAFT_API = true;
 
 function getWriteSecret(): string {
   return (process.env.NEXT_PUBLIC_MAJOR_PAIN_WRITE_SECRET || '').trim();

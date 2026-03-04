@@ -6,14 +6,13 @@
 
 import type { Tournament } from './types';
 
-/** 2026 season schedule - draft start = Monday of tournament week */
+/** 2026 season schedule - draft start = Monday of tournament week. State is date-based unless admin overrides. */
 export const TOURNAMENT_SCHEDULE_2026: Tournament[] = [
   {
     id: '1',
     name: 'PLAYERS CHAMPIONSHIP',
     dateRange: 'MAR 12 - 15, 2026',
     backgroundImage: '/images/TPC-Sawgrass.jpg',
-    state: 'completed',
     draftStartDate: '2026-03-09',
     startDate: '2026-03-12',
     endDate: '2026-03-15',
@@ -29,7 +28,6 @@ export const TOURNAMENT_SCHEDULE_2026: Tournament[] = [
     name: 'THE MASTERS',
     dateRange: 'APR 09 - 12, 2026',
     backgroundImage: '/images/Augusta.jpg',
-    state: 'completed',
     draftStartDate: '2026-04-06',
     startDate: '2026-04-09',
     endDate: '2026-04-12',
@@ -45,7 +43,6 @@ export const TOURNAMENT_SCHEDULE_2026: Tournament[] = [
     name: 'PGA CHAMPIONSHIP',
     dateRange: 'MAY 14 - 17, 2026',
     backgroundImage: '/images/Aronimink.jpg',
-    state: 'completed',
     draftStartDate: '2026-05-11',
     startDate: '2026-05-14',
     endDate: '2026-05-17',
@@ -61,7 +58,6 @@ export const TOURNAMENT_SCHEDULE_2026: Tournament[] = [
     name: 'U.S. OPEN',
     dateRange: 'JUN 18 - 21, 2026',
     backgroundImage: '/images/Shinnecock-Hills.jpg',
-    state: 'draft',
     draftStartDate: '2026-06-15',
     startDate: '2026-06-18',
     endDate: '2026-06-21',
@@ -77,7 +73,6 @@ export const TOURNAMENT_SCHEDULE_2026: Tournament[] = [
     name: 'OPEN CHAMPIONSHIP',
     dateRange: 'JUL 16 - 19, 2026',
     backgroundImage: '/images/Royal-Birkdale.jpg',
-    state: 'pre-draft',
     draftStartDate: '2026-07-13',
     startDate: '2026-07-16',
     endDate: '2026-07-19',
@@ -93,7 +88,6 @@ export const TOURNAMENT_SCHEDULE_2026: Tournament[] = [
     name: 'FEDEX ST. JUDE',
     dateRange: 'AUG 13 - 16, 2026',
     backgroundImage: '/images/TPC-Southwind.jpg',
-    state: 'pre-draft',
     draftStartDate: '2026-08-10',
     startDate: '2026-08-13',
     endDate: '2026-08-16',
@@ -109,7 +103,6 @@ export const TOURNAMENT_SCHEDULE_2026: Tournament[] = [
     name: 'BMW CHAMPIONSHIP',
     dateRange: 'AUG 20 - 23, 2026',
     backgroundImage: '/images/Bellerive.jpg',
-    state: 'pre-draft',
     draftStartDate: '2026-08-17',
     startDate: '2026-08-20',
     endDate: '2026-08-23',
@@ -125,7 +118,6 @@ export const TOURNAMENT_SCHEDULE_2026: Tournament[] = [
     name: 'TOUR CHAMPIONSHIP',
     dateRange: 'AUG 27 - 30, 2026',
     backgroundImage: '/images/East-Lake.jpg',
-    state: 'pre-draft',
     draftStartDate: '2026-08-24',
     startDate: '2026-08-27',
     endDate: '2026-08-30',
@@ -140,7 +132,6 @@ export const TOURNAMENT_SCHEDULE_2026: Tournament[] = [
     name: "PRESIDENT'S CUP",
     dateRange: 'SEP 24 - 27, 2026',
     backgroundImage: '/images/Medinah.jpg',
-    state: 'pre-draft',
     draftStartDate: '2026-09-21',
     startDate: '2026-09-24',
     endDate: '2026-09-27',
@@ -153,8 +144,8 @@ export const TOURNAMENT_SCHEDULE_2026: Tournament[] = [
 ];
 
 /**
- * Merge tournament metadata from the canonical schedule, preserving existing state.
- * Used when seeding to ensure dates/venues are always correct.
+ * Merge: schedule provides dates/venues, stored provides admin state override.
+ * State is date-based by default (getTournamentState); admin override takes precedence.
  */
 export function mergeTournamentsWithSchedule(
   existing: Array<{ id: string; state?: string }> = []
@@ -162,6 +153,6 @@ export function mergeTournamentsWithSchedule(
   const existingById = new Map(existing.map((t) => [t.id, t]));
   return TOURNAMENT_SCHEDULE_2026.map((canonical) => ({
     ...canonical,
-    state: (existingById.get(canonical.id)?.state as Tournament['state']) ?? canonical.state,
+    state: existingById.get(canonical.id)?.state as Tournament['state'] | undefined,
   }));
 }
