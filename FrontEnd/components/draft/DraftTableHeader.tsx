@@ -44,7 +44,7 @@ export default function DraftTableHeader({
           style={{
             height: '10px',
             position: 'absolute',
-            right: '8px',
+            right: '4px',
             top: '50%',
             transform: 'translateY(-50%)',
             flexShrink: 0,

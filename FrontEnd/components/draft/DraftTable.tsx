@@ -15,9 +15,10 @@ interface DraftTableProps {
   draftState: Record<string, DraftStatus>;
   onSelectGolfer: (golferId: string) => void;
   players?: Player[];
+  isMobile?: boolean;
 }
 
-export default function DraftTable({ golfers, draftState, onSelectGolfer, players }: DraftTableProps) {
+export default function DraftTable({ golfers, draftState, onSelectGolfer, players, isMobile }: DraftTableProps) {
   const playersList = players || getPlayers();
   const [sortColumn, setSortColumn] = useState<SortColumn>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
@@ -57,7 +58,9 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
         paddingRight: '1px',
         position: 'relative',
         flexShrink: 0,
-        width: '700px',
+        width: isMobile ? '100%' : '520px',
+        minWidth: isMobile ? '320px' : undefined,
+        overflowX: isMobile ? 'auto' : undefined,
       }}
     >
       {/* Golfer Column */}
@@ -87,7 +90,7 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
                 style={{
                   fontFamily: "var(--font-noto-sans), sans-serif",
                   fontWeight: 700,
-                  fontSize: '16px',
+                  fontSize: '12px',
                   lineHeight: 'normal',
                   position: 'relative',
                   flexShrink: 0,
@@ -119,7 +122,7 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
                 style={{
                   fontFamily: "var(--font-noto-sans), sans-serif",
                   fontWeight: 700,
-                  fontSize: '16px',
+                  fontSize: '12px',
                   lineHeight: 'normal',
                   position: 'relative',
                   flexShrink: 0,
@@ -152,7 +155,7 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
                 style={{
                   fontFamily: "var(--font-noto-sans), sans-serif",
                   fontWeight: 700,
-                  fontSize: '16px',
+                  fontSize: '12px',
                   lineHeight: 'normal',
                   position: 'relative',
                   flexShrink: 0,
@@ -213,9 +216,9 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
                     return (
                       <div
                         style={{
-                          width: '32px',
-                          height: '32px',
-                          borderRadius: '40px',
+                          width: '28px',
+                          height: '28px',
+                          borderRadius: '50%',
                           backgroundColor: '#323232',
                           display: 'flex',
                           alignItems: 'center',
@@ -230,22 +233,22 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
                     );
                   }
                   
-                  // Render image - exactly like PlayerCards and PlayerTables do it
+                  // Render image - compact avatar
                   return (
                     <div
                       style={{
                         position: 'relative',
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '40px',
+                        width: '28px',
+                        height: '28px',
+                        borderRadius: '50%',
                         overflow: 'hidden',
                       }}
                     >
                       <Image
                         src={imageUrl}
                         alt={draftStatus.draftedBy}
-                        width={32}
-                        height={32}
+                        width={28}
+                        height={28}
                         style={{
                           width: '100%',
                           height: '100%',

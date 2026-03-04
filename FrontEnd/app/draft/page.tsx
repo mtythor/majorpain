@@ -806,7 +806,8 @@ export default function DraftPage() {
               backgroundColor: 'rgba(180, 0, 0, 0.3)',
               border: '1px solid #c00',
               borderRadius: '8px',
-              width: '1006px',
+              width: '100%',
+              maxWidth: '1006px',
               color: '#ffffff',
             }}
           >
@@ -862,7 +863,8 @@ export default function DraftPage() {
                 backgroundColor: 'rgba(0, 0, 0, 0.7)',
                 borderRadius: '8px',
                 marginBottom: '16px',
-                width: '1006px',
+                width: '100%',
+                maxWidth: '1006px',
               }}
             >
               <div style={{ marginBottom: '8px', color: '#ffffff', fontSize: '14px', fontWeight: 700 }}>
@@ -938,20 +940,31 @@ export default function DraftPage() {
           <div
             style={{
               display: 'flex',
-              gap: '16px',
+              gap: isMobile ? 0 : '16px',
               alignItems: 'flex-start',
               position: 'relative',
               flexShrink: 0,
-              width: '1006px',
+              width: isMobile ? '100%' : '1006px',
+              overflowX: isMobile ? 'auto' : 'visible',
+              flexDirection: isMobile ? 'column' : 'row',
             }}
           >
-            <DraftTable
-              golfers={golfers}
-              draftState={draftState}
-              onSelectGolfer={handleSelectGolfer}
-              players={players}
-            />
-            <PlayByPlay events={playByPlayEvents} />
+            {(!isMobile || searchParams.get('panel') !== 'play-by-play') && (
+              <div style={isMobile ? { width: '100%', minWidth: 0 } : undefined}>
+                <DraftTable
+                  golfers={golfers}
+                  draftState={draftState}
+                  onSelectGolfer={handleSelectGolfer}
+                  players={players}
+                  isMobile={isMobile}
+                />
+              </div>
+            )}
+            {(!isMobile || searchParams.get('panel') === 'play-by-play') && (
+              <div style={isMobile ? { width: '100%', minWidth: 0, flex: 1 } : undefined}>
+                <PlayByPlay events={playByPlayEvents} isMobile={isMobile} />
+              </div>
+            )}
           </div>
         )}
         

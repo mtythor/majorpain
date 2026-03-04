@@ -10,7 +10,7 @@ export default function DraftSelectButton({ onClick, disabled = false }: DraftSe
       style={{
         fontFamily: "var(--font-noto-sans), sans-serif",
         fontWeight: 400,
-        fontSize: '14px',
+        fontSize: '12px',
         lineHeight: 'normal',
         position: 'relative',
         flexShrink: 0,

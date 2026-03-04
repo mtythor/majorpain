@@ -12,7 +12,7 @@ export default function DraftTableColumn({
   className = '',
 }: DraftTableColumnProps) {
   const isGolferColumn = type === 'golfer';
-  const width = isGolferColumn ? undefined : '108px';
+  const width = type === 'draft' ? '80px' : type === 'golfer' ? undefined : '56px';
 
   return (
     <div

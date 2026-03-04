@@ -36,7 +36,8 @@ export default function DraftBanner({
         position: 'relative',
         borderRadius: '4px',
         flexShrink: 0,
-        width: '1006px',
+        width: '100%',
+        maxWidth: '1006px',
       }}
     >
       <ProfilePicture src={playerImage} alt={playerName} size={24} />

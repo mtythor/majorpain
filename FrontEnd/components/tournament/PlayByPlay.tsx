@@ -2,22 +2,24 @@ import { DraftEvent } from '@/lib/types';
 
 interface PlayByPlayProps {
   events: DraftEvent[];
+  isMobile?: boolean;
 }
 
-export default function PlayByPlay({ events }: PlayByPlayProps) {
+export default function PlayByPlay({ events, isMobile }: PlayByPlayProps) {
   return (
     <div
       style={{
         backgroundColor: '#070707',
         display: 'flex',
         flexDirection: 'column',
-        height: '925px',
+        height: isMobile ? 'min(400px, 50vh)' : '925px',
+        minHeight: isMobile ? 200 : undefined,
         alignItems: 'flex-start',
         overflow: 'hidden',
         padding: '8px',
         position: 'relative',
         flexShrink: 0,
-        width: '290px',
+        width: isMobile ? '100%' : '290px',
       }}
     >
       <div

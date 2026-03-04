@@ -27,12 +27,12 @@ export default function DraftTableCell({
       className={className}
       style={{
         display: 'flex',
-        height: isHeader ? '32px' : '48px',
+        height: isHeader ? '28px' : '44px',
         alignItems: 'center',
         marginBottom: '-1px',
         overflow: 'hidden',
-        paddingLeft: '16px',
-        paddingRight: '16px',
+        paddingLeft: '8px',
+        paddingRight: '8px',
         position: 'relative',
         flexShrink: 0,
         width: '100%',
