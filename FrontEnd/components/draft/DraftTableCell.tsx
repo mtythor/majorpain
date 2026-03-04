@@ -6,6 +6,7 @@ interface DraftTableCellProps {
   align?: 'left' | 'center';
   children: ReactNode;
   className?: string;
+  isMobile?: boolean;
 }
 
 export default function DraftTableCell({
@@ -14,6 +15,7 @@ export default function DraftTableCell({
   align = 'center',
   children,
   className = '',
+  isMobile = false,
 }: DraftTableCellProps) {
   const isHeader = type === 'header';
   const backgroundColor = isHeader
@@ -21,18 +23,20 @@ export default function DraftTableCell({
     : rowType === 'alt'
       ? '#1f1f1f'
       : '#262626';
+  const rowHeight = isMobile ? (isHeader ? '28px' : '44px') : (isHeader ? '32px' : '48px');
+  const padding = isMobile ? '8px' : '16px';
 
   return (
     <div
       className={className}
       style={{
         display: 'flex',
-        height: isHeader ? '28px' : '44px',
+        height: rowHeight,
         alignItems: 'center',
         marginBottom: '-1px',
         overflow: 'hidden',
-        paddingLeft: '8px',
-        paddingRight: '8px',
+        paddingLeft: padding,
+        paddingRight: padding,
         position: 'relative',
         flexShrink: 0,
         width: '100%',

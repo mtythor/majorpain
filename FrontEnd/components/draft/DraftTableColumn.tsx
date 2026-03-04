@@ -4,15 +4,19 @@ interface DraftTableColumnProps {
   type: 'golfer' | 'rank' | 'odds' | 'draft';
   children: ReactNode;
   className?: string;
+  isMobile?: boolean;
 }
 
 export default function DraftTableColumn({
   type,
   children,
   className = '',
+  isMobile = false,
 }: DraftTableColumnProps) {
   const isGolferColumn = type === 'golfer';
-  const width = type === 'draft' ? '80px' : type === 'golfer' ? undefined : '56px';
+  const width = type === 'golfer' ? undefined
+    : isMobile ? (type === 'draft' ? '80px' : '56px')
+    : '108px';
 
   return (
     <div

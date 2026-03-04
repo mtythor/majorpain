@@ -58,14 +58,14 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
         paddingRight: '1px',
         position: 'relative',
         flexShrink: 0,
-        width: isMobile ? '100%' : '520px',
+        width: isMobile ? '100%' : '700px',
         minWidth: isMobile ? '320px' : undefined,
         overflowX: isMobile ? 'auto' : undefined,
       }}
     >
       {/* Golfer Column */}
-      <DraftTableColumn type="golfer">
-        <DraftTableCell type="header" align="left">
+      <DraftTableColumn type="golfer" isMobile={isMobile}>
+        <DraftTableCell type="header" align="left" isMobile={isMobile}>
           <p
             style={{
               fontFamily: "var(--font-noto-sans), sans-serif",
@@ -85,12 +85,12 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
         {sortedGolfers.map((golfer, index) => {
           const rowType = index % 2 === 0 ? 'standard' : 'alt';
           return (
-            <DraftTableCell key={golfer.id} type="data" rowType={rowType} align="left">
+            <DraftTableCell key={golfer.id} type="data" rowType={rowType} align="left" isMobile={isMobile}>
               <p
                 style={{
                   fontFamily: "var(--font-noto-sans), sans-serif",
                   fontWeight: 700,
-                  fontSize: '12px',
+                  fontSize: isMobile ? '12px' : '16px',
                   lineHeight: 'normal',
                   position: 'relative',
                   flexShrink: 0,
@@ -105,8 +105,8 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
       </DraftTableColumn>
 
       {/* Rank Column */}
-      <DraftTableColumn type="rank">
-        <DraftTableCell type="header">
+      <DraftTableColumn type="rank" isMobile={isMobile}>
+        <DraftTableCell type="header" isMobile={isMobile}>
           <DraftTableHeader
             label="rank"
             sortable
@@ -117,12 +117,12 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
         {sortedGolfers.map((golfer, index) => {
           const rowType = index % 2 === 0 ? 'standard' : 'alt';
           return (
-            <DraftTableCell key={golfer.id} type="data" rowType={rowType}>
+            <DraftTableCell key={golfer.id} type="data" rowType={rowType} isMobile={isMobile}>
               <p
                 style={{
                   fontFamily: "var(--font-noto-sans), sans-serif",
                   fontWeight: 700,
-                  fontSize: '12px',
+                  fontSize: isMobile ? '12px' : '16px',
                   lineHeight: 'normal',
                   position: 'relative',
                   flexShrink: 0,
@@ -138,8 +138,8 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
       </DraftTableColumn>
 
       {/* Odds Column */}
-      <DraftTableColumn type="odds">
-        <DraftTableCell type="header">
+      <DraftTableColumn type="odds" isMobile={isMobile}>
+        <DraftTableCell type="header" isMobile={isMobile}>
           <DraftTableHeader
             label="odds"
             sortable
@@ -150,12 +150,12 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
         {sortedGolfers.map((golfer, index) => {
           const rowType = index % 2 === 0 ? 'standard' : 'alt';
           return (
-            <DraftTableCell key={golfer.id} type="data" rowType={rowType}>
+            <DraftTableCell key={golfer.id} type="data" rowType={rowType} isMobile={isMobile}>
               <p
                 style={{
                   fontFamily: "var(--font-noto-sans), sans-serif",
                   fontWeight: 700,
-                  fontSize: '12px',
+                  fontSize: isMobile ? '12px' : '16px',
                   lineHeight: 'normal',
                   position: 'relative',
                   flexShrink: 0,
@@ -171,8 +171,8 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
       </DraftTableColumn>
 
       {/* Draft Column */}
-      <DraftTableColumn type="draft">
-        <DraftTableCell type="header">
+      <DraftTableColumn type="draft" isMobile={isMobile}>
+        <DraftTableCell type="header" isMobile={isMobile}>
           <p
             style={{
               fontFamily: "var(--font-noto-sans), sans-serif",
@@ -194,7 +194,7 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
           const draftStatus = draftState[golfer.id] || { golferId: golfer.id, isSelectable: true };
           
           return (
-            <DraftTableCell key={golfer.id} type="data" rowType={rowType}>
+            <DraftTableCell key={golfer.id} type="data" rowType={rowType} isMobile={isMobile}>
               {draftStatus.draftedBy ? (
                 (() => {
                   // Special handling for Fat Rando (not in players list)
@@ -216,8 +216,8 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
                     return (
                       <div
                         style={{
-                          width: '28px',
-                          height: '28px',
+                          width: isMobile ? '28px' : '32px',
+                          height: isMobile ? '28px' : '32px',
                           borderRadius: '50%',
                           backgroundColor: '#323232',
                           display: 'flex',
@@ -234,12 +234,13 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
                   }
                   
                   // Render image - compact avatar
+                  const avatarSize = isMobile ? 28 : 32;
                   return (
                     <div
                       style={{
                         position: 'relative',
-                        width: '28px',
-                        height: '28px',
+                        width: `${avatarSize}px`,
+                        height: `${avatarSize}px`,
                         borderRadius: '50%',
                         overflow: 'hidden',
                       }}
@@ -247,8 +248,8 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
                       <Image
                         src={imageUrl}
                         alt={draftStatus.draftedBy}
-                        width={28}
-                        height={28}
+                        width={avatarSize}
+                        height={avatarSize}
                         style={{
                           width: '100%',
                           height: '100%',
@@ -263,6 +264,7 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
                 <DraftSelectButton
                   onClick={() => onSelectGolfer(golfer.id)}
                   disabled={!draftStatus.isSelectable}
+                  isMobile={isMobile}
                 />
               )}
             </DraftTableCell>
