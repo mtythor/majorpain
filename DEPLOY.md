@@ -8,7 +8,7 @@ Production runs on a DigitalOcean droplet at **https://majorpain.devinhansen.com
 
 Build runs in GitHub Actions; the server receives pre-built artifacts. **~30–60 seconds** on the server (no local Next.js build).
 
-### 1. Push to deploy
+### 1. Push your changes
 
 ```powershell
 git add -A
@@ -16,7 +16,11 @@ git commit -m "Your commit message"
 git push origin refactor/frontend-tokens
 ```
 
-That’s it. The workflow builds in CI, rsyncs to the server, runs `npm ci`, and restarts PM2. Check the Actions tab in your GitHub repo for status.
+### 2. Deploy when ready
+
+Go to **GitHub → Actions → Deploy to production** → **Run workflow**. Choose the branch (default: `refactor/frontend-tokens`) and click **Run workflow**.
+
+No auto-deploy on push—you decide when to deploy.
 
 ### One-time setup: GitHub secrets
 
