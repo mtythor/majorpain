@@ -38,16 +38,6 @@ export const dummyPlayers = [
 /** Re-export for backwards compatibility - tournaments come from the canonical schedule */
 export const dummyTournaments = TOURNAMENT_SCHEDULE_2026;
 
-// Helper function to generate odds string
-function generateOdds(rank: number): string {
-  if (rank <= 5) return `${3 + rank}/1`;
-  if (rank <= 10) return `${10 + (rank - 5) * 2}/1`;
-  if (rank <= 20) return `${20 + (rank - 10) * 3}/1`;
-  if (rank <= 30) return `${50 + (rank - 20) * 5}/1`;
-  if (rank <= 50) return `${100 + (rank - 30) * 10}/1`;
-  return `${300 + (rank - 50) * 20}/1`;
-}
-
 // Helper function to generate round scores (deterministic)
 // For rounds 1-2: generates scores based on golfer skill (rank)
 // For rounds 3-4: generates scores based on final position (for those who made cut)
@@ -134,7 +124,6 @@ function generateGolfers(tournamentId: string): Golfer[] {
     id: `golfer-${tournamentId}-${index + 1}`,
     name,
     rank: index + 1,
-    odds: generateOdds(index + 1),
   }));
 }
 

@@ -33,8 +33,7 @@ All data attributes use the `data-*` prefix to maintain HTML5 validity. The nami
 ### Golfer Rows in Draft Table
 - `data-golfer-row` - Row index for golfer in draft table (0-based)
 - `data-golfer-name` - Golfer name
-- `data-golfer-rank` - Golfer's rank
-- `data-golfer-odds` - Golfer's betting odds (format: "X / Y")
+- `data-golfer-rank` - Golfer's world ranking
 - `data-draft-selection` - Indicates a draft selection cell
 - `data-draft-player-image` - Player image in draft selection
 

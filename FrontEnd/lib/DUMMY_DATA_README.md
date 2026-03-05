@@ -20,7 +20,7 @@ The dummy data includes:
 
 ### Golfers
 - `dummyGolfers`: Record mapping tournament ID to array of 100 golfers
-- Each golfer has: id, name, rank, odds
+- Each golfer has: id, name, rank
 
 ### Tournament Results
 - `dummyTournamentResults`: Record mapping tournament ID to tournament result object

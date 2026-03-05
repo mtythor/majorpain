@@ -50,7 +50,7 @@ Each player drafts:
 Before the draft begins, Fat Rando automatically "steals" 4 golfers from the available pool using a progressive random selection process:
 
 #### Stealing Process:
-1. **Golfers sorted by odds** - Field ranked from favorite (1st) to longshot (last)
+1. **Golfers sorted by world rank** - Field ranked from #1 (best) to last
 2. **Steal #1**: Random number 1-5, steals golfer at that position
 3. **Steal #2**: Random number 1-10, steals golfer at that position (remaining field)
 4. **Steal #3**: Random number 1-15, steals golfer at that position (remaining field)
@@ -222,7 +222,7 @@ Before the draft begins, Fat Rando automatically "steals" 4 golfers from the ava
 - Bonus system for key performances
 
 ### Development & Testing
-- **Mock dataset** - Test field of 100 golfers with realistic rankings and odds
+- **Mock dataset** - Test field of 100 golfers with realistic rankings
 - **Mock draft simulation** - Generate automated drafts to test system functionality
 - **Mock tournament results** - Simulate complete tournaments with realistic scoring
 - **Pre/post tournament testing** - Verify all scoring, substitution, and ranking systems work correctly

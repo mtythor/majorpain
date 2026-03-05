@@ -47,13 +47,13 @@ This document outlines the plan for connecting dummy tournament data to the draf
    - Ensure deterministic data for consistent testing
 
 3. **Generate Current Tournament Data (Event 4 - U.S. OPEN)**
-   - Generate golfer list with ranks and odds
+   - Generate golfer list with ranks
    - Set tournament state to 'draft'
    - No completed results (tournament hasn't started)
    - Draft status: started but empty (no selections made)
 
 4. **Generate Pre-draft Tournament Data (Events 5-9)**
-   - Generate golfer list with ranks and odds
+   - Generate golfer list with ranks
    - Set tournament state to 'pre-draft'
    - No results, no draft data
 

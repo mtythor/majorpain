@@ -3,5688 +3,3798 @@
     {
       "id": "golfer-1-1",
       "name": "Scottie Scheffler",
-      "rank": 1,
-      "odds": "4/1"
-    },
+      "rank": 1},
     {
       "id": "golfer-1-2",
       "name": "Rory McIlroy",
-      "rank": 2,
-      "odds": "5/1"
-    },
+      "rank": 2},
     {
       "id": "golfer-1-3",
       "name": "Jon Rahm",
-      "rank": 3,
-      "odds": "6/1"
-    },
+      "rank": 3},
     {
       "id": "golfer-1-4",
       "name": "Brooks Koepka",
-      "rank": 4,
-      "odds": "7/1"
-    },
+      "rank": 4},
     {
       "id": "golfer-1-5",
       "name": "Jordan Spieth",
-      "rank": 5,
-      "odds": "8/1"
-    },
+      "rank": 5},
     {
       "id": "golfer-1-6",
       "name": "Justin Thomas",
-      "rank": 6,
-      "odds": "12/1"
-    },
+      "rank": 6},
     {
       "id": "golfer-1-7",
       "name": "Dustin Johnson",
-      "rank": 7,
-      "odds": "14/1"
-    },
+      "rank": 7},
     {
       "id": "golfer-1-8",
       "name": "Patrick Cantlay",
-      "rank": 8,
-      "odds": "16/1"
-    },
+      "rank": 8},
     {
       "id": "golfer-1-9",
       "name": "Xander Schauffele",
-      "rank": 9,
-      "odds": "18/1"
-    },
+      "rank": 9},
     {
       "id": "golfer-1-10",
       "name": "Collin Morikawa",
-      "rank": 10,
-      "odds": "20/1"
-    },
+      "rank": 10},
     {
       "id": "golfer-1-11",
       "name": "Viktor Hovland",
-      "rank": 11,
-      "odds": "23/1"
-    },
+      "rank": 11},
     {
       "id": "golfer-1-12",
       "name": "Matt Fitzpatrick",
-      "rank": 12,
-      "odds": "26/1"
-    },
+      "rank": 12},
     {
       "id": "golfer-1-13",
       "name": "Tommy Fleetwood",
-      "rank": 13,
-      "odds": "29/1"
-    },
+      "rank": 13},
     {
       "id": "golfer-1-14",
       "name": "Tyrrell Hatton",
-      "rank": 14,
-      "odds": "32/1"
-    },
+      "rank": 14},
     {
       "id": "golfer-1-15",
       "name": "Shane Lowry",
-      "rank": 15,
-      "odds": "35/1"
-    },
+      "rank": 15},
     {
       "id": "golfer-1-16",
       "name": "Cameron Smith",
-      "rank": 16,
-      "odds": "38/1"
-    },
+      "rank": 16},
     {
       "id": "golfer-1-17",
       "name": "Sam Burns",
-      "rank": 17,
-      "odds": "41/1"
-    },
+      "rank": 17},
     {
       "id": "golfer-1-18",
       "name": "Max Homa",
-      "rank": 18,
-      "odds": "44/1"
-    },
+      "rank": 18},
     {
       "id": "golfer-1-19",
       "name": "Tony Finau",
-      "rank": 19,
-      "odds": "47/1"
-    },
+      "rank": 19},
     {
       "id": "golfer-1-20",
       "name": "Sungjae Im",
-      "rank": 20,
-      "odds": "50/1"
-    },
+      "rank": 20},
     {
       "id": "golfer-1-21",
       "name": "Hideki Matsuyama",
-      "rank": 21,
-      "odds": "55/1"
-    },
+      "rank": 21},
     {
       "id": "golfer-1-22",
       "name": "Jason Day",
-      "rank": 22,
-      "odds": "60/1"
-    },
+      "rank": 22},
     {
       "id": "golfer-1-23",
       "name": "Adam Scott",
-      "rank": 23,
-      "odds": "65/1"
-    },
+      "rank": 23},
     {
       "id": "golfer-1-24",
       "name": "Marc Leishman",
-      "rank": 24,
-      "odds": "70/1"
-    },
+      "rank": 24},
     {
       "id": "golfer-1-25",
       "name": "Louis Oosthuizen",
-      "rank": 25,
-      "odds": "75/1"
-    },
+      "rank": 25},
     {
       "id": "golfer-1-26",
       "name": "Bryson DeChambeau",
-      "rank": 26,
-      "odds": "80/1"
-    },
+      "rank": 26},
     {
       "id": "golfer-1-27",
       "name": "Daniel Berger",
-      "rank": 27,
-      "odds": "85/1"
-    },
+      "rank": 27},
     {
       "id": "golfer-1-28",
       "name": "Keegan Bradley",
-      "rank": 28,
-      "odds": "90/1"
-    },
+      "rank": 28},
     {
       "id": "golfer-1-29",
       "name": "Russell Henley",
-      "rank": 29,
-      "odds": "95/1"
-    },
+      "rank": 29},
     {
       "id": "golfer-1-30",
       "name": "Brian Harman",
-      "rank": 30,
-      "odds": "100/1"
-    },
+      "rank": 30},
     {
       "id": "golfer-1-31",
       "name": "Harris English",
-      "rank": 31,
-      "odds": "110/1"
-    },
+      "rank": 31},
     {
       "id": "golfer-1-32",
       "name": "Sepp Straka",
-      "rank": 32,
-      "odds": "120/1"
-    },
+      "rank": 32},
     {
       "id": "golfer-1-33",
       "name": "Ludvig Aberg",
-      "rank": 33,
-      "odds": "130/1"
-    },
+      "rank": 33},
     {
       "id": "golfer-1-34",
       "name": "Nicolai Hojgaard",
-      "rank": 34,
-      "odds": "140/1"
-    },
+      "rank": 34},
     {
       "id": "golfer-1-35",
       "name": "Tom Kim",
-      "rank": 35,
-      "odds": "150/1"
-    },
+      "rank": 35},
     {
       "id": "golfer-1-36",
       "name": "Robert MacIntyre",
-      "rank": 36,
-      "odds": "160/1"
-    },
+      "rank": 36},
     {
       "id": "golfer-1-37",
       "name": "Alex Noren",
-      "rank": 37,
-      "odds": "170/1"
-    },
+      "rank": 37},
     {
       "id": "golfer-1-38",
       "name": "Aaron Wise",
-      "rank": 38,
-      "odds": "180/1"
-    },
+      "rank": 38},
     {
       "id": "golfer-1-39",
       "name": "Sahith Theegala",
-      "rank": 39,
-      "odds": "190/1"
-    },
+      "rank": 39},
     {
       "id": "golfer-1-40",
       "name": "Kurt Kitayama",
-      "rank": 40,
-      "odds": "200/1"
-    },
+      "rank": 40},
     {
       "id": "golfer-1-41",
       "name": "Andrew Novak",
-      "rank": 41,
-      "odds": "210/1"
-    },
+      "rank": 41},
     {
       "id": "golfer-1-42",
       "name": "Michael Kim",
-      "rank": 42,
-      "odds": "220/1"
-    },
+      "rank": 42},
     {
       "id": "golfer-1-43",
       "name": "Ben Griffin",
-      "rank": 43,
-      "odds": "230/1"
-    },
+      "rank": 43},
     {
       "id": "golfer-1-44",
       "name": "Justin Rose",
-      "rank": 44,
-      "odds": "240/1"
-    },
+      "rank": 44},
     {
       "id": "golfer-1-45",
       "name": "Gary Woodland",
-      "rank": 45,
-      "odds": "250/1"
-    },
+      "rank": 45},
     {
       "id": "golfer-1-46",
       "name": "Erik Van Rooyen",
-      "rank": 46,
-      "odds": "260/1"
-    },
+      "rank": 46},
     {
       "id": "golfer-1-47",
       "name": "Joaquin Niemann",
-      "rank": 47,
-      "odds": "270/1"
-    },
+      "rank": 47},
     {
       "id": "golfer-1-48",
       "name": "Taylor Pendrith",
-      "rank": 48,
-      "odds": "280/1"
-    },
+      "rank": 48},
     {
       "id": "golfer-1-49",
       "name": "Wyndham Clark",
-      "rank": 49,
-      "odds": "290/1"
-    },
+      "rank": 49},
     {
       "id": "golfer-1-50",
       "name": "Rickie Fowler",
-      "rank": 50,
-      "odds": "300/1"
-    },
+      "rank": 50},
     {
       "id": "golfer-1-51",
       "name": "Bubba Watson",
-      "rank": 51,
-      "odds": "320/1"
-    },
+      "rank": 51},
     {
       "id": "golfer-1-52",
       "name": "Phil Mickelson",
-      "rank": 52,
-      "odds": "340/1"
-    },
+      "rank": 52},
     {
       "id": "golfer-1-53",
       "name": "Tiger Woods",
-      "rank": 53,
-      "odds": "360/1"
-    },
+      "rank": 53},
     {
       "id": "golfer-1-54",
       "name": "Fred Couples",
-      "rank": 54,
-      "odds": "380/1"
-    },
+      "rank": 54},
     {
       "id": "golfer-1-55",
       "name": "Davis Love III",
-      "rank": 55,
-      "odds": "400/1"
-    },
+      "rank": 55},
     {
       "id": "golfer-1-56",
       "name": "Webb Simpson",
-      "rank": 56,
-      "odds": "420/1"
-    },
+      "rank": 56},
     {
       "id": "golfer-1-57",
       "name": "Kevin Kisner",
-      "rank": 57,
-      "odds": "440/1"
-    },
+      "rank": 57},
     {
       "id": "golfer-1-58",
       "name": "Billy Horschel",
-      "rank": 58,
-      "odds": "460/1"
-    },
+      "rank": 58},
     {
       "id": "golfer-1-59",
       "name": "Stewart Cink",
-      "rank": 59,
-      "odds": "480/1"
-    },
+      "rank": 59},
     {
       "id": "golfer-1-60",
       "name": "Charley Hoffman",
-      "rank": 60,
-      "odds": "500/1"
-    },
+      "rank": 60},
     {
       "id": "golfer-1-61",
       "name": "J.T. Poston",
-      "rank": 61,
-      "odds": "520/1"
-    },
+      "rank": 61},
     {
       "id": "golfer-1-62",
       "name": "Brendon Todd",
-      "rank": 62,
-      "odds": "540/1"
-    },
+      "rank": 62},
     {
       "id": "golfer-1-63",
       "name": "Emiliano Grillo",
-      "rank": 63,
-      "odds": "560/1"
-    },
+      "rank": 63},
     {
       "id": "golfer-1-64",
       "name": "Francesco Molinari",
-      "rank": 64,
-      "odds": "580/1"
-    },
+      "rank": 64},
     {
       "id": "golfer-1-65",
       "name": "Adrian Otaegui",
-      "rank": 65,
-      "odds": "600/1"
-    },
+      "rank": 65},
     {
       "id": "golfer-1-66",
       "name": "Rasmus Hojgaard",
-      "rank": 66,
-      "odds": "620/1"
-    },
+      "rank": 66},
     {
       "id": "golfer-1-67",
       "name": "Thorbjorn Bjorn",
-      "rank": 67,
-      "odds": "640/1"
-    },
+      "rank": 67},
     {
       "id": "golfer-1-68",
       "name": "Henrik Stenson",
-      "rank": 68,
-      "odds": "660/1"
-    },
+      "rank": 68},
     {
       "id": "golfer-1-69",
       "name": "Sergio Garcia",
-      "rank": 69,
-      "odds": "680/1"
-    },
+      "rank": 69},
     {
       "id": "golfer-1-70",
       "name": "Pablo Larrazabal",
-      "rank": 70,
-      "odds": "700/1"
-    },
+      "rank": 70},
     {
       "id": "golfer-1-71",
       "name": "Jorge Campillo",
-      "rank": 71,
-      "odds": "720/1"
-    },
+      "rank": 71},
     {
       "id": "golfer-1-72",
       "name": "Carlos Ortiz",
-      "rank": 72,
-      "odds": "740/1"
-    },
+      "rank": 72},
     {
       "id": "golfer-1-73",
       "name": "Miguel Ancer",
-      "rank": 73,
-      "odds": "760/1"
-    },
+      "rank": 73},
     {
       "id": "golfer-1-74",
       "name": "Eduardo Rodriguez",
-      "rank": 74,
-      "odds": "780/1"
-    },
+      "rank": 74},
     {
       "id": "golfer-1-75",
       "name": "Alejandro Cabrera Bello",
-      "rank": 75,
-      "odds": "800/1"
-    },
+      "rank": 75},
     {
       "id": "golfer-1-76",
       "name": "Rafael Paratore",
-      "rank": 76,
-      "odds": "820/1"
-    },
+      "rank": 76},
     {
       "id": "golfer-1-77",
       "name": "Jose Schwartzel",
-      "rank": 77,
-      "odds": "840/1"
-    },
+      "rank": 77},
     {
       "id": "golfer-1-78",
       "name": "Lucas Grace",
-      "rank": 78,
-      "odds": "860/1"
-    },
+      "rank": 78},
     {
       "id": "golfer-1-79",
       "name": "Matthias Frittelli",
-      "rank": 79,
-      "odds": "880/1"
-    },
+      "rank": 79},
     {
       "id": "golfer-1-80",
       "name": "Martin Higgo",
-      "rank": 80,
-      "odds": "900/1"
-    },
+      "rank": 80},
     {
       "id": "golfer-1-81",
       "name": "Thomas Pieters",
-      "rank": 81,
-      "odds": "920/1"
-    },
+      "rank": 81},
     {
       "id": "golfer-1-82",
       "name": "Christiaan Willett",
-      "rank": 82,
-      "odds": "940/1"
-    },
+      "rank": 82},
     {
       "id": "golfer-1-83",
       "name": "Dean Casey",
-      "rank": 83,
-      "odds": "960/1"
-    },
+      "rank": 83},
     {
       "id": "golfer-1-84",
       "name": "Branden Westwood",
-      "rank": 84,
-      "odds": "980/1"
-    },
+      "rank": 84},
     {
       "id": "golfer-1-85",
       "name": "Charl Poulter",
-      "rank": 85,
-      "odds": "1000/1"
-    },
+      "rank": 85},
     {
       "id": "golfer-1-86",
       "name": "Ernie Rose",
-      "rank": 86,
-      "odds": "1020/1"
-    },
+      "rank": 86},
     {
       "id": "golfer-1-87",
       "name": "Retief Fitzpatrick",
-      "rank": 87,
-      "odds": "1040/1"
-    },
+      "rank": 87},
     {
       "id": "golfer-1-88",
       "name": "Louis Wallace",
-      "rank": 88,
-      "odds": "1060/1"
-    },
+      "rank": 88},
     {
       "id": "golfer-1-89",
       "name": "Dylan Fox",
-      "rank": 89,
-      "odds": "1080/1"
-    },
+      "rank": 89},
     {
       "id": "golfer-1-90",
       "name": "Garrick Power",
-      "rank": 90,
-      "odds": "1100/1"
-    },
+      "rank": 90},
     {
       "id": "golfer-1-91",
       "name": "Cameron Young",
-      "rank": 91,
-      "odds": "1120/1"
-    },
+      "rank": 91},
     {
       "id": "golfer-1-92",
       "name": "Ryan Palmer",
-      "rank": 92,
-      "odds": "1140/1"
-    },
+      "rank": 92},
     {
       "id": "golfer-1-93",
       "name": "Brendan Steele",
-      "rank": 93,
-      "odds": "1160/1"
-    },
+      "rank": 93},
     {
       "id": "golfer-1-94",
       "name": "Lucas Glover",
-      "rank": 94,
-      "odds": "1180/1"
-    },
+      "rank": 94},
     {
       "id": "golfer-1-95",
       "name": "Maverick List",
-      "rank": 95,
-      "odds": "1200/1"
-    },
+      "rank": 95},
     {
       "id": "golfer-1-96",
       "name": "Pierceson Hughes",
-      "rank": 96,
-      "odds": "1220/1"
-    },
+      "rank": 96},
     {
       "id": "golfer-1-97",
       "name": "Gordon Conners",
-      "rank": 97,
-      "odds": "1240/1"
-    },
+      "rank": 97},
     {
       "id": "golfer-1-98",
       "name": "Nick Taylor",
-      "rank": 98,
-      "odds": "1260/1"
-    },
+      "rank": 98},
     {
       "id": "golfer-1-99",
       "name": "Luke Donald",
-      "rank": 99,
-      "odds": "1280/1"
-    },
+      "rank": 99},
     {
       "id": "golfer-1-100",
       "name": "David Lingmerth",
-      "rank": 100,
-      "odds": "1300/1"
-    },
+      "rank": 100},
     {
       "id": "golfer-1-101",
       "name": "Matt Kuchar",
-      "rank": 101,
-      "odds": "1320/1"
-    },
+      "rank": 101},
     {
       "id": "golfer-1-102",
       "name": "Zach Johnson",
-      "rank": 102,
-      "odds": "1340/1"
-    },
+      "rank": 102},
     {
       "id": "golfer-1-103",
       "name": "Jim Furyk",
-      "rank": 103,
-      "odds": "1360/1"
-    },
+      "rank": 103},
     {
       "id": "golfer-1-104",
       "name": "Steve Stricker",
-      "rank": 104,
-      "odds": "1380/1"
-    },
+      "rank": 104},
     {
       "id": "golfer-1-105",
       "name": "Stewart Cink",
-      "rank": 105,
-      "odds": "1400/1"
-    }
+      "rank": 105}
   ],
   "2": [
     {
       "id": "golfer-2-1",
       "name": "Scottie Scheffler",
-      "rank": 1,
-      "odds": "4/1"
-    },
+      "rank": 1},
     {
       "id": "golfer-2-2",
       "name": "Rory McIlroy",
-      "rank": 2,
-      "odds": "5/1"
-    },
+      "rank": 2},
     {
       "id": "golfer-2-3",
       "name": "Jon Rahm",
-      "rank": 3,
-      "odds": "6/1"
-    },
+      "rank": 3},
     {
       "id": "golfer-2-4",
       "name": "Brooks Koepka",
-      "rank": 4,
-      "odds": "7/1"
-    },
+      "rank": 4},
     {
       "id": "golfer-2-5",
       "name": "Jordan Spieth",
-      "rank": 5,
-      "odds": "8/1"
-    },
+      "rank": 5},
     {
       "id": "golfer-2-6",
       "name": "Justin Thomas",
-      "rank": 6,
-      "odds": "12/1"
-    },
+      "rank": 6},
     {
       "id": "golfer-2-7",
       "name": "Dustin Johnson",
-      "rank": 7,
-      "odds": "14/1"
-    },
+      "rank": 7},
     {
       "id": "golfer-2-8",
       "name": "Patrick Cantlay",
-      "rank": 8,
-      "odds": "16/1"
-    },
+      "rank": 8},
     {
       "id": "golfer-2-9",
       "name": "Xander Schauffele",
-      "rank": 9,
-      "odds": "18/1"
-    },
+      "rank": 9},
     {
       "id": "golfer-2-10",
       "name": "Collin Morikawa",
-      "rank": 10,
-      "odds": "20/1"
-    },
+      "rank": 10},
     {
       "id": "golfer-2-11",
       "name": "Viktor Hovland",
-      "rank": 11,
-      "odds": "23/1"
-    },
+      "rank": 11},
     {
       "id": "golfer-2-12",
       "name": "Matt Fitzpatrick",
-      "rank": 12,
-      "odds": "26/1"
-    },
+      "rank": 12},
     {
       "id": "golfer-2-13",
       "name": "Tommy Fleetwood",
-      "rank": 13,
-      "odds": "29/1"
-    },
+      "rank": 13},
     {
       "id": "golfer-2-14",
       "name": "Tyrrell Hatton",
-      "rank": 14,
-      "odds": "32/1"
-    },
+      "rank": 14},
     {
       "id": "golfer-2-15",
       "name": "Shane Lowry",
-      "rank": 15,
-      "odds": "35/1"
-    },
+      "rank": 15},
     {
       "id": "golfer-2-16",
       "name": "Cameron Smith",
-      "rank": 16,
-      "odds": "38/1"
-    },
+      "rank": 16},
     {
       "id": "golfer-2-17",
       "name": "Sam Burns",
-      "rank": 17,
-      "odds": "41/1"
-    },
+      "rank": 17},
     {
       "id": "golfer-2-18",
       "name": "Max Homa",
-      "rank": 18,
-      "odds": "44/1"
-    },
+      "rank": 18},
     {
       "id": "golfer-2-19",
       "name": "Tony Finau",
-      "rank": 19,
-      "odds": "47/1"
-    },
+      "rank": 19},
     {
       "id": "golfer-2-20",
       "name": "Sungjae Im",
-      "rank": 20,
-      "odds": "50/1"
-    },
+      "rank": 20},
     {
       "id": "golfer-2-21",
       "name": "Hideki Matsuyama",
-      "rank": 21,
-      "odds": "55/1"
-    },
+      "rank": 21},
     {
       "id": "golfer-2-22",
       "name": "Jason Day",
-      "rank": 22,
-      "odds": "60/1"
-    },
+      "rank": 22},
     {
       "id": "golfer-2-23",
       "name": "Adam Scott",
-      "rank": 23,
-      "odds": "65/1"
-    },
+      "rank": 23},
     {
       "id": "golfer-2-24",
       "name": "Marc Leishman",
-      "rank": 24,
-      "odds": "70/1"
-    },
+      "rank": 24},
     {
       "id": "golfer-2-25",
       "name": "Louis Oosthuizen",
-      "rank": 25,
-      "odds": "75/1"
-    },
+      "rank": 25},
     {
       "id": "golfer-2-26",
       "name": "Bryson DeChambeau",
-      "rank": 26,
-      "odds": "80/1"
-    },
+      "rank": 26},
     {
       "id": "golfer-2-27",
       "name": "Daniel Berger",
-      "rank": 27,
-      "odds": "85/1"
-    },
+      "rank": 27},
     {
       "id": "golfer-2-28",
       "name": "Keegan Bradley",
-      "rank": 28,
-      "odds": "90/1"
-    },
+      "rank": 28},
     {
       "id": "golfer-2-29",
       "name": "Russell Henley",
-      "rank": 29,
-      "odds": "95/1"
-    },
+      "rank": 29},
     {
       "id": "golfer-2-30",
       "name": "Brian Harman",
-      "rank": 30,
-      "odds": "100/1"
-    },
+      "rank": 30},
     {
       "id": "golfer-2-31",
       "name": "Harris English",
-      "rank": 31,
-      "odds": "110/1"
-    },
+      "rank": 31},
     {
       "id": "golfer-2-32",
       "name": "Sepp Straka",
-      "rank": 32,
-      "odds": "120/1"
-    },
+      "rank": 32},
     {
       "id": "golfer-2-33",
       "name": "Ludvig Aberg",
-      "rank": 33,
-      "odds": "130/1"
-    },
+      "rank": 33},
     {
       "id": "golfer-2-34",
       "name": "Nicolai Hojgaard",
-      "rank": 34,
-      "odds": "140/1"
-    },
+      "rank": 34},
     {
       "id": "golfer-2-35",
       "name": "Tom Kim",
-      "rank": 35,
-      "odds": "150/1"
-    },
+      "rank": 35},
     {
       "id": "golfer-2-36",
       "name": "Robert MacIntyre",
-      "rank": 36,
-      "odds": "160/1"
-    },
+      "rank": 36},
     {
       "id": "golfer-2-37",
       "name": "Alex Noren",
-      "rank": 37,
-      "odds": "170/1"
-    },
+      "rank": 37},
     {
       "id": "golfer-2-38",
       "name": "Aaron Wise",
-      "rank": 38,
-      "odds": "180/1"
-    },
+      "rank": 38},
     {
       "id": "golfer-2-39",
       "name": "Sahith Theegala",
-      "rank": 39,
-      "odds": "190/1"
-    },
+      "rank": 39},
     {
       "id": "golfer-2-40",
       "name": "Kurt Kitayama",
-      "rank": 40,
-      "odds": "200/1"
-    },
+      "rank": 40},
     {
       "id": "golfer-2-41",
       "name": "Andrew Novak",
-      "rank": 41,
-      "odds": "210/1"
-    },
+      "rank": 41},
     {
       "id": "golfer-2-42",
       "name": "Michael Kim",
-      "rank": 42,
-      "odds": "220/1"
-    },
+      "rank": 42},
     {
       "id": "golfer-2-43",
       "name": "Ben Griffin",
-      "rank": 43,
-      "odds": "230/1"
-    },
+      "rank": 43},
     {
       "id": "golfer-2-44",
       "name": "Justin Rose",
-      "rank": 44,
-      "odds": "240/1"
-    },
+      "rank": 44},
     {
       "id": "golfer-2-45",
       "name": "Gary Woodland",
-      "rank": 45,
-      "odds": "250/1"
-    },
+      "rank": 45},
     {
       "id": "golfer-2-46",
       "name": "Erik Van Rooyen",
-      "rank": 46,
-      "odds": "260/1"
-    },
+      "rank": 46},
     {
       "id": "golfer-2-47",
       "name": "Joaquin Niemann",
-      "rank": 47,
-      "odds": "270/1"
-    },
+      "rank": 47},
     {
       "id": "golfer-2-48",
       "name": "Taylor Pendrith",
-      "rank": 48,
-      "odds": "280/1"
-    },
+      "rank": 48},
     {
       "id": "golfer-2-49",
       "name": "Wyndham Clark",
-      "rank": 49,
-      "odds": "290/1"
-    },
+      "rank": 49},
     {
       "id": "golfer-2-50",
       "name": "Rickie Fowler",
-      "rank": 50,
-      "odds": "300/1"
-    },
+      "rank": 50},
     {
       "id": "golfer-2-51",
       "name": "Bubba Watson",
-      "rank": 51,
-      "odds": "320/1"
-    },
+      "rank": 51},
     {
       "id": "golfer-2-52",
       "name": "Phil Mickelson",
-      "rank": 52,
-      "odds": "340/1"
-    },
+      "rank": 52},
     {
       "id": "golfer-2-53",
       "name": "Tiger Woods",
-      "rank": 53,
-      "odds": "360/1"
-    },
+      "rank": 53},
     {
       "id": "golfer-2-54",
       "name": "Fred Couples",
-      "rank": 54,
-      "odds": "380/1"
-    },
+      "rank": 54},
     {
       "id": "golfer-2-55",
       "name": "Davis Love III",
-      "rank": 55,
-      "odds": "400/1"
-    },
+      "rank": 55},
     {
       "id": "golfer-2-56",
       "name": "Webb Simpson",
-      "rank": 56,
-      "odds": "420/1"
-    },
+      "rank": 56},
     {
       "id": "golfer-2-57",
       "name": "Kevin Kisner",
-      "rank": 57,
-      "odds": "440/1"
-    },
+      "rank": 57},
     {
       "id": "golfer-2-58",
       "name": "Billy Horschel",
-      "rank": 58,
-      "odds": "460/1"
-    },
+      "rank": 58},
     {
       "id": "golfer-2-59",
       "name": "Stewart Cink",
-      "rank": 59,
-      "odds": "480/1"
-    },
+      "rank": 59},
     {
       "id": "golfer-2-60",
       "name": "Charley Hoffman",
-      "rank": 60,
-      "odds": "500/1"
-    },
+      "rank": 60},
     {
       "id": "golfer-2-61",
       "name": "J.T. Poston",
-      "rank": 61,
-      "odds": "520/1"
-    },
+      "rank": 61},
     {
       "id": "golfer-2-62",
       "name": "Brendon Todd",
-      "rank": 62,
-      "odds": "540/1"
-    },
+      "rank": 62},
     {
       "id": "golfer-2-63",
       "name": "Emiliano Grillo",
-      "rank": 63,
-      "odds": "560/1"
-    },
+      "rank": 63},
     {
       "id": "golfer-2-64",
       "name": "Francesco Molinari",
-      "rank": 64,
-      "odds": "580/1"
-    },
+      "rank": 64},
     {
       "id": "golfer-2-65",
       "name": "Adrian Otaegui",
-      "rank": 65,
-      "odds": "600/1"
-    },
+      "rank": 65},
     {
       "id": "golfer-2-66",
       "name": "Rasmus Hojgaard",
-      "rank": 66,
-      "odds": "620/1"
-    },
+      "rank": 66},
     {
       "id": "golfer-2-67",
       "name": "Thorbjorn Bjorn",
-      "rank": 67,
-      "odds": "640/1"
-    },
+      "rank": 67},
     {
       "id": "golfer-2-68",
       "name": "Henrik Stenson",
-      "rank": 68,
-      "odds": "660/1"
-    },
+      "rank": 68},
     {
       "id": "golfer-2-69",
       "name": "Sergio Garcia",
-      "rank": 69,
-      "odds": "680/1"
-    },
+      "rank": 69},
     {
       "id": "golfer-2-70",
       "name": "Pablo Larrazabal",
-      "rank": 70,
-      "odds": "700/1"
-    },
+      "rank": 70},
     {
       "id": "golfer-2-71",
       "name": "Jorge Campillo",
-      "rank": 71,
-      "odds": "720/1"
-    },
+      "rank": 71},
     {
       "id": "golfer-2-72",
       "name": "Carlos Ortiz",
-      "rank": 72,
-      "odds": "740/1"
-    },
+      "rank": 72},
     {
       "id": "golfer-2-73",
       "name": "Miguel Ancer",
-      "rank": 73,
-      "odds": "760/1"
-    },
+      "rank": 73},
     {
       "id": "golfer-2-74",
       "name": "Eduardo Rodriguez",
-      "rank": 74,
-      "odds": "780/1"
-    },
+      "rank": 74},
     {
       "id": "golfer-2-75",
       "name": "Alejandro Cabrera Bello",
-      "rank": 75,
-      "odds": "800/1"
-    },
+      "rank": 75},
     {
       "id": "golfer-2-76",
       "name": "Rafael Paratore",
-      "rank": 76,
-      "odds": "820/1"
-    },
+      "rank": 76},
     {
       "id": "golfer-2-77",
       "name": "Jose Schwartzel",
-      "rank": 77,
-      "odds": "840/1"
-    },
+      "rank": 77},
     {
       "id": "golfer-2-78",
       "name": "Lucas Grace",
-      "rank": 78,
-      "odds": "860/1"
-    },
+      "rank": 78},
     {
       "id": "golfer-2-79",
       "name": "Matthias Frittelli",
-      "rank": 79,
-      "odds": "880/1"
-    },
+      "rank": 79},
     {
       "id": "golfer-2-80",
       "name": "Martin Higgo",
-      "rank": 80,
-      "odds": "900/1"
-    },
+      "rank": 80},
     {
       "id": "golfer-2-81",
       "name": "Thomas Pieters",
-      "rank": 81,
-      "odds": "920/1"
-    },
+      "rank": 81},
     {
       "id": "golfer-2-82",
       "name": "Christiaan Willett",
-      "rank": 82,
-      "odds": "940/1"
-    },
+      "rank": 82},
     {
       "id": "golfer-2-83",
       "name": "Dean Casey",
-      "rank": 83,
-      "odds": "960/1"
-    },
+      "rank": 83},
     {
       "id": "golfer-2-84",
       "name": "Branden Westwood",
-      "rank": 84,
-      "odds": "980/1"
-    },
+      "rank": 84},
     {
       "id": "golfer-2-85",
       "name": "Charl Poulter",
-      "rank": 85,
-      "odds": "1000/1"
-    },
+      "rank": 85},
     {
       "id": "golfer-2-86",
       "name": "Ernie Rose",
-      "rank": 86,
-      "odds": "1020/1"
-    },
+      "rank": 86},
     {
       "id": "golfer-2-87",
       "name": "Retief Fitzpatrick",
-      "rank": 87,
-      "odds": "1040/1"
-    },
+      "rank": 87},
     {
       "id": "golfer-2-88",
       "name": "Louis Wallace",
-      "rank": 88,
-      "odds": "1060/1"
-    },
+      "rank": 88},
     {
       "id": "golfer-2-89",
       "name": "Dylan Fox",
-      "rank": 89,
-      "odds": "1080/1"
-    },
+      "rank": 89},
     {
       "id": "golfer-2-90",
       "name": "Garrick Power",
-      "rank": 90,
-      "odds": "1100/1"
-    },
+      "rank": 90},
     {
       "id": "golfer-2-91",
       "name": "Cameron Young",
-      "rank": 91,
-      "odds": "1120/1"
-    },
+      "rank": 91},
     {
       "id": "golfer-2-92",
       "name": "Ryan Palmer",
-      "rank": 92,
-      "odds": "1140/1"
-    },
+      "rank": 92},
     {
       "id": "golfer-2-93",
       "name": "Brendan Steele",
-      "rank": 93,
-      "odds": "1160/1"
-    },
+      "rank": 93},
     {
       "id": "golfer-2-94",
       "name": "Lucas Glover",
-      "rank": 94,
-      "odds": "1180/1"
-    },
+      "rank": 94},
     {
       "id": "golfer-2-95",
       "name": "Maverick List",
-      "rank": 95,
-      "odds": "1200/1"
-    },
+      "rank": 95},
     {
       "id": "golfer-2-96",
       "name": "Pierceson Hughes",
-      "rank": 96,
-      "odds": "1220/1"
-    },
+      "rank": 96},
     {
       "id": "golfer-2-97",
       "name": "Gordon Conners",
-      "rank": 97,
-      "odds": "1240/1"
-    },
+      "rank": 97},
     {
       "id": "golfer-2-98",
       "name": "Nick Taylor",
-      "rank": 98,
-      "odds": "1260/1"
-    },
+      "rank": 98},
     {
       "id": "golfer-2-99",
       "name": "Luke Donald",
-      "rank": 99,
-      "odds": "1280/1"
-    },
+      "rank": 99},
     {
       "id": "golfer-2-100",
       "name": "David Lingmerth",
-      "rank": 100,
-      "odds": "1300/1"
-    },
+      "rank": 100},
     {
       "id": "golfer-2-101",
       "name": "Matt Kuchar",
-      "rank": 101,
-      "odds": "1320/1"
-    },
+      "rank": 101},
     {
       "id": "golfer-2-102",
       "name": "Zach Johnson",
-      "rank": 102,
-      "odds": "1340/1"
-    },
+      "rank": 102},
     {
       "id": "golfer-2-103",
       "name": "Jim Furyk",
-      "rank": 103,
-      "odds": "1360/1"
-    },
+      "rank": 103},
     {
       "id": "golfer-2-104",
       "name": "Steve Stricker",
-      "rank": 104,
-      "odds": "1380/1"
-    },
+      "rank": 104},
     {
       "id": "golfer-2-105",
       "name": "Stewart Cink",
-      "rank": 105,
-      "odds": "1400/1"
-    }
+      "rank": 105}
   ],
   "3": [
     {
       "id": "golfer-3-1",
       "name": "Scottie Scheffler",
-      "rank": 1,
-      "odds": "4/1"
-    },
+      "rank": 1},
     {
       "id": "golfer-3-2",
       "name": "Rory McIlroy",
-      "rank": 2,
-      "odds": "5/1"
-    },
+      "rank": 2},
     {
       "id": "golfer-3-3",
       "name": "Jon Rahm",
-      "rank": 3,
-      "odds": "6/1"
-    },
+      "rank": 3},
     {
       "id": "golfer-3-4",
       "name": "Brooks Koepka",
-      "rank": 4,
-      "odds": "7/1"
-    },
+      "rank": 4},
     {
       "id": "golfer-3-5",
       "name": "Jordan Spieth",
-      "rank": 5,
-      "odds": "8/1"
-    },
+      "rank": 5},
     {
       "id": "golfer-3-6",
       "name": "Justin Thomas",
-      "rank": 6,
-      "odds": "12/1"
-    },
+      "rank": 6},
     {
       "id": "golfer-3-7",
       "name": "Dustin Johnson",
-      "rank": 7,
-      "odds": "14/1"
-    },
+      "rank": 7},
     {
       "id": "golfer-3-8",
       "name": "Patrick Cantlay",
-      "rank": 8,
-      "odds": "16/1"
-    },
+      "rank": 8},
     {
       "id": "golfer-3-9",
       "name": "Xander Schauffele",
-      "rank": 9,
-      "odds": "18/1"
-    },
+      "rank": 9},
     {
       "id": "golfer-3-10",
       "name": "Collin Morikawa",
-      "rank": 10,
-      "odds": "20/1"
-    },
+      "rank": 10},
     {
       "id": "golfer-3-11",
       "name": "Viktor Hovland",
-      "rank": 11,
-      "odds": "23/1"
-    },
+      "rank": 11},
     {
       "id": "golfer-3-12",
       "name": "Matt Fitzpatrick",
-      "rank": 12,
-      "odds": "26/1"
-    },
+      "rank": 12},
     {
       "id": "golfer-3-13",
       "name": "Tommy Fleetwood",
-      "rank": 13,
-      "odds": "29/1"
-    },
+      "rank": 13},
     {
       "id": "golfer-3-14",
       "name": "Tyrrell Hatton",
-      "rank": 14,
-      "odds": "32/1"
-    },
+      "rank": 14},
     {
       "id": "golfer-3-15",
       "name": "Shane Lowry",
-      "rank": 15,
-      "odds": "35/1"
-    },
+      "rank": 15},
     {
       "id": "golfer-3-16",
       "name": "Cameron Smith",
-      "rank": 16,
-      "odds": "38/1"
-    },
+      "rank": 16},
     {
       "id": "golfer-3-17",
       "name": "Sam Burns",
-      "rank": 17,
-      "odds": "41/1"
-    },
+      "rank": 17},
     {
       "id": "golfer-3-18",
       "name": "Max Homa",
-      "rank": 18,
-      "odds": "44/1"
-    },
+      "rank": 18},
     {
       "id": "golfer-3-19",
       "name": "Tony Finau",
-      "rank": 19,
-      "odds": "47/1"
-    },
+      "rank": 19},
     {
       "id": "golfer-3-20",
       "name": "Sungjae Im",
-      "rank": 20,
-      "odds": "50/1"
-    },
+      "rank": 20},
     {
       "id": "golfer-3-21",
       "name": "Hideki Matsuyama",
-      "rank": 21,
-      "odds": "55/1"
-    },
+      "rank": 21},
     {
       "id": "golfer-3-22",
       "name": "Jason Day",
-      "rank": 22,
-      "odds": "60/1"
-    },
+      "rank": 22},
     {
       "id": "golfer-3-23",
       "name": "Adam Scott",
-      "rank": 23,
-      "odds": "65/1"
-    },
+      "rank": 23},
     {
       "id": "golfer-3-24",
       "name": "Marc Leishman",
-      "rank": 24,
-      "odds": "70/1"
-    },
+      "rank": 24},
     {
       "id": "golfer-3-25",
       "name": "Louis Oosthuizen",
-      "rank": 25,
-      "odds": "75/1"
-    },
+      "rank": 25},
     {
       "id": "golfer-3-26",
       "name": "Bryson DeChambeau",
-      "rank": 26,
-      "odds": "80/1"
-    },
+      "rank": 26},
     {
       "id": "golfer-3-27",
       "name": "Daniel Berger",
-      "rank": 27,
-      "odds": "85/1"
-    },
+      "rank": 27},
     {
       "id": "golfer-3-28",
       "name": "Keegan Bradley",
-      "rank": 28,
-      "odds": "90/1"
-    },
+      "rank": 28},
     {
       "id": "golfer-3-29",
       "name": "Russell Henley",
-      "rank": 29,
-      "odds": "95/1"
-    },
+      "rank": 29},
     {
       "id": "golfer-3-30",
       "name": "Brian Harman",
-      "rank": 30,
-      "odds": "100/1"
-    },
+      "rank": 30},
     {
       "id": "golfer-3-31",
       "name": "Harris English",
-      "rank": 31,
-      "odds": "110/1"
-    },
+      "rank": 31},
     {
       "id": "golfer-3-32",
       "name": "Sepp Straka",
-      "rank": 32,
-      "odds": "120/1"
-    },
+      "rank": 32},
     {
       "id": "golfer-3-33",
       "name": "Ludvig Aberg",
-      "rank": 33,
-      "odds": "130/1"
-    },
+      "rank": 33},
     {
       "id": "golfer-3-34",
       "name": "Nicolai Hojgaard",
-      "rank": 34,
-      "odds": "140/1"
-    },
+      "rank": 34},
     {
       "id": "golfer-3-35",
       "name": "Tom Kim",
-      "rank": 35,
-      "odds": "150/1"
-    },
+      "rank": 35},
     {
       "id": "golfer-3-36",
       "name": "Robert MacIntyre",
-      "rank": 36,
-      "odds": "160/1"
-    },
+      "rank": 36},
     {
       "id": "golfer-3-37",
       "name": "Alex Noren",
-      "rank": 37,
-      "odds": "170/1"
-    },
+      "rank": 37},
     {
       "id": "golfer-3-38",
       "name": "Aaron Wise",
-      "rank": 38,
-      "odds": "180/1"
-    },
+      "rank": 38},
     {
       "id": "golfer-3-39",
       "name": "Sahith Theegala",
-      "rank": 39,
-      "odds": "190/1"
-    },
+      "rank": 39},
     {
       "id": "golfer-3-40",
       "name": "Kurt Kitayama",
-      "rank": 40,
-      "odds": "200/1"
-    },
+      "rank": 40},
     {
       "id": "golfer-3-41",
       "name": "Andrew Novak",
-      "rank": 41,
-      "odds": "210/1"
-    },
+      "rank": 41},
     {
       "id": "golfer-3-42",
       "name": "Michael Kim",
-      "rank": 42,
-      "odds": "220/1"
-    },
+      "rank": 42},
     {
       "id": "golfer-3-43",
       "name": "Ben Griffin",
-      "rank": 43,
-      "odds": "230/1"
-    },
+      "rank": 43},
     {
       "id": "golfer-3-44",
       "name": "Justin Rose",
-      "rank": 44,
-      "odds": "240/1"
-    },
+      "rank": 44},
     {
       "id": "golfer-3-45",
       "name": "Gary Woodland",
-      "rank": 45,
-      "odds": "250/1"
-    },
+      "rank": 45},
     {
       "id": "golfer-3-46",
       "name": "Erik Van Rooyen",
-      "rank": 46,
-      "odds": "260/1"
-    },
+      "rank": 46},
     {
       "id": "golfer-3-47",
       "name": "Joaquin Niemann",
-      "rank": 47,
-      "odds": "270/1"
-    },
+      "rank": 47},
     {
       "id": "golfer-3-48",
       "name": "Taylor Pendrith",
-      "rank": 48,
-      "odds": "280/1"
-    },
+      "rank": 48},
     {
       "id": "golfer-3-49",
       "name": "Wyndham Clark",
-      "rank": 49,
-      "odds": "290/1"
-    },
+      "rank": 49},
     {
       "id": "golfer-3-50",
       "name": "Rickie Fowler",
-      "rank": 50,
-      "odds": "300/1"
-    },
+      "rank": 50},
     {
       "id": "golfer-3-51",
       "name": "Bubba Watson",
-      "rank": 51,
-      "odds": "320/1"
-    },
+      "rank": 51},
     {
       "id": "golfer-3-52",
       "name": "Phil Mickelson",
-      "rank": 52,
-      "odds": "340/1"
-    },
+      "rank": 52},
     {
       "id": "golfer-3-53",
       "name": "Tiger Woods",
-      "rank": 53,
-      "odds": "360/1"
-    },
+      "rank": 53},
     {
       "id": "golfer-3-54",
       "name": "Fred Couples",
-      "rank": 54,
-      "odds": "380/1"
-    },
+      "rank": 54},
     {
       "id": "golfer-3-55",
       "name": "Davis Love III",
-      "rank": 55,
-      "odds": "400/1"
-    },
+      "rank": 55},
     {
       "id": "golfer-3-56",
       "name": "Webb Simpson",
-      "rank": 56,
-      "odds": "420/1"
-    },
+      "rank": 56},
     {
       "id": "golfer-3-57",
       "name": "Kevin Kisner",
-      "rank": 57,
-      "odds": "440/1"
-    },
+      "rank": 57},
     {
       "id": "golfer-3-58",
       "name": "Billy Horschel",
-      "rank": 58,
-      "odds": "460/1"
-    },
+      "rank": 58},
     {
       "id": "golfer-3-59",
       "name": "Stewart Cink",
-      "rank": 59,
-      "odds": "480/1"
-    },
+      "rank": 59},
     {
       "id": "golfer-3-60",
       "name": "Charley Hoffman",
-      "rank": 60,
-      "odds": "500/1"
-    },
+      "rank": 60},
     {
       "id": "golfer-3-61",
       "name": "J.T. Poston",
-      "rank": 61,
-      "odds": "520/1"
-    },
+      "rank": 61},
     {
       "id": "golfer-3-62",
       "name": "Brendon Todd",
-      "rank": 62,
-      "odds": "540/1"
-    },
+      "rank": 62},
     {
       "id": "golfer-3-63",
       "name": "Emiliano Grillo",
-      "rank": 63,
-      "odds": "560/1"
-    },
+      "rank": 63},
     {
       "id": "golfer-3-64",
       "name": "Francesco Molinari",
-      "rank": 64,
-      "odds": "580/1"
-    },
+      "rank": 64},
     {
       "id": "golfer-3-65",
       "name": "Adrian Otaegui",
-      "rank": 65,
-      "odds": "600/1"
-    },
+      "rank": 65},
     {
       "id": "golfer-3-66",
       "name": "Rasmus Hojgaard",
-      "rank": 66,
-      "odds": "620/1"
-    },
+      "rank": 66},
     {
       "id": "golfer-3-67",
       "name": "Thorbjorn Bjorn",
-      "rank": 67,
-      "odds": "640/1"
-    },
+      "rank": 67},
     {
       "id": "golfer-3-68",
       "name": "Henrik Stenson",
-      "rank": 68,
-      "odds": "660/1"
-    },
+      "rank": 68},
     {
       "id": "golfer-3-69",
       "name": "Sergio Garcia",
-      "rank": 69,
-      "odds": "680/1"
-    },
+      "rank": 69},
     {
       "id": "golfer-3-70",
       "name": "Pablo Larrazabal",
-      "rank": 70,
-      "odds": "700/1"
-    },
+      "rank": 70},
     {
       "id": "golfer-3-71",
       "name": "Jorge Campillo",
-      "rank": 71,
-      "odds": "720/1"
-    },
+      "rank": 71},
     {
       "id": "golfer-3-72",
       "name": "Carlos Ortiz",
-      "rank": 72,
-      "odds": "740/1"
-    },
+      "rank": 72},
     {
       "id": "golfer-3-73",
       "name": "Miguel Ancer",
-      "rank": 73,
-      "odds": "760/1"
-    },
+      "rank": 73},
     {
       "id": "golfer-3-74",
       "name": "Eduardo Rodriguez",
-      "rank": 74,
-      "odds": "780/1"
-    },
+      "rank": 74},
     {
       "id": "golfer-3-75",
       "name": "Alejandro Cabrera Bello",
-      "rank": 75,
-      "odds": "800/1"
-    },
+      "rank": 75},
     {
       "id": "golfer-3-76",
       "name": "Rafael Paratore",
-      "rank": 76,
-      "odds": "820/1"
-    },
+      "rank": 76},
     {
       "id": "golfer-3-77",
       "name": "Jose Schwartzel",
-      "rank": 77,
-      "odds": "840/1"
-    },
+      "rank": 77},
     {
       "id": "golfer-3-78",
       "name": "Lucas Grace",
-      "rank": 78,
-      "odds": "860/1"
-    },
+      "rank": 78},
     {
       "id": "golfer-3-79",
       "name": "Matthias Frittelli",
-      "rank": 79,
-      "odds": "880/1"
-    },
+      "rank": 79},
     {
       "id": "golfer-3-80",
       "name": "Martin Higgo",
-      "rank": 80,
-      "odds": "900/1"
-    },
+      "rank": 80},
     {
       "id": "golfer-3-81",
       "name": "Thomas Pieters",
-      "rank": 81,
-      "odds": "920/1"
-    },
+      "rank": 81},
     {
       "id": "golfer-3-82",
       "name": "Christiaan Willett",
-      "rank": 82,
-      "odds": "940/1"
-    },
+      "rank": 82},
     {
       "id": "golfer-3-83",
       "name": "Dean Casey",
-      "rank": 83,
-      "odds": "960/1"
-    },
+      "rank": 83},
     {
       "id": "golfer-3-84",
       "name": "Branden Westwood",
-      "rank": 84,
-      "odds": "980/1"
-    },
+      "rank": 84},
     {
       "id": "golfer-3-85",
       "name": "Charl Poulter",
-      "rank": 85,
-      "odds": "1000/1"
-    },
+      "rank": 85},
     {
       "id": "golfer-3-86",
       "name": "Ernie Rose",
-      "rank": 86,
-      "odds": "1020/1"
-    },
+      "rank": 86},
     {
       "id": "golfer-3-87",
       "name": "Retief Fitzpatrick",
-      "rank": 87,
-      "odds": "1040/1"
-    },
+      "rank": 87},
     {
       "id": "golfer-3-88",
       "name": "Louis Wallace",
-      "rank": 88,
-      "odds": "1060/1"
-    },
+      "rank": 88},
     {
       "id": "golfer-3-89",
       "name": "Dylan Fox",
-      "rank": 89,
-      "odds": "1080/1"
-    },
+      "rank": 89},
     {
       "id": "golfer-3-90",
       "name": "Garrick Power",
-      "rank": 90,
-      "odds": "1100/1"
-    },
+      "rank": 90},
     {
       "id": "golfer-3-91",
       "name": "Cameron Young",
-      "rank": 91,
-      "odds": "1120/1"
-    },
+      "rank": 91},
     {
       "id": "golfer-3-92",
       "name": "Ryan Palmer",
-      "rank": 92,
-      "odds": "1140/1"
-    },
+      "rank": 92},
     {
       "id": "golfer-3-93",
       "name": "Brendan Steele",
-      "rank": 93,
-      "odds": "1160/1"
-    },
+      "rank": 93},
     {
       "id": "golfer-3-94",
       "name": "Lucas Glover",
-      "rank": 94,
-      "odds": "1180/1"
-    },
+      "rank": 94},
     {
       "id": "golfer-3-95",
       "name": "Maverick List",
-      "rank": 95,
-      "odds": "1200/1"
-    },
+      "rank": 95},
     {
       "id": "golfer-3-96",
       "name": "Pierceson Hughes",
-      "rank": 96,
-      "odds": "1220/1"
-    },
+      "rank": 96},
     {
       "id": "golfer-3-97",
       "name": "Gordon Conners",
-      "rank": 97,
-      "odds": "1240/1"
-    },
+      "rank": 97},
     {
       "id": "golfer-3-98",
       "name": "Nick Taylor",
-      "rank": 98,
-      "odds": "1260/1"
-    },
+      "rank": 98},
     {
       "id": "golfer-3-99",
       "name": "Luke Donald",
-      "rank": 99,
-      "odds": "1280/1"
-    },
+      "rank": 99},
     {
       "id": "golfer-3-100",
       "name": "David Lingmerth",
-      "rank": 100,
-      "odds": "1300/1"
-    },
+      "rank": 100},
     {
       "id": "golfer-3-101",
       "name": "Matt Kuchar",
-      "rank": 101,
-      "odds": "1320/1"
-    },
+      "rank": 101},
     {
       "id": "golfer-3-102",
       "name": "Zach Johnson",
-      "rank": 102,
-      "odds": "1340/1"
-    },
+      "rank": 102},
     {
       "id": "golfer-3-103",
       "name": "Jim Furyk",
-      "rank": 103,
-      "odds": "1360/1"
-    },
+      "rank": 103},
     {
       "id": "golfer-3-104",
       "name": "Steve Stricker",
-      "rank": 104,
-      "odds": "1380/1"
-    },
+      "rank": 104},
     {
       "id": "golfer-3-105",
       "name": "Stewart Cink",
-      "rank": 105,
-      "odds": "1400/1"
-    }
+      "rank": 105}
   ],
   "4": [
     {
       "id": "golfer-4-1",
       "name": "Scottie Scheffler",
-      "rank": 1,
-      "odds": "4/1"
-    },
+      "rank": 1},
     {
       "id": "golfer-4-2",
       "name": "Rory McIlroy",
-      "rank": 2,
-      "odds": "5/1"
-    },
+      "rank": 2},
     {
       "id": "golfer-4-3",
       "name": "Jon Rahm",
-      "rank": 3,
-      "odds": "6/1"
-    },
+      "rank": 3},
     {
       "id": "golfer-4-4",
       "name": "Brooks Koepka",
-      "rank": 4,
-      "odds": "7/1"
-    },
+      "rank": 4},
     {
       "id": "golfer-4-5",
       "name": "Jordan Spieth",
-      "rank": 5,
-      "odds": "8/1"
-    },
+      "rank": 5},
     {
       "id": "golfer-4-6",
       "name": "Justin Thomas",
-      "rank": 6,
-      "odds": "12/1"
-    },
+      "rank": 6},
     {
       "id": "golfer-4-7",
       "name": "Dustin Johnson",
-      "rank": 7,
-      "odds": "14/1"
-    },
+      "rank": 7},
     {
       "id": "golfer-4-8",
       "name": "Patrick Cantlay",
-      "rank": 8,
-      "odds": "16/1"
-    },
+      "rank": 8},
     {
       "id": "golfer-4-9",
       "name": "Xander Schauffele",
-      "rank": 9,
-      "odds": "18/1"
-    },
+      "rank": 9},
     {
       "id": "golfer-4-10",
       "name": "Collin Morikawa",
-      "rank": 10,
-      "odds": "20/1"
-    },
+      "rank": 10},
     {
       "id": "golfer-4-11",
       "name": "Viktor Hovland",
-      "rank": 11,
-      "odds": "23/1"
-    },
+      "rank": 11},
     {
       "id": "golfer-4-12",
       "name": "Matt Fitzpatrick",
-      "rank": 12,
-      "odds": "26/1"
-    },
+      "rank": 12},
     {
       "id": "golfer-4-13",
       "name": "Tommy Fleetwood",
-      "rank": 13,
-      "odds": "29/1"
-    },
+      "rank": 13},
     {
       "id": "golfer-4-14",
       "name": "Tyrrell Hatton",
-      "rank": 14,
-      "odds": "32/1"
-    },
+      "rank": 14},
     {
       "id": "golfer-4-15",
       "name": "Shane Lowry",
-      "rank": 15,
-      "odds": "35/1"
-    },
+      "rank": 15},
     {
       "id": "golfer-4-16",
       "name": "Cameron Smith",
-      "rank": 16,
-      "odds": "38/1"
-    },
+      "rank": 16},
     {
       "id": "golfer-4-17",
       "name": "Sam Burns",
-      "rank": 17,
-      "odds": "41/1"
-    },
+      "rank": 17},
     {
       "id": "golfer-4-18",
       "name": "Max Homa",
-      "rank": 18,
-      "odds": "44/1"
-    },
+      "rank": 18},
     {
       "id": "golfer-4-19",
       "name": "Tony Finau",
-      "rank": 19,
-      "odds": "47/1"
-    },
+      "rank": 19},
     {
       "id": "golfer-4-20",
       "name": "Sungjae Im",
-      "rank": 20,
-      "odds": "50/1"
-    },
+      "rank": 20},
     {
       "id": "golfer-4-21",
       "name": "Hideki Matsuyama",
-      "rank": 21,
-      "odds": "55/1"
-    },
+      "rank": 21},
     {
       "id": "golfer-4-22",
       "name": "Jason Day",
-      "rank": 22,
-      "odds": "60/1"
-    },
+      "rank": 22},
     {
       "id": "golfer-4-23",
       "name": "Adam Scott",
-      "rank": 23,
-      "odds": "65/1"
-    },
+      "rank": 23},
     {
       "id": "golfer-4-24",
       "name": "Marc Leishman",
-      "rank": 24,
-      "odds": "70/1"
-    },
+      "rank": 24},
     {
       "id": "golfer-4-25",
       "name": "Louis Oosthuizen",
-      "rank": 25,
-      "odds": "75/1"
-    },
+      "rank": 25},
     {
       "id": "golfer-4-26",
       "name": "Bryson DeChambeau",
-      "rank": 26,
-      "odds": "80/1"
-    },
+      "rank": 26},
     {
       "id": "golfer-4-27",
       "name": "Daniel Berger",
-      "rank": 27,
-      "odds": "85/1"
-    },
+      "rank": 27},
     {
       "id": "golfer-4-28",
       "name": "Keegan Bradley",
-      "rank": 28,
-      "odds": "90/1"
-    },
+      "rank": 28},
     {
       "id": "golfer-4-29",
       "name": "Russell Henley",
-      "rank": 29,
-      "odds": "95/1"
-    },
+      "rank": 29},
     {
       "id": "golfer-4-30",
       "name": "Brian Harman",
-      "rank": 30,
-      "odds": "100/1"
-    },
+      "rank": 30},
     {
       "id": "golfer-4-31",
       "name": "Harris English",
-      "rank": 31,
-      "odds": "110/1"
-    },
+      "rank": 31},
     {
       "id": "golfer-4-32",
       "name": "Sepp Straka",
-      "rank": 32,
-      "odds": "120/1"
-    },
+      "rank": 32},
     {
       "id": "golfer-4-33",
       "name": "Ludvig Aberg",
-      "rank": 33,
-      "odds": "130/1"
-    },
+      "rank": 33},
     {
       "id": "golfer-4-34",
       "name": "Nicolai Hojgaard",
-      "rank": 34,
-      "odds": "140/1"
-    },
+      "rank": 34},
     {
       "id": "golfer-4-35",
       "name": "Tom Kim",
-      "rank": 35,
-      "odds": "150/1"
-    },
+      "rank": 35},
     {
       "id": "golfer-4-36",
       "name": "Robert MacIntyre",
-      "rank": 36,
-      "odds": "160/1"
-    },
+      "rank": 36},
     {
       "id": "golfer-4-37",
       "name": "Alex Noren",
-      "rank": 37,
-      "odds": "170/1"
-    },
+      "rank": 37},
     {
       "id": "golfer-4-38",
       "name": "Aaron Wise",
-      "rank": 38,
-      "odds": "180/1"
-    },
+      "rank": 38},
     {
       "id": "golfer-4-39",
       "name": "Sahith Theegala",
-      "rank": 39,
-      "odds": "190/1"
-    },
+      "rank": 39},
     {
       "id": "golfer-4-40",
       "name": "Kurt Kitayama",
-      "rank": 40,
-      "odds": "200/1"
-    },
+      "rank": 40},
     {
       "id": "golfer-4-41",
       "name": "Andrew Novak",
-      "rank": 41,
-      "odds": "210/1"
-    },
+      "rank": 41},
     {
       "id": "golfer-4-42",
       "name": "Michael Kim",
-      "rank": 42,
-      "odds": "220/1"
-    },
+      "rank": 42},
     {
       "id": "golfer-4-43",
       "name": "Ben Griffin",
-      "rank": 43,
-      "odds": "230/1"
-    },
+      "rank": 43},
     {
       "id": "golfer-4-44",
       "name": "Justin Rose",
-      "rank": 44,
-      "odds": "240/1"
-    },
+      "rank": 44},
     {
       "id": "golfer-4-45",
       "name": "Gary Woodland",
-      "rank": 45,
-      "odds": "250/1"
-    },
+      "rank": 45},
     {
       "id": "golfer-4-46",
       "name": "Erik Van Rooyen",
-      "rank": 46,
-      "odds": "260/1"
-    },
+      "rank": 46},
     {
       "id": "golfer-4-47",
       "name": "Joaquin Niemann",
-      "rank": 47,
-      "odds": "270/1"
-    },
+      "rank": 47},
     {
       "id": "golfer-4-48",
       "name": "Taylor Pendrith",
-      "rank": 48,
-      "odds": "280/1"
-    },
+      "rank": 48},
     {
       "id": "golfer-4-49",
       "name": "Wyndham Clark",
-      "rank": 49,
-      "odds": "290/1"
-    },
+      "rank": 49},
     {
       "id": "golfer-4-50",
       "name": "Rickie Fowler",
-      "rank": 50,
-      "odds": "300/1"
-    },
+      "rank": 50},
     {
       "id": "golfer-4-51",
       "name": "Bubba Watson",
-      "rank": 51,
-      "odds": "320/1"
-    },
+      "rank": 51},
     {
       "id": "golfer-4-52",
       "name": "Phil Mickelson",
-      "rank": 52,
-      "odds": "340/1"
-    },
+      "rank": 52},
     {
       "id": "golfer-4-53",
       "name": "Tiger Woods",
-      "rank": 53,
-      "odds": "360/1"
-    },
+      "rank": 53},
     {
       "id": "golfer-4-54",
       "name": "Fred Couples",
-      "rank": 54,
-      "odds": "380/1"
-    },
+      "rank": 54},
     {
       "id": "golfer-4-55",
       "name": "Davis Love III",
-      "rank": 55,
-      "odds": "400/1"
-    },
+      "rank": 55},
     {
       "id": "golfer-4-56",
       "name": "Webb Simpson",
-      "rank": 56,
-      "odds": "420/1"
-    },
+      "rank": 56},
     {
       "id": "golfer-4-57",
       "name": "Kevin Kisner",
-      "rank": 57,
-      "odds": "440/1"
-    },
+      "rank": 57},
     {
       "id": "golfer-4-58",
       "name": "Billy Horschel",
-      "rank": 58,
-      "odds": "460/1"
-    },
+      "rank": 58},
     {
       "id": "golfer-4-59",
       "name": "Stewart Cink",
-      "rank": 59,
-      "odds": "480/1"
-    },
+      "rank": 59},
     {
       "id": "golfer-4-60",
       "name": "Charley Hoffman",
-      "rank": 60,
-      "odds": "500/1"
-    },
+      "rank": 60},
     {
       "id": "golfer-4-61",
       "name": "J.T. Poston",
-      "rank": 61,
-      "odds": "520/1"
-    },
+      "rank": 61},
     {
       "id": "golfer-4-62",
       "name": "Brendon Todd",
-      "rank": 62,
-      "odds": "540/1"
-    },
+      "rank": 62},
     {
       "id": "golfer-4-63",
       "name": "Emiliano Grillo",
-      "rank": 63,
-      "odds": "560/1"
-    },
+      "rank": 63},
     {
       "id": "golfer-4-64",
       "name": "Francesco Molinari",
-      "rank": 64,
-      "odds": "580/1"
-    },
+      "rank": 64},
     {
       "id": "golfer-4-65",
       "name": "Adrian Otaegui",
-      "rank": 65,
-      "odds": "600/1"
-    },
+      "rank": 65},
     {
       "id": "golfer-4-66",
       "name": "Rasmus Hojgaard",
-      "rank": 66,
-      "odds": "620/1"
-    },
+      "rank": 66},
     {
       "id": "golfer-4-67",
       "name": "Thorbjorn Bjorn",
-      "rank": 67,
-      "odds": "640/1"
-    },
+      "rank": 67},
     {
       "id": "golfer-4-68",
       "name": "Henrik Stenson",
-      "rank": 68,
-      "odds": "660/1"
-    },
+      "rank": 68},
     {
       "id": "golfer-4-69",
       "name": "Sergio Garcia",
-      "rank": 69,
-      "odds": "680/1"
-    },
+      "rank": 69},
     {
       "id": "golfer-4-70",
       "name": "Pablo Larrazabal",
-      "rank": 70,
-      "odds": "700/1"
-    },
+      "rank": 70},
     {
       "id": "golfer-4-71",
       "name": "Jorge Campillo",
-      "rank": 71,
-      "odds": "720/1"
-    },
+      "rank": 71},
     {
       "id": "golfer-4-72",
       "name": "Carlos Ortiz",
-      "rank": 72,
-      "odds": "740/1"
-    },
+      "rank": 72},
     {
       "id": "golfer-4-73",
       "name": "Miguel Ancer",
-      "rank": 73,
-      "odds": "760/1"
-    },
+      "rank": 73},
     {
       "id": "golfer-4-74",
       "name": "Eduardo Rodriguez",
-      "rank": 74,
-      "odds": "780/1"
-    },
+      "rank": 74},
     {
       "id": "golfer-4-75",
       "name": "Alejandro Cabrera Bello",
-      "rank": 75,
-      "odds": "800/1"
-    },
+      "rank": 75},
     {
       "id": "golfer-4-76",
       "name": "Rafael Paratore",
-      "rank": 76,
-      "odds": "820/1"
-    },
+      "rank": 76},
     {
       "id": "golfer-4-77",
       "name": "Jose Schwartzel",
-      "rank": 77,
-      "odds": "840/1"
-    },
+      "rank": 77},
     {
       "id": "golfer-4-78",
       "name": "Lucas Grace",
-      "rank": 78,
-      "odds": "860/1"
-    },
+      "rank": 78},
     {
       "id": "golfer-4-79",
       "name": "Matthias Frittelli",
-      "rank": 79,
-      "odds": "880/1"
-    },
+      "rank": 79},
     {
       "id": "golfer-4-80",
       "name": "Martin Higgo",
-      "rank": 80,
-      "odds": "900/1"
-    },
+      "rank": 80},
     {
       "id": "golfer-4-81",
       "name": "Thomas Pieters",
-      "rank": 81,
-      "odds": "920/1"
-    },
+      "rank": 81},
     {
       "id": "golfer-4-82",
       "name": "Christiaan Willett",
-      "rank": 82,
-      "odds": "940/1"
-    },
+      "rank": 82},
     {
       "id": "golfer-4-83",
       "name": "Dean Casey",
-      "rank": 83,
-      "odds": "960/1"
-    },
+      "rank": 83},
     {
       "id": "golfer-4-84",
       "name": "Branden Westwood",
-      "rank": 84,
-      "odds": "980/1"
-    },
+      "rank": 84},
     {
       "id": "golfer-4-85",
       "name": "Charl Poulter",
-      "rank": 85,
-      "odds": "1000/1"
-    },
+      "rank": 85},
     {
       "id": "golfer-4-86",
       "name": "Ernie Rose",
-      "rank": 86,
-      "odds": "1020/1"
-    },
+      "rank": 86},
     {
       "id": "golfer-4-87",
       "name": "Retief Fitzpatrick",
-      "rank": 87,
-      "odds": "1040/1"
-    },
+      "rank": 87},
     {
       "id": "golfer-4-88",
       "name": "Louis Wallace",
-      "rank": 88,
-      "odds": "1060/1"
-    },
+      "rank": 88},
     {
       "id": "golfer-4-89",
       "name": "Dylan Fox",
-      "rank": 89,
-      "odds": "1080/1"
-    },
+      "rank": 89},
     {
       "id": "golfer-4-90",
       "name": "Garrick Power",
-      "rank": 90,
-      "odds": "1100/1"
-    },
+      "rank": 90},
     {
       "id": "golfer-4-91",
       "name": "Cameron Young",
-      "rank": 91,
-      "odds": "1120/1"
-    },
+      "rank": 91},
     {
       "id": "golfer-4-92",
       "name": "Ryan Palmer",
-      "rank": 92,
-      "odds": "1140/1"
-    },
+      "rank": 92},
     {
       "id": "golfer-4-93",
       "name": "Brendan Steele",
-      "rank": 93,
-      "odds": "1160/1"
-    },
+      "rank": 93},
     {
       "id": "golfer-4-94",
       "name": "Lucas Glover",
-      "rank": 94,
-      "odds": "1180/1"
-    },
+      "rank": 94},
     {
       "id": "golfer-4-95",
       "name": "Maverick List",
-      "rank": 95,
-      "odds": "1200/1"
-    },
+      "rank": 95},
     {
       "id": "golfer-4-96",
       "name": "Pierceson Hughes",
-      "rank": 96,
-      "odds": "1220/1"
-    },
+      "rank": 96},
     {
       "id": "golfer-4-97",
       "name": "Gordon Conners",
-      "rank": 97,
-      "odds": "1240/1"
-    },
+      "rank": 97},
     {
       "id": "golfer-4-98",
       "name": "Nick Taylor",
-      "rank": 98,
-      "odds": "1260/1"
-    },
+      "rank": 98},
     {
       "id": "golfer-4-99",
       "name": "Luke Donald",
-      "rank": 99,
-      "odds": "1280/1"
-    },
+      "rank": 99},
     {
       "id": "golfer-4-100",
       "name": "David Lingmerth",
-      "rank": 100,
-      "odds": "1300/1"
-    },
+      "rank": 100},
     {
       "id": "golfer-4-101",
       "name": "Matt Kuchar",
-      "rank": 101,
-      "odds": "1320/1"
-    },
+      "rank": 101},
     {
       "id": "golfer-4-102",
       "name": "Zach Johnson",
-      "rank": 102,
-      "odds": "1340/1"
-    },
+      "rank": 102},
     {
       "id": "golfer-4-103",
       "name": "Jim Furyk",
-      "rank": 103,
-      "odds": "1360/1"
-    },
+      "rank": 103},
     {
       "id": "golfer-4-104",
       "name": "Steve Stricker",
-      "rank": 104,
-      "odds": "1380/1"
-    },
+      "rank": 104},
     {
       "id": "golfer-4-105",
       "name": "Stewart Cink",
-      "rank": 105,
-      "odds": "1400/1"
-    }
+      "rank": 105}
   ],
   "5": [
     {
       "id": "golfer-5-1",
       "name": "Scottie Scheffler",
-      "rank": 1,
-      "odds": "4/1"
-    },
+      "rank": 1},
     {
       "id": "golfer-5-2",
       "name": "Rory McIlroy",
-      "rank": 2,
-      "odds": "5/1"
-    },
+      "rank": 2},
     {
       "id": "golfer-5-3",
       "name": "Jon Rahm",
-      "rank": 3,
-      "odds": "6/1"
-    },
+      "rank": 3},
     {
       "id": "golfer-5-4",
       "name": "Brooks Koepka",
-      "rank": 4,
-      "odds": "7/1"
-    },
+      "rank": 4},
     {
       "id": "golfer-5-5",
       "name": "Jordan Spieth",
-      "rank": 5,
-      "odds": "8/1"
-    },
+      "rank": 5},
     {
       "id": "golfer-5-6",
       "name": "Justin Thomas",
-      "rank": 6,
-      "odds": "12/1"
-    },
+      "rank": 6},
     {
       "id": "golfer-5-7",
       "name": "Dustin Johnson",
-      "rank": 7,
-      "odds": "14/1"
-    },
+      "rank": 7},
     {
       "id": "golfer-5-8",
       "name": "Patrick Cantlay",
-      "rank": 8,
-      "odds": "16/1"
-    },
+      "rank": 8},
     {
       "id": "golfer-5-9",
       "name": "Xander Schauffele",
-      "rank": 9,
-      "odds": "18/1"
-    },
+      "rank": 9},
     {
       "id": "golfer-5-10",
       "name": "Collin Morikawa",
-      "rank": 10,
-      "odds": "20/1"
-    },
+      "rank": 10},
     {
       "id": "golfer-5-11",
       "name": "Viktor Hovland",
-      "rank": 11,
-      "odds": "23/1"
-    },
+      "rank": 11},
     {
       "id": "golfer-5-12",
       "name": "Matt Fitzpatrick",
-      "rank": 12,
-      "odds": "26/1"
-    },
+      "rank": 12},
     {
       "id": "golfer-5-13",
       "name": "Tommy Fleetwood",
-      "rank": 13,
-      "odds": "29/1"
-    },
+      "rank": 13},
     {
       "id": "golfer-5-14",
       "name": "Tyrrell Hatton",
-      "rank": 14,
-      "odds": "32/1"
-    },
+      "rank": 14},
     {
       "id": "golfer-5-15",
       "name": "Shane Lowry",
-      "rank": 15,
-      "odds": "35/1"
-    },
+      "rank": 15},
     {
       "id": "golfer-5-16",
       "name": "Cameron Smith",
-      "rank": 16,
-      "odds": "38/1"
-    },
+      "rank": 16},
     {
       "id": "golfer-5-17",
       "name": "Sam Burns",
-      "rank": 17,
-      "odds": "41/1"
-    },
+      "rank": 17},
     {
       "id": "golfer-5-18",
       "name": "Max Homa",
-      "rank": 18,
-      "odds": "44/1"
-    },
+      "rank": 18},
     {
       "id": "golfer-5-19",
       "name": "Tony Finau",
-      "rank": 19,
-      "odds": "47/1"
-    },
+      "rank": 19},
     {
       "id": "golfer-5-20",
       "name": "Sungjae Im",
-      "rank": 20,
-      "odds": "50/1"
-    },
+      "rank": 20},
     {
       "id": "golfer-5-21",
       "name": "Hideki Matsuyama",
-      "rank": 21,
-      "odds": "55/1"
-    },
+      "rank": 21},
     {
       "id": "golfer-5-22",
       "name": "Jason Day",
-      "rank": 22,
-      "odds": "60/1"
-    },
+      "rank": 22},
     {
       "id": "golfer-5-23",
       "name": "Adam Scott",
-      "rank": 23,
-      "odds": "65/1"
-    },
+      "rank": 23},
     {
       "id": "golfer-5-24",
       "name": "Marc Leishman",
-      "rank": 24,
-      "odds": "70/1"
-    },
+      "rank": 24},
     {
       "id": "golfer-5-25",
       "name": "Louis Oosthuizen",
-      "rank": 25,
-      "odds": "75/1"
-    },
+      "rank": 25},
     {
       "id": "golfer-5-26",
       "name": "Bryson DeChambeau",
-      "rank": 26,
-      "odds": "80/1"
-    },
+      "rank": 26},
     {
       "id": "golfer-5-27",
       "name": "Daniel Berger",
-      "rank": 27,
-      "odds": "85/1"
-    },
+      "rank": 27},
     {
       "id": "golfer-5-28",
       "name": "Keegan Bradley",
-      "rank": 28,
-      "odds": "90/1"
-    },
+      "rank": 28},
     {
       "id": "golfer-5-29",
       "name": "Russell Henley",
-      "rank": 29,
-      "odds": "95/1"
-    },
+      "rank": 29},
     {
       "id": "golfer-5-30",
       "name": "Brian Harman",
-      "rank": 30,
-      "odds": "100/1"
-    },
+      "rank": 30},
     {
       "id": "golfer-5-31",
       "name": "Harris English",
-      "rank": 31,
-      "odds": "110/1"
-    },
+      "rank": 31},
     {
       "id": "golfer-5-32",
       "name": "Sepp Straka",
-      "rank": 32,
-      "odds": "120/1"
-    },
+      "rank": 32},
     {
       "id": "golfer-5-33",
       "name": "Ludvig Aberg",
-      "rank": 33,
-      "odds": "130/1"
-    },
+      "rank": 33},
     {
       "id": "golfer-5-34",
       "name": "Nicolai Hojgaard",
-      "rank": 34,
-      "odds": "140/1"
-    },
+      "rank": 34},
     {
       "id": "golfer-5-35",
       "name": "Tom Kim",
-      "rank": 35,
-      "odds": "150/1"
-    },
+      "rank": 35},
     {
       "id": "golfer-5-36",
       "name": "Robert MacIntyre",
-      "rank": 36,
-      "odds": "160/1"
-    },
+      "rank": 36},
     {
       "id": "golfer-5-37",
       "name": "Alex Noren",
-      "rank": 37,
-      "odds": "170/1"
-    },
+      "rank": 37},
     {
       "id": "golfer-5-38",
       "name": "Aaron Wise",
-      "rank": 38,
-      "odds": "180/1"
-    },
+      "rank": 38},
     {
       "id": "golfer-5-39",
       "name": "Sahith Theegala",
-      "rank": 39,
-      "odds": "190/1"
-    },
+      "rank": 39},
     {
       "id": "golfer-5-40",
       "name": "Kurt Kitayama",
-      "rank": 40,
-      "odds": "200/1"
-    },
+      "rank": 40},
     {
       "id": "golfer-5-41",
       "name": "Andrew Novak",
-      "rank": 41,
-      "odds": "210/1"
-    },
+      "rank": 41},
     {
       "id": "golfer-5-42",
       "name": "Michael Kim",
-      "rank": 42,
-      "odds": "220/1"
-    },
+      "rank": 42},
     {
       "id": "golfer-5-43",
       "name": "Ben Griffin",
-      "rank": 43,
-      "odds": "230/1"
-    },
+      "rank": 43},
     {
       "id": "golfer-5-44",
       "name": "Justin Rose",
-      "rank": 44,
-      "odds": "240/1"
-    },
+      "rank": 44},
     {
       "id": "golfer-5-45",
       "name": "Gary Woodland",
-      "rank": 45,
-      "odds": "250/1"
-    },
+      "rank": 45},
     {
       "id": "golfer-5-46",
       "name": "Erik Van Rooyen",
-      "rank": 46,
-      "odds": "260/1"
-    },
+      "rank": 46},
     {
       "id": "golfer-5-47",
       "name": "Joaquin Niemann",
-      "rank": 47,
-      "odds": "270/1"
-    },
+      "rank": 47},
     {
       "id": "golfer-5-48",
       "name": "Taylor Pendrith",
-      "rank": 48,
-      "odds": "280/1"
-    },
+      "rank": 48},
     {
       "id": "golfer-5-49",
       "name": "Wyndham Clark",
-      "rank": 49,
-      "odds": "290/1"
-    },
+      "rank": 49},
     {
       "id": "golfer-5-50",
       "name": "Rickie Fowler",
-      "rank": 50,
-      "odds": "300/1"
-    },
+      "rank": 50},
     {
       "id": "golfer-5-51",
       "name": "Bubba Watson",
-      "rank": 51,
-      "odds": "320/1"
-    },
+      "rank": 51},
     {
       "id": "golfer-5-52",
       "name": "Phil Mickelson",
-      "rank": 52,
-      "odds": "340/1"
-    },
+      "rank": 52},
     {
       "id": "golfer-5-53",
       "name": "Tiger Woods",
-      "rank": 53,
-      "odds": "360/1"
-    },
+      "rank": 53},
     {
       "id": "golfer-5-54",
       "name": "Fred Couples",
-      "rank": 54,
-      "odds": "380/1"
-    },
+      "rank": 54},
     {
       "id": "golfer-5-55",
       "name": "Davis Love III",
-      "rank": 55,
-      "odds": "400/1"
-    },
+      "rank": 55},
     {
       "id": "golfer-5-56",
       "name": "Webb Simpson",
-      "rank": 56,
-      "odds": "420/1"
-    },
+      "rank": 56},
     {
       "id": "golfer-5-57",
       "name": "Kevin Kisner",
-      "rank": 57,
-      "odds": "440/1"
-    },
+      "rank": 57},
     {
       "id": "golfer-5-58",
       "name": "Billy Horschel",
-      "rank": 58,
-      "odds": "460/1"
-    },
+      "rank": 58},
     {
       "id": "golfer-5-59",
       "name": "Stewart Cink",
-      "rank": 59,
-      "odds": "480/1"
-    },
+      "rank": 59},
     {
       "id": "golfer-5-60",
       "name": "Charley Hoffman",
-      "rank": 60,
-      "odds": "500/1"
-    },
+      "rank": 60},
     {
       "id": "golfer-5-61",
       "name": "J.T. Poston",
-      "rank": 61,
-      "odds": "520/1"
-    },
+      "rank": 61},
     {
       "id": "golfer-5-62",
       "name": "Brendon Todd",
-      "rank": 62,
-      "odds": "540/1"
-    },
+      "rank": 62},
     {
       "id": "golfer-5-63",
       "name": "Emiliano Grillo",
-      "rank": 63,
-      "odds": "560/1"
-    },
+      "rank": 63},
     {
       "id": "golfer-5-64",
       "name": "Francesco Molinari",
-      "rank": 64,
-      "odds": "580/1"
-    },
+      "rank": 64},
     {
       "id": "golfer-5-65",
       "name": "Adrian Otaegui",
-      "rank": 65,
-      "odds": "600/1"
-    },
+      "rank": 65},
     {
       "id": "golfer-5-66",
       "name": "Rasmus Hojgaard",
-      "rank": 66,
-      "odds": "620/1"
-    },
+      "rank": 66},
     {
       "id": "golfer-5-67",
       "name": "Thorbjorn Bjorn",
-      "rank": 67,
-      "odds": "640/1"
-    },
+      "rank": 67},
     {
       "id": "golfer-5-68",
       "name": "Henrik Stenson",
-      "rank": 68,
-      "odds": "660/1"
-    },
+      "rank": 68},
     {
       "id": "golfer-5-69",
       "name": "Sergio Garcia",
-      "rank": 69,
-      "odds": "680/1"
-    },
+      "rank": 69},
     {
       "id": "golfer-5-70",
       "name": "Pablo Larrazabal",
-      "rank": 70,
-      "odds": "700/1"
-    },
+      "rank": 70},
     {
       "id": "golfer-5-71",
       "name": "Jorge Campillo",
-      "rank": 71,
-      "odds": "720/1"
-    },
+      "rank": 71},
     {
       "id": "golfer-5-72",
       "name": "Carlos Ortiz",
-      "rank": 72,
-      "odds": "740/1"
-    },
+      "rank": 72},
     {
       "id": "golfer-5-73",
       "name": "Miguel Ancer",
-      "rank": 73,
-      "odds": "760/1"
-    },
+      "rank": 73},
     {
       "id": "golfer-5-74",
       "name": "Eduardo Rodriguez",
-      "rank": 74,
-      "odds": "780/1"
-    },
+      "rank": 74},
     {
       "id": "golfer-5-75",
       "name": "Alejandro Cabrera Bello",
-      "rank": 75,
-      "odds": "800/1"
-    },
+      "rank": 75},
     {
       "id": "golfer-5-76",
       "name": "Rafael Paratore",
-      "rank": 76,
-      "odds": "820/1"
-    },
+      "rank": 76},
     {
       "id": "golfer-5-77",
       "name": "Jose Schwartzel",
-      "rank": 77,
-      "odds": "840/1"
-    },
+      "rank": 77},
     {
       "id": "golfer-5-78",
       "name": "Lucas Grace",
-      "rank": 78,
-      "odds": "860/1"
-    },
+      "rank": 78},
     {
       "id": "golfer-5-79",
       "name": "Matthias Frittelli",
-      "rank": 79,
-      "odds": "880/1"
-    },
+      "rank": 79},
     {
       "id": "golfer-5-80",
       "name": "Martin Higgo",
-      "rank": 80,
-      "odds": "900/1"
-    },
+      "rank": 80},
     {
       "id": "golfer-5-81",
       "name": "Thomas Pieters",
-      "rank": 81,
-      "odds": "920/1"
-    },
+      "rank": 81},
     {
       "id": "golfer-5-82",
       "name": "Christiaan Willett",
-      "rank": 82,
-      "odds": "940/1"
-    },
+      "rank": 82},
     {
       "id": "golfer-5-83",
       "name": "Dean Casey",
-      "rank": 83,
-      "odds": "960/1"
-    },
+      "rank": 83},
     {
       "id": "golfer-5-84",
       "name": "Branden Westwood",
-      "rank": 84,
-      "odds": "980/1"
-    },
+      "rank": 84},
     {
       "id": "golfer-5-85",
       "name": "Charl Poulter",
-      "rank": 85,
-      "odds": "1000/1"
-    },
+      "rank": 85},
     {
       "id": "golfer-5-86",
       "name": "Ernie Rose",
-      "rank": 86,
-      "odds": "1020/1"
-    },
+      "rank": 86},
     {
       "id": "golfer-5-87",
       "name": "Retief Fitzpatrick",
-      "rank": 87,
-      "odds": "1040/1"
-    },
+      "rank": 87},
     {
       "id": "golfer-5-88",
       "name": "Louis Wallace",
-      "rank": 88,
-      "odds": "1060/1"
-    },
+      "rank": 88},
     {
       "id": "golfer-5-89",
       "name": "Dylan Fox",
-      "rank": 89,
-      "odds": "1080/1"
-    },
+      "rank": 89},
     {
       "id": "golfer-5-90",
       "name": "Garrick Power",
-      "rank": 90,
-      "odds": "1100/1"
-    },
+      "rank": 90},
     {
       "id": "golfer-5-91",
       "name": "Cameron Young",
-      "rank": 91,
-      "odds": "1120/1"
-    },
+      "rank": 91},
     {
       "id": "golfer-5-92",
       "name": "Ryan Palmer",
-      "rank": 92,
-      "odds": "1140/1"
-    },
+      "rank": 92},
     {
       "id": "golfer-5-93",
       "name": "Brendan Steele",
-      "rank": 93,
-      "odds": "1160/1"
-    },
+      "rank": 93},
     {
       "id": "golfer-5-94",
       "name": "Lucas Glover",
-      "rank": 94,
-      "odds": "1180/1"
-    },
+      "rank": 94},
     {
       "id": "golfer-5-95",
       "name": "Maverick List",
-      "rank": 95,
-      "odds": "1200/1"
-    },
+      "rank": 95},
     {
       "id": "golfer-5-96",
       "name": "Pierceson Hughes",
-      "rank": 96,
-      "odds": "1220/1"
-    },
+      "rank": 96},
     {
       "id": "golfer-5-97",
       "name": "Gordon Conners",
-      "rank": 97,
-      "odds": "1240/1"
-    },
+      "rank": 97},
     {
       "id": "golfer-5-98",
       "name": "Nick Taylor",
-      "rank": 98,
-      "odds": "1260/1"
-    },
+      "rank": 98},
     {
       "id": "golfer-5-99",
       "name": "Luke Donald",
-      "rank": 99,
-      "odds": "1280/1"
-    },
+      "rank": 99},
     {
       "id": "golfer-5-100",
       "name": "David Lingmerth",
-      "rank": 100,
-      "odds": "1300/1"
-    },
+      "rank": 100},
     {
       "id": "golfer-5-101",
       "name": "Matt Kuchar",
-      "rank": 101,
-      "odds": "1320/1"
-    },
+      "rank": 101},
     {
       "id": "golfer-5-102",
       "name": "Zach Johnson",
-      "rank": 102,
-      "odds": "1340/1"
-    },
+      "rank": 102},
     {
       "id": "golfer-5-103",
       "name": "Jim Furyk",
-      "rank": 103,
-      "odds": "1360/1"
-    },
+      "rank": 103},
     {
       "id": "golfer-5-104",
       "name": "Steve Stricker",
-      "rank": 104,
-      "odds": "1380/1"
-    },
+      "rank": 104},
     {
       "id": "golfer-5-105",
       "name": "Stewart Cink",
-      "rank": 105,
-      "odds": "1400/1"
-    }
+      "rank": 105}
   ],
   "6": [
     {
       "id": "golfer-6-1",
       "name": "Scottie Scheffler",
-      "rank": 1,
-      "odds": "4/1"
-    },
+      "rank": 1},
     {
       "id": "golfer-6-2",
       "name": "Rory McIlroy",
-      "rank": 2,
-      "odds": "5/1"
-    },
+      "rank": 2},
     {
       "id": "golfer-6-3",
       "name": "Jon Rahm",
-      "rank": 3,
-      "odds": "6/1"
-    },
+      "rank": 3},
     {
       "id": "golfer-6-4",
       "name": "Brooks Koepka",
-      "rank": 4,
-      "odds": "7/1"
-    },
+      "rank": 4},
     {
       "id": "golfer-6-5",
       "name": "Jordan Spieth",
-      "rank": 5,
-      "odds": "8/1"
-    },
+      "rank": 5},
     {
       "id": "golfer-6-6",
       "name": "Justin Thomas",
-      "rank": 6,
-      "odds": "12/1"
-    },
+      "rank": 6},
     {
       "id": "golfer-6-7",
       "name": "Dustin Johnson",
-      "rank": 7,
-      "odds": "14/1"
-    },
+      "rank": 7},
     {
       "id": "golfer-6-8",
       "name": "Patrick Cantlay",
-      "rank": 8,
-      "odds": "16/1"
-    },
+      "rank": 8},
     {
       "id": "golfer-6-9",
       "name": "Xander Schauffele",
-      "rank": 9,
-      "odds": "18/1"
-    },
+      "rank": 9},
     {
       "id": "golfer-6-10",
       "name": "Collin Morikawa",
-      "rank": 10,
-      "odds": "20/1"
-    },
+      "rank": 10},
     {
       "id": "golfer-6-11",
       "name": "Viktor Hovland",
-      "rank": 11,
-      "odds": "23/1"
-    },
+      "rank": 11},
     {
       "id": "golfer-6-12",
       "name": "Matt Fitzpatrick",
-      "rank": 12,
-      "odds": "26/1"
-    },
+      "rank": 12},
     {
       "id": "golfer-6-13",
       "name": "Tommy Fleetwood",
-      "rank": 13,
-      "odds": "29/1"
-    },
+      "rank": 13},
     {
       "id": "golfer-6-14",
       "name": "Tyrrell Hatton",
-      "rank": 14,
-      "odds": "32/1"
-    },
+      "rank": 14},
     {
       "id": "golfer-6-15",
       "name": "Shane Lowry",
-      "rank": 15,
-      "odds": "35/1"
-    },
+      "rank": 15},
     {
       "id": "golfer-6-16",
       "name": "Cameron Smith",
-      "rank": 16,
-      "odds": "38/1"
-    },
+      "rank": 16},
     {
       "id": "golfer-6-17",
       "name": "Sam Burns",
-      "rank": 17,
-      "odds": "41/1"
-    },
+      "rank": 17},
     {
       "id": "golfer-6-18",
       "name": "Max Homa",
-      "rank": 18,
-      "odds": "44/1"
-    },
+      "rank": 18},
     {
       "id": "golfer-6-19",
       "name": "Tony Finau",
-      "rank": 19,
-      "odds": "47/1"
-    },
+      "rank": 19},
     {
       "id": "golfer-6-20",
       "name": "Sungjae Im",
-      "rank": 20,
-      "odds": "50/1"
-    },
+      "rank": 20},
     {
       "id": "golfer-6-21",
       "name": "Hideki Matsuyama",
-      "rank": 21,
-      "odds": "55/1"
-    },
+      "rank": 21},
     {
       "id": "golfer-6-22",
       "name": "Jason Day",
-      "rank": 22,
-      "odds": "60/1"
-    },
+      "rank": 22},
     {
       "id": "golfer-6-23",
       "name": "Adam Scott",
-      "rank": 23,
-      "odds": "65/1"
-    },
+      "rank": 23},
     {
       "id": "golfer-6-24",
       "name": "Marc Leishman",
-      "rank": 24,
-      "odds": "70/1"
-    },
+      "rank": 24},
     {
       "id": "golfer-6-25",
       "name": "Louis Oosthuizen",
-      "rank": 25,
-      "odds": "75/1"
-    },
+      "rank": 25},
     {
       "id": "golfer-6-26",
       "name": "Bryson DeChambeau",
-      "rank": 26,
-      "odds": "80/1"
-    },
+      "rank": 26},
     {
       "id": "golfer-6-27",
       "name": "Daniel Berger",
-      "rank": 27,
-      "odds": "85/1"
-    },
+      "rank": 27},
     {
       "id": "golfer-6-28",
       "name": "Keegan Bradley",
-      "rank": 28,
-      "odds": "90/1"
-    },
+      "rank": 28},
     {
       "id": "golfer-6-29",
       "name": "Russell Henley",
-      "rank": 29,
-      "odds": "95/1"
-    },
+      "rank": 29},
     {
       "id": "golfer-6-30",
       "name": "Brian Harman",
-      "rank": 30,
-      "odds": "100/1"
-    },
+      "rank": 30},
     {
       "id": "golfer-6-31",
       "name": "Harris English",
-      "rank": 31,
-      "odds": "110/1"
-    },
+      "rank": 31},
     {
       "id": "golfer-6-32",
       "name": "Sepp Straka",
-      "rank": 32,
-      "odds": "120/1"
-    },
+      "rank": 32},
     {
       "id": "golfer-6-33",
       "name": "Ludvig Aberg",
-      "rank": 33,
-      "odds": "130/1"
-    },
+      "rank": 33},
     {
       "id": "golfer-6-34",
       "name": "Nicolai Hojgaard",
-      "rank": 34,
-      "odds": "140/1"
-    },
+      "rank": 34},
     {
       "id": "golfer-6-35",
       "name": "Tom Kim",
-      "rank": 35,
-      "odds": "150/1"
-    },
+      "rank": 35},
     {
       "id": "golfer-6-36",
       "name": "Robert MacIntyre",
-      "rank": 36,
-      "odds": "160/1"
-    },
+      "rank": 36},
     {
       "id": "golfer-6-37",
       "name": "Alex Noren",
-      "rank": 37,
-      "odds": "170/1"
-    },
+      "rank": 37},
     {
       "id": "golfer-6-38",
       "name": "Aaron Wise",
-      "rank": 38,
-      "odds": "180/1"
-    },
+      "rank": 38},
     {
       "id": "golfer-6-39",
       "name": "Sahith Theegala",
-      "rank": 39,
-      "odds": "190/1"
-    },
+      "rank": 39},
     {
       "id": "golfer-6-40",
       "name": "Kurt Kitayama",
-      "rank": 40,
-      "odds": "200/1"
-    },
+      "rank": 40},
     {
       "id": "golfer-6-41",
       "name": "Andrew Novak",
-      "rank": 41,
-      "odds": "210/1"
-    },
+      "rank": 41},
     {
       "id": "golfer-6-42",
       "name": "Michael Kim",
-      "rank": 42,
-      "odds": "220/1"
-    },
+      "rank": 42},
     {
       "id": "golfer-6-43",
       "name": "Ben Griffin",
-      "rank": 43,
-      "odds": "230/1"
-    },
+      "rank": 43},
     {
       "id": "golfer-6-44",
       "name": "Justin Rose",
-      "rank": 44,
-      "odds": "240/1"
-    },
+      "rank": 44},
     {
       "id": "golfer-6-45",
       "name": "Gary Woodland",
-      "rank": 45,
-      "odds": "250/1"
-    },
+      "rank": 45},
     {
       "id": "golfer-6-46",
       "name": "Erik Van Rooyen",
-      "rank": 46,
-      "odds": "260/1"
-    },
+      "rank": 46},
     {
       "id": "golfer-6-47",
       "name": "Joaquin Niemann",
-      "rank": 47,
-      "odds": "270/1"
-    },
+      "rank": 47},
     {
       "id": "golfer-6-48",
       "name": "Taylor Pendrith",
-      "rank": 48,
-      "odds": "280/1"
-    },
+      "rank": 48},
     {
       "id": "golfer-6-49",
       "name": "Wyndham Clark",
-      "rank": 49,
-      "odds": "290/1"
-    },
+      "rank": 49},
     {
       "id": "golfer-6-50",
       "name": "Rickie Fowler",
-      "rank": 50,
-      "odds": "300/1"
-    },
+      "rank": 50},
     {
       "id": "golfer-6-51",
       "name": "Bubba Watson",
-      "rank": 51,
-      "odds": "320/1"
-    },
+      "rank": 51},
     {
       "id": "golfer-6-52",
       "name": "Phil Mickelson",
-      "rank": 52,
-      "odds": "340/1"
-    },
+      "rank": 52},
     {
       "id": "golfer-6-53",
       "name": "Tiger Woods",
-      "rank": 53,
-      "odds": "360/1"
-    },
+      "rank": 53},
     {
       "id": "golfer-6-54",
       "name": "Fred Couples",
-      "rank": 54,
-      "odds": "380/1"
-    },
+      "rank": 54},
     {
       "id": "golfer-6-55",
       "name": "Davis Love III",
-      "rank": 55,
-      "odds": "400/1"
-    },
+      "rank": 55},
     {
       "id": "golfer-6-56",
       "name": "Webb Simpson",
-      "rank": 56,
-      "odds": "420/1"
-    },
+      "rank": 56},
     {
       "id": "golfer-6-57",
       "name": "Kevin Kisner",
-      "rank": 57,
-      "odds": "440/1"
-    },
+      "rank": 57},
     {
       "id": "golfer-6-58",
       "name": "Billy Horschel",
-      "rank": 58,
-      "odds": "460/1"
-    },
+      "rank": 58},
     {
       "id": "golfer-6-59",
       "name": "Stewart Cink",
-      "rank": 59,
-      "odds": "480/1"
-    },
+      "rank": 59},
     {
       "id": "golfer-6-60",
       "name": "Charley Hoffman",
-      "rank": 60,
-      "odds": "500/1"
-    },
+      "rank": 60},
     {
       "id": "golfer-6-61",
       "name": "J.T. Poston",
-      "rank": 61,
-      "odds": "520/1"
-    },
+      "rank": 61},
     {
       "id": "golfer-6-62",
       "name": "Brendon Todd",
-      "rank": 62,
-      "odds": "540/1"
-    },
+      "rank": 62},
     {
       "id": "golfer-6-63",
       "name": "Emiliano Grillo",
-      "rank": 63,
-      "odds": "560/1"
-    },
+      "rank": 63},
     {
       "id": "golfer-6-64",
       "name": "Francesco Molinari",
-      "rank": 64,
-      "odds": "580/1"
-    },
+      "rank": 64},
     {
       "id": "golfer-6-65",
       "name": "Adrian Otaegui",
-      "rank": 65,
-      "odds": "600/1"
-    },
+      "rank": 65},
     {
       "id": "golfer-6-66",
       "name": "Rasmus Hojgaard",
-      "rank": 66,
-      "odds": "620/1"
-    },
+      "rank": 66},
     {
       "id": "golfer-6-67",
       "name": "Thorbjorn Bjorn",
-      "rank": 67,
-      "odds": "640/1"
-    },
+      "rank": 67},
     {
       "id": "golfer-6-68",
       "name": "Henrik Stenson",
-      "rank": 68,
-      "odds": "660/1"
-    },
+      "rank": 68},
     {
       "id": "golfer-6-69",
       "name": "Sergio Garcia",
-      "rank": 69,
-      "odds": "680/1"
-    },
+      "rank": 69},
     {
       "id": "golfer-6-70",
       "name": "Pablo Larrazabal",
-      "rank": 70,
-      "odds": "700/1"
-    },
+      "rank": 70},
     {
       "id": "golfer-6-71",
       "name": "Jorge Campillo",
-      "rank": 71,
-      "odds": "720/1"
-    },
+      "rank": 71},
     {
       "id": "golfer-6-72",
       "name": "Carlos Ortiz",
-      "rank": 72,
-      "odds": "740/1"
-    },
+      "rank": 72},
     {
       "id": "golfer-6-73",
       "name": "Miguel Ancer",
-      "rank": 73,
-      "odds": "760/1"
-    },
+      "rank": 73},
     {
       "id": "golfer-6-74",
       "name": "Eduardo Rodriguez",
-      "rank": 74,
-      "odds": "780/1"
-    },
+      "rank": 74},
     {
       "id": "golfer-6-75",
       "name": "Alejandro Cabrera Bello",
-      "rank": 75,
-      "odds": "800/1"
-    },
+      "rank": 75},
     {
       "id": "golfer-6-76",
       "name": "Rafael Paratore",
-      "rank": 76,
-      "odds": "820/1"
-    },
+      "rank": 76},
     {
       "id": "golfer-6-77",
       "name": "Jose Schwartzel",
-      "rank": 77,
-      "odds": "840/1"
-    },
+      "rank": 77},
     {
       "id": "golfer-6-78",
       "name": "Lucas Grace",
-      "rank": 78,
-      "odds": "860/1"
-    },
+      "rank": 78},
     {
       "id": "golfer-6-79",
       "name": "Matthias Frittelli",
-      "rank": 79,
-      "odds": "880/1"
-    },
+      "rank": 79},
     {
       "id": "golfer-6-80",
       "name": "Martin Higgo",
-      "rank": 80,
-      "odds": "900/1"
-    },
+      "rank": 80},
     {
       "id": "golfer-6-81",
       "name": "Thomas Pieters",
-      "rank": 81,
-      "odds": "920/1"
-    },
+      "rank": 81},
     {
       "id": "golfer-6-82",
       "name": "Christiaan Willett",
-      "rank": 82,
-      "odds": "940/1"
-    },
+      "rank": 82},
     {
       "id": "golfer-6-83",
       "name": "Dean Casey",
-      "rank": 83,
-      "odds": "960/1"
-    },
+      "rank": 83},
     {
       "id": "golfer-6-84",
       "name": "Branden Westwood",
-      "rank": 84,
-      "odds": "980/1"
-    },
+      "rank": 84},
     {
       "id": "golfer-6-85",
       "name": "Charl Poulter",
-      "rank": 85,
-      "odds": "1000/1"
-    },
+      "rank": 85},
     {
       "id": "golfer-6-86",
       "name": "Ernie Rose",
-      "rank": 86,
-      "odds": "1020/1"
-    },
+      "rank": 86},
     {
       "id": "golfer-6-87",
       "name": "Retief Fitzpatrick",
-      "rank": 87,
-      "odds": "1040/1"
-    },
+      "rank": 87},
     {
       "id": "golfer-6-88",
       "name": "Louis Wallace",
-      "rank": 88,
-      "odds": "1060/1"
-    },
+      "rank": 88},
     {
       "id": "golfer-6-89",
       "name": "Dylan Fox",
-      "rank": 89,
-      "odds": "1080/1"
-    },
+      "rank": 89},
     {
       "id": "golfer-6-90",
       "name": "Garrick Power",
-      "rank": 90,
-      "odds": "1100/1"
-    },
+      "rank": 90},
     {
       "id": "golfer-6-91",
       "name": "Cameron Young",
-      "rank": 91,
-      "odds": "1120/1"
-    },
+      "rank": 91},
     {
       "id": "golfer-6-92",
       "name": "Ryan Palmer",
-      "rank": 92,
-      "odds": "1140/1"
-    },
+      "rank": 92},
     {
       "id": "golfer-6-93",
       "name": "Brendan Steele",
-      "rank": 93,
-      "odds": "1160/1"
-    },
+      "rank": 93},
     {
       "id": "golfer-6-94",
       "name": "Lucas Glover",
-      "rank": 94,
-      "odds": "1180/1"
-    },
+      "rank": 94},
     {
       "id": "golfer-6-95",
       "name": "Maverick List",
-      "rank": 95,
-      "odds": "1200/1"
-    },
+      "rank": 95},
     {
       "id": "golfer-6-96",
       "name": "Pierceson Hughes",
-      "rank": 96,
-      "odds": "1220/1"
-    },
+      "rank": 96},
     {
       "id": "golfer-6-97",
       "name": "Gordon Conners",
-      "rank": 97,
-      "odds": "1240/1"
-    },
+      "rank": 97},
     {
       "id": "golfer-6-98",
       "name": "Nick Taylor",
-      "rank": 98,
-      "odds": "1260/1"
-    },
+      "rank": 98},
     {
       "id": "golfer-6-99",
       "name": "Luke Donald",
-      "rank": 99,
-      "odds": "1280/1"
-    },
+      "rank": 99},
     {
       "id": "golfer-6-100",
       "name": "David Lingmerth",
-      "rank": 100,
-      "odds": "1300/1"
-    },
+      "rank": 100},
     {
       "id": "golfer-6-101",
       "name": "Matt Kuchar",
-      "rank": 101,
-      "odds": "1320/1"
-    },
+      "rank": 101},
     {
       "id": "golfer-6-102",
       "name": "Zach Johnson",
-      "rank": 102,
-      "odds": "1340/1"
-    },
+      "rank": 102},
     {
       "id": "golfer-6-103",
       "name": "Jim Furyk",
-      "rank": 103,
-      "odds": "1360/1"
-    },
+      "rank": 103},
     {
       "id": "golfer-6-104",
       "name": "Steve Stricker",
-      "rank": 104,
-      "odds": "1380/1"
-    },
+      "rank": 104},
     {
       "id": "golfer-6-105",
       "name": "Stewart Cink",
-      "rank": 105,
-      "odds": "1400/1"
-    }
+      "rank": 105}
   ],
   "7": [
     {
       "id": "golfer-7-1",
       "name": "Scottie Scheffler",
-      "rank": 1,
-      "odds": "4/1"
-    },
+      "rank": 1},
     {
       "id": "golfer-7-2",
       "name": "Rory McIlroy",
-      "rank": 2,
-      "odds": "5/1"
-    },
+      "rank": 2},
     {
       "id": "golfer-7-3",
       "name": "Jon Rahm",
-      "rank": 3,
-      "odds": "6/1"
-    },
+      "rank": 3},
     {
       "id": "golfer-7-4",
       "name": "Brooks Koepka",
-      "rank": 4,
-      "odds": "7/1"
-    },
+      "rank": 4},
     {
       "id": "golfer-7-5",
       "name": "Jordan Spieth",
-      "rank": 5,
-      "odds": "8/1"
-    },
+      "rank": 5},
     {
       "id": "golfer-7-6",
       "name": "Justin Thomas",
-      "rank": 6,
-      "odds": "12/1"
-    },
+      "rank": 6},
     {
       "id": "golfer-7-7",
       "name": "Dustin Johnson",
-      "rank": 7,
-      "odds": "14/1"
-    },
+      "rank": 7},
     {
       "id": "golfer-7-8",
       "name": "Patrick Cantlay",
-      "rank": 8,
-      "odds": "16/1"
-    },
+      "rank": 8},
     {
       "id": "golfer-7-9",
       "name": "Xander Schauffele",
-      "rank": 9,
-      "odds": "18/1"
-    },
+      "rank": 9},
     {
       "id": "golfer-7-10",
       "name": "Collin Morikawa",
-      "rank": 10,
-      "odds": "20/1"
-    },
+      "rank": 10},
     {
       "id": "golfer-7-11",
       "name": "Viktor Hovland",
-      "rank": 11,
-      "odds": "23/1"
-    },
+      "rank": 11},
     {
       "id": "golfer-7-12",
       "name": "Matt Fitzpatrick",
-      "rank": 12,
-      "odds": "26/1"
-    },
+      "rank": 12},
     {
       "id": "golfer-7-13",
       "name": "Tommy Fleetwood",
-      "rank": 13,
-      "odds": "29/1"
-    },
+      "rank": 13},
     {
       "id": "golfer-7-14",
       "name": "Tyrrell Hatton",
-      "rank": 14,
-      "odds": "32/1"
-    },
+      "rank": 14},
     {
       "id": "golfer-7-15",
       "name": "Shane Lowry",
-      "rank": 15,
-      "odds": "35/1"
-    },
+      "rank": 15},
     {
       "id": "golfer-7-16",
       "name": "Cameron Smith",
-      "rank": 16,
-      "odds": "38/1"
-    },
+      "rank": 16},
     {
       "id": "golfer-7-17",
       "name": "Sam Burns",
-      "rank": 17,
-      "odds": "41/1"
-    },
+      "rank": 17},
     {
       "id": "golfer-7-18",
       "name": "Max Homa",
-      "rank": 18,
-      "odds": "44/1"
-    },
+      "rank": 18},
     {
       "id": "golfer-7-19",
       "name": "Tony Finau",
-      "rank": 19,
-      "odds": "47/1"
-    },
+      "rank": 19},
     {
       "id": "golfer-7-20",
       "name": "Sungjae Im",
-      "rank": 20,
-      "odds": "50/1"
-    },
+      "rank": 20},
     {
       "id": "golfer-7-21",
       "name": "Hideki Matsuyama",
-      "rank": 21,
-      "odds": "55/1"
-    },
+      "rank": 21},
     {
       "id": "golfer-7-22",
       "name": "Jason Day",
-      "rank": 22,
-      "odds": "60/1"
-    },
+      "rank": 22},
     {
       "id": "golfer-7-23",
       "name": "Adam Scott",
-      "rank": 23,
-      "odds": "65/1"
-    },
+      "rank": 23},
     {
       "id": "golfer-7-24",
       "name": "Marc Leishman",
-      "rank": 24,
-      "odds": "70/1"
-    },
+      "rank": 24},
     {
       "id": "golfer-7-25",
       "name": "Louis Oosthuizen",
-      "rank": 25,
-      "odds": "75/1"
-    },
+      "rank": 25},
     {
       "id": "golfer-7-26",
       "name": "Bryson DeChambeau",
-      "rank": 26,
-      "odds": "80/1"
-    },
+      "rank": 26},
     {
       "id": "golfer-7-27",
       "name": "Daniel Berger",
-      "rank": 27,
-      "odds": "85/1"
-    },
+      "rank": 27},
     {
       "id": "golfer-7-28",
       "name": "Keegan Bradley",
-      "rank": 28,
-      "odds": "90/1"
-    },
+      "rank": 28},
     {
       "id": "golfer-7-29",
       "name": "Russell Henley",
-      "rank": 29,
-      "odds": "95/1"
-    },
+      "rank": 29},
     {
       "id": "golfer-7-30",
       "name": "Brian Harman",
-      "rank": 30,
-      "odds": "100/1"
-    },
+      "rank": 30},
     {
       "id": "golfer-7-31",
       "name": "Harris English",
-      "rank": 31,
-      "odds": "110/1"
-    },
+      "rank": 31},
     {
       "id": "golfer-7-32",
       "name": "Sepp Straka",
-      "rank": 32,
-      "odds": "120/1"
-    },
+      "rank": 32},
     {
       "id": "golfer-7-33",
       "name": "Ludvig Aberg",
-      "rank": 33,
-      "odds": "130/1"
-    },
+      "rank": 33},
     {
       "id": "golfer-7-34",
       "name": "Nicolai Hojgaard",
-      "rank": 34,
-      "odds": "140/1"
-    },
+      "rank": 34},
     {
       "id": "golfer-7-35",
       "name": "Tom Kim",
-      "rank": 35,
-      "odds": "150/1"
-    },
+      "rank": 35},
     {
       "id": "golfer-7-36",
       "name": "Robert MacIntyre",
-      "rank": 36,
-      "odds": "160/1"
-    },
+      "rank": 36},
     {
       "id": "golfer-7-37",
       "name": "Alex Noren",
-      "rank": 37,
-      "odds": "170/1"
-    },
+      "rank": 37},
     {
       "id": "golfer-7-38",
       "name": "Aaron Wise",
-      "rank": 38,
-      "odds": "180/1"
-    },
+      "rank": 38},
     {
       "id": "golfer-7-39",
       "name": "Sahith Theegala",
-      "rank": 39,
-      "odds": "190/1"
-    },
+      "rank": 39},
     {
       "id": "golfer-7-40",
       "name": "Kurt Kitayama",
-      "rank": 40,
-      "odds": "200/1"
-    },
+      "rank": 40},
     {
       "id": "golfer-7-41",
       "name": "Andrew Novak",
-      "rank": 41,
-      "odds": "210/1"
-    },
+      "rank": 41},
     {
       "id": "golfer-7-42",
       "name": "Michael Kim",
-      "rank": 42,
-      "odds": "220/1"
-    },
+      "rank": 42},
     {
       "id": "golfer-7-43",
       "name": "Ben Griffin",
-      "rank": 43,
-      "odds": "230/1"
-    },
+      "rank": 43},
     {
       "id": "golfer-7-44",
       "name": "Justin Rose",
-      "rank": 44,
-      "odds": "240/1"
-    },
+      "rank": 44},
     {
       "id": "golfer-7-45",
       "name": "Gary Woodland",
-      "rank": 45,
-      "odds": "250/1"
-    },
+      "rank": 45},
     {
       "id": "golfer-7-46",
       "name": "Erik Van Rooyen",
-      "rank": 46,
-      "odds": "260/1"
-    },
+      "rank": 46},
     {
       "id": "golfer-7-47",
       "name": "Joaquin Niemann",
-      "rank": 47,
-      "odds": "270/1"
-    },
+      "rank": 47},
     {
       "id": "golfer-7-48",
       "name": "Taylor Pendrith",
-      "rank": 48,
-      "odds": "280/1"
-    },
+      "rank": 48},
     {
       "id": "golfer-7-49",
       "name": "Wyndham Clark",
-      "rank": 49,
-      "odds": "290/1"
-    },
+      "rank": 49},
     {
       "id": "golfer-7-50",
       "name": "Rickie Fowler",
-      "rank": 50,
-      "odds": "300/1"
-    },
+      "rank": 50},
     {
       "id": "golfer-7-51",
       "name": "Bubba Watson",
-      "rank": 51,
-      "odds": "320/1"
-    },
+      "rank": 51},
     {
       "id": "golfer-7-52",
       "name": "Phil Mickelson",
-      "rank": 52,
-      "odds": "340/1"
-    },
+      "rank": 52},
     {
       "id": "golfer-7-53",
       "name": "Tiger Woods",
-      "rank": 53,
-      "odds": "360/1"
-    },
+      "rank": 53},
     {
       "id": "golfer-7-54",
       "name": "Fred Couples",
-      "rank": 54,
-      "odds": "380/1"
-    },
+      "rank": 54},
     {
       "id": "golfer-7-55",
       "name": "Davis Love III",
-      "rank": 55,
-      "odds": "400/1"
-    },
+      "rank": 55},
     {
       "id": "golfer-7-56",
       "name": "Webb Simpson",
-      "rank": 56,
-      "odds": "420/1"
-    },
+      "rank": 56},
     {
       "id": "golfer-7-57",
       "name": "Kevin Kisner",
-      "rank": 57,
-      "odds": "440/1"
-    },
+      "rank": 57},
     {
       "id": "golfer-7-58",
       "name": "Billy Horschel",
-      "rank": 58,
-      "odds": "460/1"
-    },
+      "rank": 58},
     {
       "id": "golfer-7-59",
       "name": "Stewart Cink",
-      "rank": 59,
-      "odds": "480/1"
-    },
+      "rank": 59},
     {
       "id": "golfer-7-60",
       "name": "Charley Hoffman",
-      "rank": 60,
-      "odds": "500/1"
-    },
+      "rank": 60},
     {
       "id": "golfer-7-61",
       "name": "J.T. Poston",
-      "rank": 61,
-      "odds": "520/1"
-    },
+      "rank": 61},
     {
       "id": "golfer-7-62",
       "name": "Brendon Todd",
-      "rank": 62,
-      "odds": "540/1"
-    },
+      "rank": 62},
     {
       "id": "golfer-7-63",
       "name": "Emiliano Grillo",
-      "rank": 63,
-      "odds": "560/1"
-    },
+      "rank": 63},
     {
       "id": "golfer-7-64",
       "name": "Francesco Molinari",
-      "rank": 64,
-      "odds": "580/1"
-    },
+      "rank": 64},
     {
       "id": "golfer-7-65",
       "name": "Adrian Otaegui",
-      "rank": 65,
-      "odds": "600/1"
-    },
+      "rank": 65},
     {
       "id": "golfer-7-66",
       "name": "Rasmus Hojgaard",
-      "rank": 66,
-      "odds": "620/1"
-    },
+      "rank": 66},
     {
       "id": "golfer-7-67",
       "name": "Thorbjorn Bjorn",
-      "rank": 67,
-      "odds": "640/1"
-    },
+      "rank": 67},
     {
       "id": "golfer-7-68",
       "name": "Henrik Stenson",
-      "rank": 68,
-      "odds": "660/1"
-    },
+      "rank": 68},
     {
       "id": "golfer-7-69",
       "name": "Sergio Garcia",
-      "rank": 69,
-      "odds": "680/1"
-    },
+      "rank": 69},
     {
       "id": "golfer-7-70",
       "name": "Pablo Larrazabal",
-      "rank": 70,
-      "odds": "700/1"
-    },
+      "rank": 70},
     {
       "id": "golfer-7-71",
       "name": "Jorge Campillo",
-      "rank": 71,
-      "odds": "720/1"
-    },
+      "rank": 71},
     {
       "id": "golfer-7-72",
       "name": "Carlos Ortiz",
-      "rank": 72,
-      "odds": "740/1"
-    },
+      "rank": 72},
     {
       "id": "golfer-7-73",
       "name": "Miguel Ancer",
-      "rank": 73,
-      "odds": "760/1"
-    },
+      "rank": 73},
     {
       "id": "golfer-7-74",
       "name": "Eduardo Rodriguez",
-      "rank": 74,
-      "odds": "780/1"
-    },
+      "rank": 74},
     {
       "id": "golfer-7-75",
       "name": "Alejandro Cabrera Bello",
-      "rank": 75,
-      "odds": "800/1"
-    },
+      "rank": 75},
     {
       "id": "golfer-7-76",
       "name": "Rafael Paratore",
-      "rank": 76,
-      "odds": "820/1"
-    },
+      "rank": 76},
     {
       "id": "golfer-7-77",
       "name": "Jose Schwartzel",
-      "rank": 77,
-      "odds": "840/1"
-    },
+      "rank": 77},
     {
       "id": "golfer-7-78",
       "name": "Lucas Grace",
-      "rank": 78,
-      "odds": "860/1"
-    },
+      "rank": 78},
     {
       "id": "golfer-7-79",
       "name": "Matthias Frittelli",
-      "rank": 79,
-      "odds": "880/1"
-    },
+      "rank": 79},
     {
       "id": "golfer-7-80",
       "name": "Martin Higgo",
-      "rank": 80,
-      "odds": "900/1"
-    },
+      "rank": 80},
     {
       "id": "golfer-7-81",
       "name": "Thomas Pieters",
-      "rank": 81,
-      "odds": "920/1"
-    },
+      "rank": 81},
     {
       "id": "golfer-7-82",
       "name": "Christiaan Willett",
-      "rank": 82,
-      "odds": "940/1"
-    },
+      "rank": 82},
     {
       "id": "golfer-7-83",
       "name": "Dean Casey",
-      "rank": 83,
-      "odds": "960/1"
-    },
+      "rank": 83},
     {
       "id": "golfer-7-84",
       "name": "Branden Westwood",
-      "rank": 84,
-      "odds": "980/1"
-    },
+      "rank": 84},
     {
       "id": "golfer-7-85",
       "name": "Charl Poulter",
-      "rank": 85,
-      "odds": "1000/1"
-    },
+      "rank": 85},
     {
       "id": "golfer-7-86",
       "name": "Ernie Rose",
-      "rank": 86,
-      "odds": "1020/1"
-    },
+      "rank": 86},
     {
       "id": "golfer-7-87",
       "name": "Retief Fitzpatrick",
-      "rank": 87,
-      "odds": "1040/1"
-    },
+      "rank": 87},
     {
       "id": "golfer-7-88",
       "name": "Louis Wallace",
-      "rank": 88,
-      "odds": "1060/1"
-    },
+      "rank": 88},
     {
       "id": "golfer-7-89",
       "name": "Dylan Fox",
-      "rank": 89,
-      "odds": "1080/1"
-    },
+      "rank": 89},
     {
       "id": "golfer-7-90",
       "name": "Garrick Power",
-      "rank": 90,
-      "odds": "1100/1"
-    },
+      "rank": 90},
     {
       "id": "golfer-7-91",
       "name": "Cameron Young",
-      "rank": 91,
-      "odds": "1120/1"
-    },
+      "rank": 91},
     {
       "id": "golfer-7-92",
       "name": "Ryan Palmer",
-      "rank": 92,
-      "odds": "1140/1"
-    },
+      "rank": 92},
     {
       "id": "golfer-7-93",
       "name": "Brendan Steele",
-      "rank": 93,
-      "odds": "1160/1"
-    },
+      "rank": 93},
     {
       "id": "golfer-7-94",
       "name": "Lucas Glover",
-      "rank": 94,
-      "odds": "1180/1"
-    },
+      "rank": 94},
     {
       "id": "golfer-7-95",
       "name": "Maverick List",
-      "rank": 95,
-      "odds": "1200/1"
-    },
+      "rank": 95},
     {
       "id": "golfer-7-96",
       "name": "Pierceson Hughes",
-      "rank": 96,
-      "odds": "1220/1"
-    },
+      "rank": 96},
     {
       "id": "golfer-7-97",
       "name": "Gordon Conners",
-      "rank": 97,
-      "odds": "1240/1"
-    },
+      "rank": 97},
     {
       "id": "golfer-7-98",
       "name": "Nick Taylor",
-      "rank": 98,
-      "odds": "1260/1"
-    },
+      "rank": 98},
     {
       "id": "golfer-7-99",
       "name": "Luke Donald",
-      "rank": 99,
-      "odds": "1280/1"
-    },
+      "rank": 99},
     {
       "id": "golfer-7-100",
       "name": "David Lingmerth",
-      "rank": 100,
-      "odds": "1300/1"
-    },
+      "rank": 100},
     {
       "id": "golfer-7-101",
       "name": "Matt Kuchar",
-      "rank": 101,
-      "odds": "1320/1"
-    },
+      "rank": 101},
     {
       "id": "golfer-7-102",
       "name": "Zach Johnson",
-      "rank": 102,
-      "odds": "1340/1"
-    },
+      "rank": 102},
     {
       "id": "golfer-7-103",
       "name": "Jim Furyk",
-      "rank": 103,
-      "odds": "1360/1"
-    },
+      "rank": 103},
     {
       "id": "golfer-7-104",
       "name": "Steve Stricker",
-      "rank": 104,
-      "odds": "1380/1"
-    },
+      "rank": 104},
     {
       "id": "golfer-7-105",
       "name": "Stewart Cink",
-      "rank": 105,
-      "odds": "1400/1"
-    }
+      "rank": 105}
   ],
   "8": [
     {
       "id": "golfer-8-1",
       "name": "Scottie Scheffler",
-      "rank": 1,
-      "odds": "4/1"
-    },
+      "rank": 1},
     {
       "id": "golfer-8-2",
       "name": "Rory McIlroy",
-      "rank": 2,
-      "odds": "5/1"
-    },
+      "rank": 2},
     {
       "id": "golfer-8-3",
       "name": "Jon Rahm",
-      "rank": 3,
-      "odds": "6/1"
-    },
+      "rank": 3},
     {
       "id": "golfer-8-4",
       "name": "Brooks Koepka",
-      "rank": 4,
-      "odds": "7/1"
-    },
+      "rank": 4},
     {
       "id": "golfer-8-5",
       "name": "Jordan Spieth",
-      "rank": 5,
-      "odds": "8/1"
-    },
+      "rank": 5},
     {
       "id": "golfer-8-6",
       "name": "Justin Thomas",
-      "rank": 6,
-      "odds": "12/1"
-    },
+      "rank": 6},
     {
       "id": "golfer-8-7",
       "name": "Dustin Johnson",
-      "rank": 7,
-      "odds": "14/1"
-    },
+      "rank": 7},
     {
       "id": "golfer-8-8",
       "name": "Patrick Cantlay",
-      "rank": 8,
-      "odds": "16/1"
-    },
+      "rank": 8},
     {
       "id": "golfer-8-9",
       "name": "Xander Schauffele",
-      "rank": 9,
-      "odds": "18/1"
-    },
+      "rank": 9},
     {
       "id": "golfer-8-10",
       "name": "Collin Morikawa",
-      "rank": 10,
-      "odds": "20/1"
-    },
+      "rank": 10},
     {
       "id": "golfer-8-11",
       "name": "Viktor Hovland",
-      "rank": 11,
-      "odds": "23/1"
-    },
+      "rank": 11},
     {
       "id": "golfer-8-12",
       "name": "Matt Fitzpatrick",
-      "rank": 12,
-      "odds": "26/1"
-    },
+      "rank": 12},
     {
       "id": "golfer-8-13",
       "name": "Tommy Fleetwood",
-      "rank": 13,
-      "odds": "29/1"
-    },
+      "rank": 13},
     {
       "id": "golfer-8-14",
       "name": "Tyrrell Hatton",
-      "rank": 14,
-      "odds": "32/1"
-    },
+      "rank": 14},
     {
       "id": "golfer-8-15",
       "name": "Shane Lowry",
-      "rank": 15,
-      "odds": "35/1"
-    },
+      "rank": 15},
     {
       "id": "golfer-8-16",
       "name": "Cameron Smith",
-      "rank": 16,
-      "odds": "38/1"
-    },
+      "rank": 16},
     {
       "id": "golfer-8-17",
       "name": "Sam Burns",
-      "rank": 17,
-      "odds": "41/1"
-    },
+      "rank": 17},
     {
       "id": "golfer-8-18",
       "name": "Max Homa",
-      "rank": 18,
-      "odds": "44/1"
-    },
+      "rank": 18},
     {
       "id": "golfer-8-19",
       "name": "Tony Finau",
-      "rank": 19,
-      "odds": "47/1"
-    },
+      "rank": 19},
     {
       "id": "golfer-8-20",
       "name": "Sungjae Im",
-      "rank": 20,
-      "odds": "50/1"
-    },
+      "rank": 20},
     {
       "id": "golfer-8-21",
       "name": "Hideki Matsuyama",
-      "rank": 21,
-      "odds": "55/1"
-    },
+      "rank": 21},
     {
       "id": "golfer-8-22",
       "name": "Jason Day",
-      "rank": 22,
-      "odds": "60/1"
-    },
+      "rank": 22},
     {
       "id": "golfer-8-23",
       "name": "Adam Scott",
-      "rank": 23,
-      "odds": "65/1"
-    },
+      "rank": 23},
     {
       "id": "golfer-8-24",
       "name": "Marc Leishman",
-      "rank": 24,
-      "odds": "70/1"
-    },
+      "rank": 24},
     {
       "id": "golfer-8-25",
       "name": "Louis Oosthuizen",
-      "rank": 25,
-      "odds": "75/1"
-    },
+      "rank": 25},
     {
       "id": "golfer-8-26",
       "name": "Bryson DeChambeau",
-      "rank": 26,
-      "odds": "80/1"
-    },
+      "rank": 26},
     {
       "id": "golfer-8-27",
       "name": "Daniel Berger",
-      "rank": 27,
-      "odds": "85/1"
-    },
+      "rank": 27},
     {
       "id": "golfer-8-28",
       "name": "Keegan Bradley",
-      "rank": 28,
-      "odds": "90/1"
-    },
+      "rank": 28},
     {
       "id": "golfer-8-29",
       "name": "Russell Henley",
-      "rank": 29,
-      "odds": "95/1"
-    },
+      "rank": 29},
     {
       "id": "golfer-8-30",
       "name": "Brian Harman",
-      "rank": 30,
-      "odds": "100/1"
-    },
+      "rank": 30},
     {
       "id": "golfer-8-31",
       "name": "Harris English",
-      "rank": 31,
-      "odds": "110/1"
-    },
+      "rank": 31},
     {
       "id": "golfer-8-32",
       "name": "Sepp Straka",
-      "rank": 32,
-      "odds": "120/1"
-    },
+      "rank": 32},
     {
       "id": "golfer-8-33",
       "name": "Ludvig Aberg",
-      "rank": 33,
-      "odds": "130/1"
-    },
+      "rank": 33},
     {
       "id": "golfer-8-34",
       "name": "Nicolai Hojgaard",
-      "rank": 34,
-      "odds": "140/1"
-    },
+      "rank": 34},
     {
       "id": "golfer-8-35",
       "name": "Tom Kim",
-      "rank": 35,
-      "odds": "150/1"
-    },
+      "rank": 35},
     {
       "id": "golfer-8-36",
       "name": "Robert MacIntyre",
-      "rank": 36,
-      "odds": "160/1"
-    },
+      "rank": 36},
     {
       "id": "golfer-8-37",
       "name": "Alex Noren",
-      "rank": 37,
-      "odds": "170/1"
-    },
+      "rank": 37},
     {
       "id": "golfer-8-38",
       "name": "Aaron Wise",
-      "rank": 38,
-      "odds": "180/1"
-    },
+      "rank": 38},
     {
       "id": "golfer-8-39",
       "name": "Sahith Theegala",
-      "rank": 39,
-      "odds": "190/1"
-    },
+      "rank": 39},
     {
       "id": "golfer-8-40",
       "name": "Kurt Kitayama",
-      "rank": 40,
-      "odds": "200/1"
-    },
+      "rank": 40},
     {
       "id": "golfer-8-41",
       "name": "Andrew Novak",
-      "rank": 41,
-      "odds": "210/1"
-    },
+      "rank": 41},
     {
       "id": "golfer-8-42",
       "name": "Michael Kim",
-      "rank": 42,
-      "odds": "220/1"
-    },
+      "rank": 42},
     {
       "id": "golfer-8-43",
       "name": "Ben Griffin",
-      "rank": 43,
-      "odds": "230/1"
-    },
+      "rank": 43},
     {
       "id": "golfer-8-44",
       "name": "Justin Rose",
-      "rank": 44,
-      "odds": "240/1"
-    },
+      "rank": 44},
     {
       "id": "golfer-8-45",
       "name": "Gary Woodland",
-      "rank": 45,
-      "odds": "250/1"
-    },
+      "rank": 45},
     {
       "id": "golfer-8-46",
       "name": "Erik Van Rooyen",
-      "rank": 46,
-      "odds": "260/1"
-    },
+      "rank": 46},
     {
       "id": "golfer-8-47",
       "name": "Joaquin Niemann",
-      "rank": 47,
-      "odds": "270/1"
-    },
+      "rank": 47},
     {
       "id": "golfer-8-48",
       "name": "Taylor Pendrith",
-      "rank": 48,
-      "odds": "280/1"
-    },
+      "rank": 48},
     {
       "id": "golfer-8-49",
       "name": "Wyndham Clark",
-      "rank": 49,
-      "odds": "290/1"
-    },
+      "rank": 49},
     {
       "id": "golfer-8-50",
       "name": "Rickie Fowler",
-      "rank": 50,
-      "odds": "300/1"
-    },
+      "rank": 50},
     {
       "id": "golfer-8-51",
       "name": "Bubba Watson",
-      "rank": 51,
-      "odds": "320/1"
-    },
+      "rank": 51},
     {
       "id": "golfer-8-52",
       "name": "Phil Mickelson",
-      "rank": 52,
-      "odds": "340/1"
-    },
+      "rank": 52},
     {
       "id": "golfer-8-53",
       "name": "Tiger Woods",
-      "rank": 53,
-      "odds": "360/1"
-    },
+      "rank": 53},
     {
       "id": "golfer-8-54",
       "name": "Fred Couples",
-      "rank": 54,
-      "odds": "380/1"
-    },
+      "rank": 54},
     {
       "id": "golfer-8-55",
       "name": "Davis Love III",
-      "rank": 55,
-      "odds": "400/1"
-    },
+      "rank": 55},
     {
       "id": "golfer-8-56",
       "name": "Webb Simpson",
-      "rank": 56,
-      "odds": "420/1"
-    },
+      "rank": 56},
     {
       "id": "golfer-8-57",
       "name": "Kevin Kisner",
-      "rank": 57,
-      "odds": "440/1"
-    },
+      "rank": 57},
     {
       "id": "golfer-8-58",
       "name": "Billy Horschel",
-      "rank": 58,
-      "odds": "460/1"
-    },
+      "rank": 58},
     {
       "id": "golfer-8-59",
       "name": "Stewart Cink",
-      "rank": 59,
-      "odds": "480/1"
-    },
+      "rank": 59},
     {
       "id": "golfer-8-60",
       "name": "Charley Hoffman",
-      "rank": 60,
-      "odds": "500/1"
-    },
+      "rank": 60},
     {
       "id": "golfer-8-61",
       "name": "J.T. Poston",
-      "rank": 61,
-      "odds": "520/1"
-    },
+      "rank": 61},
     {
       "id": "golfer-8-62",
       "name": "Brendon Todd",
-      "rank": 62,
-      "odds": "540/1"
-    },
+      "rank": 62},
     {
       "id": "golfer-8-63",
       "name": "Emiliano Grillo",
-      "rank": 63,
-      "odds": "560/1"
-    },
+      "rank": 63},
     {
       "id": "golfer-8-64",
       "name": "Francesco Molinari",
-      "rank": 64,
-      "odds": "580/1"
-    },
+      "rank": 64},
     {
       "id": "golfer-8-65",
       "name": "Adrian Otaegui",
-      "rank": 65,
-      "odds": "600/1"
-    },
+      "rank": 65},
     {
       "id": "golfer-8-66",
       "name": "Rasmus Hojgaard",
-      "rank": 66,
-      "odds": "620/1"
-    },
+      "rank": 66},
     {
       "id": "golfer-8-67",
       "name": "Thorbjorn Bjorn",
-      "rank": 67,
-      "odds": "640/1"
-    },
+      "rank": 67},
     {
       "id": "golfer-8-68",
       "name": "Henrik Stenson",
-      "rank": 68,
-      "odds": "660/1"
-    },
+      "rank": 68},
     {
       "id": "golfer-8-69",
       "name": "Sergio Garcia",
-      "rank": 69,
-      "odds": "680/1"
-    },
+      "rank": 69},
     {
       "id": "golfer-8-70",
       "name": "Pablo Larrazabal",
-      "rank": 70,
-      "odds": "700/1"
-    },
+      "rank": 70},
     {
       "id": "golfer-8-71",
       "name": "Jorge Campillo",
-      "rank": 71,
-      "odds": "720/1"
-    },
+      "rank": 71},
     {
       "id": "golfer-8-72",
       "name": "Carlos Ortiz",
-      "rank": 72,
-      "odds": "740/1"
-    },
+      "rank": 72},
     {
       "id": "golfer-8-73",
       "name": "Miguel Ancer",
-      "rank": 73,
-      "odds": "760/1"
-    },
+      "rank": 73},
     {
       "id": "golfer-8-74",
       "name": "Eduardo Rodriguez",
-      "rank": 74,
-      "odds": "780/1"
-    },
+      "rank": 74},
     {
       "id": "golfer-8-75",
       "name": "Alejandro Cabrera Bello",
-      "rank": 75,
-      "odds": "800/1"
-    },
+      "rank": 75},
     {
       "id": "golfer-8-76",
       "name": "Rafael Paratore",
-      "rank": 76,
-      "odds": "820/1"
-    },
+      "rank": 76},
     {
       "id": "golfer-8-77",
       "name": "Jose Schwartzel",
-      "rank": 77,
-      "odds": "840/1"
-    },
+      "rank": 77},
     {
       "id": "golfer-8-78",
       "name": "Lucas Grace",
-      "rank": 78,
-      "odds": "860/1"
-    },
+      "rank": 78},
     {
       "id": "golfer-8-79",
       "name": "Matthias Frittelli",
-      "rank": 79,
-      "odds": "880/1"
-    },
+      "rank": 79},
     {
       "id": "golfer-8-80",
       "name": "Martin Higgo",
-      "rank": 80,
-      "odds": "900/1"
-    },
+      "rank": 80},
     {
       "id": "golfer-8-81",
       "name": "Thomas Pieters",
-      "rank": 81,
-      "odds": "920/1"
-    },
+      "rank": 81},
     {
       "id": "golfer-8-82",
       "name": "Christiaan Willett",
-      "rank": 82,
-      "odds": "940/1"
-    },
+      "rank": 82},
     {
       "id": "golfer-8-83",
       "name": "Dean Casey",
-      "rank": 83,
-      "odds": "960/1"
-    },
+      "rank": 83},
     {
       "id": "golfer-8-84",
       "name": "Branden Westwood",
-      "rank": 84,
-      "odds": "980/1"
-    },
+      "rank": 84},
     {
       "id": "golfer-8-85",
       "name": "Charl Poulter",
-      "rank": 85,
-      "odds": "1000/1"
-    },
+      "rank": 85},
     {
       "id": "golfer-8-86",
       "name": "Ernie Rose",
-      "rank": 86,
-      "odds": "1020/1"
-    },
+      "rank": 86},
     {
       "id": "golfer-8-87",
       "name": "Retief Fitzpatrick",
-      "rank": 87,
-      "odds": "1040/1"
-    },
+      "rank": 87},
     {
       "id": "golfer-8-88",
       "name": "Louis Wallace",
-      "rank": 88,
-      "odds": "1060/1"
-    },
+      "rank": 88},
     {
       "id": "golfer-8-89",
       "name": "Dylan Fox",
-      "rank": 89,
-      "odds": "1080/1"
-    },
+      "rank": 89},
     {
       "id": "golfer-8-90",
       "name": "Garrick Power",
-      "rank": 90,
-      "odds": "1100/1"
-    },
+      "rank": 90},
     {
       "id": "golfer-8-91",
       "name": "Cameron Young",
-      "rank": 91,
-      "odds": "1120/1"
-    },
+      "rank": 91},
     {
       "id": "golfer-8-92",
       "name": "Ryan Palmer",
-      "rank": 92,
-      "odds": "1140/1"
-    },
+      "rank": 92},
     {
       "id": "golfer-8-93",
       "name": "Brendan Steele",
-      "rank": 93,
-      "odds": "1160/1"
-    },
+      "rank": 93},
     {
       "id": "golfer-8-94",
       "name": "Lucas Glover",
-      "rank": 94,
-      "odds": "1180/1"
-    },
+      "rank": 94},
     {
       "id": "golfer-8-95",
       "name": "Maverick List",
-      "rank": 95,
-      "odds": "1200/1"
-    },
+      "rank": 95},
     {
       "id": "golfer-8-96",
       "name": "Pierceson Hughes",
-      "rank": 96,
-      "odds": "1220/1"
-    },
+      "rank": 96},
     {
       "id": "golfer-8-97",
       "name": "Gordon Conners",
-      "rank": 97,
-      "odds": "1240/1"
-    },
+      "rank": 97},
     {
       "id": "golfer-8-98",
       "name": "Nick Taylor",
-      "rank": 98,
-      "odds": "1260/1"
-    },
+      "rank": 98},
     {
       "id": "golfer-8-99",
       "name": "Luke Donald",
-      "rank": 99,
-      "odds": "1280/1"
-    },
+      "rank": 99},
     {
       "id": "golfer-8-100",
       "name": "David Lingmerth",
-      "rank": 100,
-      "odds": "1300/1"
-    },
+      "rank": 100},
     {
       "id": "golfer-8-101",
       "name": "Matt Kuchar",
-      "rank": 101,
-      "odds": "1320/1"
-    },
+      "rank": 101},
     {
       "id": "golfer-8-102",
       "name": "Zach Johnson",
-      "rank": 102,
-      "odds": "1340/1"
-    },
+      "rank": 102},
     {
       "id": "golfer-8-103",
       "name": "Jim Furyk",
-      "rank": 103,
-      "odds": "1360/1"
-    },
+      "rank": 103},
     {
       "id": "golfer-8-104",
       "name": "Steve Stricker",
-      "rank": 104,
-      "odds": "1380/1"
-    },
+      "rank": 104},
     {
       "id": "golfer-8-105",
       "name": "Stewart Cink",
-      "rank": 105,
-      "odds": "1400/1"
-    }
+      "rank": 105}
   ],
   "9": [
     {
       "id": "golfer-9-1",
       "name": "Scottie Scheffler",
-      "rank": 1,
-      "odds": "4/1"
-    },
+      "rank": 1},
     {
       "id": "golfer-9-2",
       "name": "Rory McIlroy",
-      "rank": 2,
-      "odds": "5/1"
-    },
+      "rank": 2},
     {
       "id": "golfer-9-3",
       "name": "Jon Rahm",
-      "rank": 3,
-      "odds": "6/1"
-    },
+      "rank": 3},
     {
       "id": "golfer-9-4",
       "name": "Brooks Koepka",
-      "rank": 4,
-      "odds": "7/1"
-    },
+      "rank": 4},
     {
       "id": "golfer-9-5",
       "name": "Jordan Spieth",
-      "rank": 5,
-      "odds": "8/1"
-    },
+      "rank": 5},
     {
       "id": "golfer-9-6",
       "name": "Justin Thomas",
-      "rank": 6,
-      "odds": "12/1"
-    },
+      "rank": 6},
     {
       "id": "golfer-9-7",
       "name": "Dustin Johnson",
-      "rank": 7,
-      "odds": "14/1"
-    },
+      "rank": 7},
     {
       "id": "golfer-9-8",
       "name": "Patrick Cantlay",
-      "rank": 8,
-      "odds": "16/1"
-    },
+      "rank": 8},
     {
       "id": "golfer-9-9",
       "name": "Xander Schauffele",
-      "rank": 9,
-      "odds": "18/1"
-    },
+      "rank": 9},
     {
       "id": "golfer-9-10",
       "name": "Collin Morikawa",
-      "rank": 10,
-      "odds": "20/1"
-    },
+      "rank": 10},
     {
       "id": "golfer-9-11",
       "name": "Viktor Hovland",
-      "rank": 11,
-      "odds": "23/1"
-    },
+      "rank": 11},
     {
       "id": "golfer-9-12",
       "name": "Matt Fitzpatrick",
-      "rank": 12,
-      "odds": "26/1"
-    },
+      "rank": 12},
     {
       "id": "golfer-9-13",
       "name": "Tommy Fleetwood",
-      "rank": 13,
-      "odds": "29/1"
-    },
+      "rank": 13},
     {
       "id": "golfer-9-14",
       "name": "Tyrrell Hatton",
-      "rank": 14,
-      "odds": "32/1"
-    },
+      "rank": 14},
     {
       "id": "golfer-9-15",
       "name": "Shane Lowry",
-      "rank": 15,
-      "odds": "35/1"
-    },
+      "rank": 15},
     {
       "id": "golfer-9-16",
       "name": "Cameron Smith",
-      "rank": 16,
-      "odds": "38/1"
-    },
+      "rank": 16},
     {
       "id": "golfer-9-17",
       "name": "Sam Burns",
-      "rank": 17,
-      "odds": "41/1"
-    },
+      "rank": 17},
     {
       "id": "golfer-9-18",
       "name": "Max Homa",
-      "rank": 18,
-      "odds": "44/1"
-    },
+      "rank": 18},
     {
       "id": "golfer-9-19",
       "name": "Tony Finau",
-      "rank": 19,
-      "odds": "47/1"
-    },
+      "rank": 19},
     {
       "id": "golfer-9-20",
       "name": "Sungjae Im",
-      "rank": 20,
-      "odds": "50/1"
-    },
+      "rank": 20},
     {
       "id": "golfer-9-21",
       "name": "Hideki Matsuyama",
-      "rank": 21,
-      "odds": "55/1"
-    },
+      "rank": 21},
     {
       "id": "golfer-9-22",
       "name": "Jason Day",
-      "rank": 22,
-      "odds": "60/1"
-    },
+      "rank": 22},
     {
       "id": "golfer-9-23",
       "name": "Adam Scott",
-      "rank": 23,
-      "odds": "65/1"
-    },
+      "rank": 23},
     {
       "id": "golfer-9-24",
       "name": "Marc Leishman",
-      "rank": 24,
-      "odds": "70/1"
-    },
+      "rank": 24},
     {
       "id": "golfer-9-25",
       "name": "Louis Oosthuizen",
-      "rank": 25,
-      "odds": "75/1"
-    },
+      "rank": 25},
     {
       "id": "golfer-9-26",
       "name": "Bryson DeChambeau",
-      "rank": 26,
-      "odds": "80/1"
-    },
+      "rank": 26},
     {
       "id": "golfer-9-27",
       "name": "Daniel Berger",
-      "rank": 27,
-      "odds": "85/1"
-    },
+      "rank": 27},
     {
       "id": "golfer-9-28",
       "name": "Keegan Bradley",
-      "rank": 28,
-      "odds": "90/1"
-    },
+      "rank": 28},
     {
       "id": "golfer-9-29",
       "name": "Russell Henley",
-      "rank": 29,
-      "odds": "95/1"
-    },
+      "rank": 29},
     {
       "id": "golfer-9-30",
       "name": "Brian Harman",
-      "rank": 30,
-      "odds": "100/1"
-    },
+      "rank": 30},
     {
       "id": "golfer-9-31",
       "name": "Harris English",
-      "rank": 31,
-      "odds": "110/1"
-    },
+      "rank": 31},
     {
       "id": "golfer-9-32",
       "name": "Sepp Straka",
-      "rank": 32,
-      "odds": "120/1"
-    },
+      "rank": 32},
     {
       "id": "golfer-9-33",
       "name": "Ludvig Aberg",
-      "rank": 33,
-      "odds": "130/1"
-    },
+      "rank": 33},
     {
       "id": "golfer-9-34",
       "name": "Nicolai Hojgaard",
-      "rank": 34,
-      "odds": "140/1"
-    },
+      "rank": 34},
     {
       "id": "golfer-9-35",
       "name": "Tom Kim",
-      "rank": 35,
-      "odds": "150/1"
-    },
+      "rank": 35},
     {
       "id": "golfer-9-36",
       "name": "Robert MacIntyre",
-      "rank": 36,
-      "odds": "160/1"
-    },
+      "rank": 36},
     {
       "id": "golfer-9-37",
       "name": "Alex Noren",
-      "rank": 37,
-      "odds": "170/1"
-    },
+      "rank": 37},
     {
       "id": "golfer-9-38",
       "name": "Aaron Wise",
-      "rank": 38,
-      "odds": "180/1"
-    },
+      "rank": 38},
     {
       "id": "golfer-9-39",
       "name": "Sahith Theegala",
-      "rank": 39,
-      "odds": "190/1"
-    },
+      "rank": 39},
     {
       "id": "golfer-9-40",
       "name": "Kurt Kitayama",
-      "rank": 40,
-      "odds": "200/1"
-    },
+      "rank": 40},
     {
       "id": "golfer-9-41",
       "name": "Andrew Novak",
-      "rank": 41,
-      "odds": "210/1"
-    },
+      "rank": 41},
     {
       "id": "golfer-9-42",
       "name": "Michael Kim",
-      "rank": 42,
-      "odds": "220/1"
-    },
+      "rank": 42},
     {
       "id": "golfer-9-43",
       "name": "Ben Griffin",
-      "rank": 43,
-      "odds": "230/1"
-    },
+      "rank": 43},
     {
       "id": "golfer-9-44",
       "name": "Justin Rose",
-      "rank": 44,
-      "odds": "240/1"
-    },
+      "rank": 44},
     {
       "id": "golfer-9-45",
       "name": "Gary Woodland",
-      "rank": 45,
-      "odds": "250/1"
-    },
+      "rank": 45},
     {
       "id": "golfer-9-46",
       "name": "Erik Van Rooyen",
-      "rank": 46,
-      "odds": "260/1"
-    },
+      "rank": 46},
     {
       "id": "golfer-9-47",
       "name": "Joaquin Niemann",
-      "rank": 47,
-      "odds": "270/1"
-    },
+      "rank": 47},
     {
       "id": "golfer-9-48",
       "name": "Taylor Pendrith",
-      "rank": 48,
-      "odds": "280/1"
-    },
+      "rank": 48},
     {
       "id": "golfer-9-49",
       "name": "Wyndham Clark",
-      "rank": 49,
-      "odds": "290/1"
-    },
+      "rank": 49},
     {
       "id": "golfer-9-50",
       "name": "Rickie Fowler",
-      "rank": 50,
-      "odds": "300/1"
-    },
+      "rank": 50},
     {
       "id": "golfer-9-51",
       "name": "Bubba Watson",
-      "rank": 51,
-      "odds": "320/1"
-    },
+      "rank": 51},
     {
       "id": "golfer-9-52",
       "name": "Phil Mickelson",
-      "rank": 52,
-      "odds": "340/1"
-    },
+      "rank": 52},
     {
       "id": "golfer-9-53",
       "name": "Tiger Woods",
-      "rank": 53,
-      "odds": "360/1"
-    },
+      "rank": 53},
     {
       "id": "golfer-9-54",
       "name": "Fred Couples",
-      "rank": 54,
-      "odds": "380/1"
-    },
+      "rank": 54},
     {
       "id": "golfer-9-55",
       "name": "Davis Love III",
-      "rank": 55,
-      "odds": "400/1"
-    },
+      "rank": 55},
     {
       "id": "golfer-9-56",
       "name": "Webb Simpson",
-      "rank": 56,
-      "odds": "420/1"
-    },
+      "rank": 56},
     {
       "id": "golfer-9-57",
       "name": "Kevin Kisner",
-      "rank": 57,
-      "odds": "440/1"
-    },
+      "rank": 57},
     {
       "id": "golfer-9-58",
       "name": "Billy Horschel",
-      "rank": 58,
-      "odds": "460/1"
-    },
+      "rank": 58},
     {
       "id": "golfer-9-59",
       "name": "Stewart Cink",
-      "rank": 59,
-      "odds": "480/1"
-    },
+      "rank": 59},
     {
       "id": "golfer-9-60",
       "name": "Charley Hoffman",
-      "rank": 60,
-      "odds": "500/1"
-    },
+      "rank": 60},
     {
       "id": "golfer-9-61",
       "name": "J.T. Poston",
-      "rank": 61,
-      "odds": "520/1"
-    },
+      "rank": 61},
     {
       "id": "golfer-9-62",
       "name": "Brendon Todd",
-      "rank": 62,
-      "odds": "540/1"
-    },
+      "rank": 62},
     {
       "id": "golfer-9-63",
       "name": "Emiliano Grillo",
-      "rank": 63,
-      "odds": "560/1"
-    },
+      "rank": 63},
     {
       "id": "golfer-9-64",
       "name": "Francesco Molinari",
-      "rank": 64,
-      "odds": "580/1"
-    },
+      "rank": 64},
     {
       "id": "golfer-9-65",
       "name": "Adrian Otaegui",
-      "rank": 65,
-      "odds": "600/1"
-    },
+      "rank": 65},
     {
       "id": "golfer-9-66",
       "name": "Rasmus Hojgaard",
-      "rank": 66,
-      "odds": "620/1"
-    },
+      "rank": 66},
     {
       "id": "golfer-9-67",
       "name": "Thorbjorn Bjorn",
-      "rank": 67,
-      "odds": "640/1"
-    },
+      "rank": 67},
     {
       "id": "golfer-9-68",
       "name": "Henrik Stenson",
-      "rank": 68,
-      "odds": "660/1"
-    },
+      "rank": 68},
     {
       "id": "golfer-9-69",
       "name": "Sergio Garcia",
-      "rank": 69,
-      "odds": "680/1"
-    },
+      "rank": 69},
     {
       "id": "golfer-9-70",
       "name": "Pablo Larrazabal",
-      "rank": 70,
-      "odds": "700/1"
-    },
+      "rank": 70},
     {
       "id": "golfer-9-71",
       "name": "Jorge Campillo",
-      "rank": 71,
-      "odds": "720/1"
-    },
+      "rank": 71},
     {
       "id": "golfer-9-72",
       "name": "Carlos Ortiz",
-      "rank": 72,
-      "odds": "740/1"
-    },
+      "rank": 72},
     {
       "id": "golfer-9-73",
       "name": "Miguel Ancer",
-      "rank": 73,
-      "odds": "760/1"
-    },
+      "rank": 73},
     {
       "id": "golfer-9-74",
       "name": "Eduardo Rodriguez",
-      "rank": 74,
-      "odds": "780/1"
-    },
+      "rank": 74},
     {
       "id": "golfer-9-75",
       "name": "Alejandro Cabrera Bello",
-      "rank": 75,
-      "odds": "800/1"
-    },
+      "rank": 75},
     {
       "id": "golfer-9-76",
       "name": "Rafael Paratore",
-      "rank": 76,
-      "odds": "820/1"
-    },
+      "rank": 76},
     {
       "id": "golfer-9-77",
       "name": "Jose Schwartzel",
-      "rank": 77,
-      "odds": "840/1"
-    },
+      "rank": 77},
     {
       "id": "golfer-9-78",
       "name": "Lucas Grace",
-      "rank": 78,
-      "odds": "860/1"
-    },
+      "rank": 78},
     {
       "id": "golfer-9-79",
       "name": "Matthias Frittelli",
-      "rank": 79,
-      "odds": "880/1"
-    },
+      "rank": 79},
     {
       "id": "golfer-9-80",
       "name": "Martin Higgo",
-      "rank": 80,
-      "odds": "900/1"
-    },
+      "rank": 80},
     {
       "id": "golfer-9-81",
       "name": "Thomas Pieters",
-      "rank": 81,
-      "odds": "920/1"
-    },
+      "rank": 81},
     {
       "id": "golfer-9-82",
       "name": "Christiaan Willett",
-      "rank": 82,
-      "odds": "940/1"
-    },
+      "rank": 82},
     {
       "id": "golfer-9-83",
       "name": "Dean Casey",
-      "rank": 83,
-      "odds": "960/1"
-    },
+      "rank": 83},
     {
       "id": "golfer-9-84",
       "name": "Branden Westwood",
-      "rank": 84,
-      "odds": "980/1"
-    },
+      "rank": 84},
     {
       "id": "golfer-9-85",
       "name": "Charl Poulter",
-      "rank": 85,
-      "odds": "1000/1"
-    },
+      "rank": 85},
     {
       "id": "golfer-9-86",
       "name": "Ernie Rose",
-      "rank": 86,
-      "odds": "1020/1"
-    },
+      "rank": 86},
     {
       "id": "golfer-9-87",
       "name": "Retief Fitzpatrick",
-      "rank": 87,
-      "odds": "1040/1"
-    },
+      "rank": 87},
     {
       "id": "golfer-9-88",
       "name": "Louis Wallace",
-      "rank": 88,
-      "odds": "1060/1"
-    },
+      "rank": 88},
     {
       "id": "golfer-9-89",
       "name": "Dylan Fox",
-      "rank": 89,
-      "odds": "1080/1"
-    },
+      "rank": 89},
     {
       "id": "golfer-9-90",
       "name": "Garrick Power",
-      "rank": 90,
-      "odds": "1100/1"
-    },
+      "rank": 90},
     {
       "id": "golfer-9-91",
       "name": "Cameron Young",
-      "rank": 91,
-      "odds": "1120/1"
-    },
+      "rank": 91},
     {
       "id": "golfer-9-92",
       "name": "Ryan Palmer",
-      "rank": 92,
-      "odds": "1140/1"
-    },
+      "rank": 92},
     {
       "id": "golfer-9-93",
       "name": "Brendan Steele",
-      "rank": 93,
-      "odds": "1160/1"
-    },
+      "rank": 93},
     {
       "id": "golfer-9-94",
       "name": "Lucas Glover",
-      "rank": 94,
-      "odds": "1180/1"
-    },
+      "rank": 94},
     {
       "id": "golfer-9-95",
       "name": "Maverick List",
-      "rank": 95,
-      "odds": "1200/1"
-    },
+      "rank": 95},
     {
       "id": "golfer-9-96",
       "name": "Pierceson Hughes",
-      "rank": 96,
-      "odds": "1220/1"
-    },
+      "rank": 96},
     {
       "id": "golfer-9-97",
       "name": "Gordon Conners",
-      "rank": 97,
-      "odds": "1240/1"
-    },
+      "rank": 97},
     {
       "id": "golfer-9-98",
       "name": "Nick Taylor",
-      "rank": 98,
-      "odds": "1260/1"
-    },
+      "rank": 98},
     {
       "id": "golfer-9-99",
       "name": "Luke Donald",
-      "rank": 99,
-      "odds": "1280/1"
-    },
+      "rank": 99},
     {
       "id": "golfer-9-100",
       "name": "David Lingmerth",
-      "rank": 100,
-      "odds": "1300/1"
-    },
+      "rank": 100},
     {
       "id": "golfer-9-101",
       "name": "Matt Kuchar",
-      "rank": 101,
-      "odds": "1320/1"
-    },
+      "rank": 101},
     {
       "id": "golfer-9-102",
       "name": "Zach Johnson",
-      "rank": 102,
-      "odds": "1340/1"
-    },
+      "rank": 102},
     {
       "id": "golfer-9-103",
       "name": "Jim Furyk",
-      "rank": 103,
-      "odds": "1360/1"
-    },
+      "rank": 103},
     {
       "id": "golfer-9-104",
       "name": "Steve Stricker",
-      "rank": 104,
-      "odds": "1380/1"
-    },
+      "rank": 104},
     {
       "id": "golfer-9-105",
       "name": "Stewart Cink",
-      "rank": 105,
-      "odds": "1400/1"
-    }
+      "rank": 105}
   ]
 }

@@ -7,7 +7,6 @@ import { getRowClass } from '@/lib/utils';
 interface GolferRowProps {
   golfer: Golfer;
   rank: number;
-  odds: string;
   draftStatus: DraftStatus;
   onSelect: () => void;
   index: number;
@@ -16,7 +15,6 @@ interface GolferRowProps {
 export default function GolferRow({
   golfer,
   rank,
-  odds,
   draftStatus,
   onSelect,
   index,
@@ -58,24 +56,6 @@ export default function GolferRow({
           }}
         >
           {rank}
-        </p>
-      </DraftTableCell>
-
-      {/* Odds Column */}
-      <DraftTableCell type="data" rowType={rowType}>
-        <p
-          style={{
-            fontFamily: "var(--font-noto-sans), sans-serif",
-            fontWeight: 700,
-            fontSize: '16px',
-            lineHeight: 'normal',
-            position: 'relative',
-            flexShrink: 0,
-            textAlign: 'center',
-            color: '#ffffff',
-          }}
-        >
-          {odds}
         </p>
       </DraftTableCell>
 

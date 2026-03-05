@@ -89,7 +89,7 @@ Each tournament includes:
 
 ### Golfers Data
 - All tournaments have golfer lists generated (100 golfers per tournament)
-- Golfers include: id, name, rank, odds
+- Golfers include: id, name, rank
 
 ## Helper Functions
 

@@ -2,7 +2,6 @@ export interface Golfer {
   id: string;
   name: string;
   rank: number;
-  odds: string; // "3 / 1"
   imageUrl?: string;
 }
 
@@ -49,7 +48,7 @@ export interface DraftEvent {
 export type ViewMode = 'tournament' | 'season' | 'admin';
 export type TableViewMode = 'list' | 'table';
 export type SortDirection = 'asc' | 'desc' | null;
-export type SortColumn = 'rank' | 'odds' | null;
+export type SortColumn = 'rank' | null;
 
 // Tournament result types
 export interface RoundScore {

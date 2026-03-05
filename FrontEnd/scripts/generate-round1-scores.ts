@@ -52,7 +52,6 @@ interface Golfer {
   id: string;
   name: string;
   rank: number;
-  odds: string;
 }
 
 // Generate random round 1 score based on golfer rank

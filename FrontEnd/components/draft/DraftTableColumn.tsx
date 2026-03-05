@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 interface DraftTableColumnProps {
-  type: 'golfer' | 'rank' | 'odds' | 'draft';
+  type: 'golfer' | 'rank' | 'draft';
   children: ReactNode;
   className?: string;
   isMobile?: boolean;

@@ -7,7 +7,6 @@ import DraftTableColumn from './DraftTableColumn';
 import DraftTableCell from './DraftTableCell';
 import DraftTableHeader from './DraftTableHeader';
 import DraftSelectButton from './DraftSelectButton';
-import { parseOdds } from '@/lib/utils';
 import { getPlayers } from '@/lib/data';
 
 interface DraftTableProps {
@@ -29,10 +28,6 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
     const sorted = [...golfers].sort((a, b) => {
       if (sortColumn === 'rank') {
         return sortDirection === 'asc' ? a.rank - b.rank : b.rank - a.rank;
-      } else if (sortColumn === 'odds') {
-        const aOdds = parseOdds(a.odds);
-        const bOdds = parseOdds(b.odds);
-        return sortDirection === 'asc' ? aOdds - bOdds : bOdds - aOdds;
       }
       return 0;
     });
@@ -40,7 +35,7 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
     return sorted;
   }, [golfers, sortColumn, sortDirection]);
 
-  const handleSort = (column: 'rank' | 'odds') => {
+  const handleSort = (column: 'rank') => {
     if (sortColumn === column) {
       // Toggle direction
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
@@ -131,39 +126,6 @@ export default function DraftTable({ golfers, draftState, onSelectGolfer, player
                 }}
               >
                 {golfer.rank}
-              </p>
-            </DraftTableCell>
-          );
-        })}
-      </DraftTableColumn>
-
-      {/* Odds Column */}
-      <DraftTableColumn type="odds" isMobile={isMobile}>
-        <DraftTableCell type="header" isMobile={isMobile}>
-          <DraftTableHeader
-            label="odds"
-            sortable
-            sortDirection={sortColumn === 'odds' ? sortDirection : null}
-            onSort={() => handleSort('odds')}
-          />
-        </DraftTableCell>
-        {sortedGolfers.map((golfer, index) => {
-          const rowType = index % 2 === 0 ? 'standard' : 'alt';
-          return (
-            <DraftTableCell key={golfer.id} type="data" rowType={rowType} isMobile={isMobile}>
-              <p
-                style={{
-                  fontFamily: "var(--font-noto-sans), sans-serif",
-                  fontWeight: 700,
-                  fontSize: isMobile ? '12px' : '16px',
-                  lineHeight: 'normal',
-                  position: 'relative',
-                  flexShrink: 0,
-                  textAlign: 'center',
-                  color: '#ffffff',
-                }}
-              >
-                {golfer.odds}
               </p>
             </DraftTableCell>
           );
