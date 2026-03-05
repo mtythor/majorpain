@@ -30,7 +30,7 @@ export function useApiData() {
         
         updateDataCache('tournaments', tournaments);
         updateDataCache('players', players);
-        updateDataCache('currentUser', players[0]);
+        // currentUser is set by auth-context based on logged-in user
         
         setLoading(false);
       } catch (err) {
@@ -94,7 +94,7 @@ export function useAllTournamentData() {
         
         updateDataCache('tournaments', tournaments);
         updateDataCache('players', players);
-        updateDataCache('currentUser', players[0]);
+        // currentUser is set by auth-context based on logged-in user
         
         // Then load data for all completed tournaments
         const completedTournaments = tournaments.filter(t => t.state === 'completed');

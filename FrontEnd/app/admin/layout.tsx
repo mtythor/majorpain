@@ -7,8 +7,7 @@ import BackgroundImage from '@/components/layout/BackgroundImage';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { getCurrentUser } from '@/lib/data';
 import { useAllTournamentData } from '@/lib/use-api-data';
-
-const ADMIN_PLAYER_ID = '1'; // MtyThor
+import { useAuth } from '@/lib/auth-context';
 
 export default function AdminLayout({
   children,
@@ -17,14 +16,14 @@ export default function AdminLayout({
 }) {
   const router = useRouter();
   const { loading } = useAllTournamentData();
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     if (loading) return;
-    const user = getCurrentUser();
-    if (user.id !== ADMIN_PLAYER_ID) {
+    if (!currentUser?.isAdmin) {
       router.replace('/season');
     }
-  }, [loading, router]);
+  }, [loading, currentUser, router]);
 
   return (
     <ProtectedRoute>

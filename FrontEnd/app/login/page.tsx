@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-import { useRouter } from 'next/navigation';
 import Logo from '@/components/ui/Logo';
 import { useIsMobile } from '@/hooks/useMediaQuery';
 import Stripe from '@/components/ui/Stripe';
@@ -13,21 +12,55 @@ export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const router = useRouter();
+  const [submitting, setSubmitting] = useState(false);
   const { login } = useAuth();
-  useApiData(); // Load tournaments so we can show the landing page's background
+  useApiData();
   const backgroundImage = getLandingBackgroundImage();
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
+    setSubmitting(true);
 
-    // Temporary login: TEST / TEST
-    if (username.trim().toUpperCase() === 'TEST' && password.trim().toUpperCase() === 'TEST') {
-      login();
-      // Redirect will be handled by auth context's login function
-    } else {
-      setError('Invalid username or password. Use TEST / TEST to login.');
+    const normalizedUsername = username.trim().toLowerCase();
+    const trimmedPassword = password.trim();
+
+    if (!normalizedUsername || !trimmedPassword) {
+      setError('Username and password required');
+      setSubmitting(false);
+      return;
+    }
+
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
+      const res = await fetch(`${apiUrl}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: normalizedUsername, password: trimmedPassword }),
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        setError(data.error || 'Invalid username or password');
+        setSubmitting(false);
+        return;
+      }
+
+      login(
+        {
+          playerId: data.playerId,
+          playerName: data.playerName,
+          username: data.username ?? normalizedUsername,
+          isAdmin: data.isAdmin ?? false,
+          isSuperAdmin: data.isSuperAdmin ?? false,
+          forcePasswordChange: data.forcePasswordChange ?? false,
+        },
+        data.token
+      );
+      // Redirect is handled by auth context's login()
+    } catch {
+      setError('Login failed. Please try again.');
+      setSubmitting(false);
     }
   };
 
@@ -42,7 +75,7 @@ export default function LoginPage() {
         fontFamily: "'Open Sans', sans-serif",
       }}
     >
-      {/* Background Image - use img to avoid Next.js Image optimization issues with missing files */}
+      {/* Background Image */}
       <div
         style={{
           position: 'absolute',
@@ -173,6 +206,7 @@ export default function LoginPage() {
             className="login-input"
             placeholder="Username"
             autoComplete="username"
+            disabled={submitting}
             style={{
               backgroundColor: '#141414',
               border: 'none',
@@ -183,7 +217,6 @@ export default function LoginPage() {
               height: '60px',
               lineHeight: 'normal',
               padding: '0 24px',
-              textTransform: 'uppercase',
               width: '100%',
             }}
             onFocus={(e) => {
@@ -199,6 +232,7 @@ export default function LoginPage() {
             className="login-input"
             placeholder="PASSWORD"
             autoComplete="current-password"
+            disabled={submitting}
             style={{
               backgroundColor: '#141414',
               border: 'none',
@@ -215,10 +249,8 @@ export default function LoginPage() {
             onFocus={(e) => {
               e.target.style.outline = 'none';
             }}
-            onKeyPress={(e) => {
-              if (e.key === 'Enter') {
-                handleSubmit(e);
-              }
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleSubmit(e as unknown as FormEvent);
             }}
           />
           {error && (
@@ -229,12 +261,13 @@ export default function LoginPage() {
           <button
             type="submit"
             className="login-button"
+            disabled={submitting}
             style={{
               backgroundColor: '#222',
               border: '1px solid #ffc61c',
               borderRadius: '4px',
               color: '#fdc71c',
-              cursor: 'pointer',
+              cursor: submitting ? 'not-allowed' : 'pointer',
               fontFamily: "'Open Sans', sans-serif",
               fontWeight: 800,
               fontSize: '12px',
@@ -246,19 +279,19 @@ export default function LoginPage() {
               width: '200px',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.opacity = '0.9';
+              if (!submitting) e.currentTarget.style.opacity = '0.9';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.opacity = '1';
             }}
             onMouseDown={(e) => {
-              e.currentTarget.style.transform = 'scale(0.98)';
+              if (!submitting) e.currentTarget.style.transform = 'scale(0.98)';
             }}
             onMouseUp={(e) => {
               e.currentTarget.style.transform = 'scale(1)';
             }}
           >
-            <p style={{ margin: 0 }}>LOG IN</p>
+            <p style={{ margin: 0 }}>{submitting ? 'LOGGING IN...' : 'LOG IN'}</p>
           </button>
         </form>
       </div>

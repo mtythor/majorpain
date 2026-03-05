@@ -4,7 +4,7 @@ import { ViewMode, TableViewMode, Player } from '@/lib/types';
 import NavBar from '../navigation/NavBar';
 import Logo from '../ui/Logo';
 import ViewToggle from '../navigation/ViewToggle';
-import ProfilePicture from '../ui/ProfilePicture';
+import IdentityMenu from '../auth/IdentityMenu';
 import Stripe from '../ui/Stripe';
 import Divider from '../ui/Divider';
 import { useIsMobile } from '@/hooks/useMediaQuery';
@@ -116,11 +116,7 @@ export default function Header({
             }}
           >
             {userProfile && (
-              <ProfilePicture
-                src={userProfile.imageUrl}
-                alt={userProfile.name}
-                size={32}
-              />
+              <IdentityMenu userProfile={userProfile} compact />
             )}
           </div>
         </>
@@ -179,11 +175,7 @@ export default function Header({
                 </>
               )}
               {userProfile && (
-                <ProfilePicture
-                  src={userProfile.imageUrl}
-                  alt={userProfile.name}
-                  size={32}
-                />
+                <IdentityMenu userProfile={userProfile} compact />
               )}
             </div>
           </div>

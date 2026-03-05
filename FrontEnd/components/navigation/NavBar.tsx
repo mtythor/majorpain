@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { ViewMode, Player } from '@/lib/types';
 import NavButton from './NavButton';
 
@@ -10,12 +9,7 @@ interface NavBarProps {
   userProfile?: Player | null;
 }
 
-const ADMIN_PLAYER_ID = '1'; // MtyThor
-
-export default function NavBar({ currentView, onViewChange, userProfile }: NavBarProps) {
-  const router = useRouter();
-  const isAdmin = userProfile?.id === ADMIN_PLAYER_ID;
-
+export default function NavBar({ currentView, onViewChange }: NavBarProps) {
   return (
     <div
       style={{
@@ -40,13 +34,6 @@ export default function NavBar({ currentView, onViewChange, userProfile }: NavBa
         isSelected={currentView === 'season'}
         onClick={() => onViewChange('season')}
       />
-      {isAdmin && (
-        <NavButton
-          label="ADMIN"
-          isSelected={currentView === 'admin'}
-          onClick={() => router.push('/admin')}
-        />
-      )}
     </div>
   );
 }

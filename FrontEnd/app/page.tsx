@@ -6,15 +6,16 @@ import { useAuth, getLandingPath } from '@/lib/auth-context';
 
 export default function Home() {
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
 
   useEffect(() => {
+    if (loading) return;
     if (!isAuthenticated) {
       router.push('/login');
     } else {
       router.push(getLandingPath());
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, loading, router]);
 
   return null;
 }
