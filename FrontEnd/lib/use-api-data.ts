@@ -3,7 +3,7 @@
  * Always fetches from API (backend: Postgres or JSON file when DATABASE_URL not set).
  */
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { updateDataCache } from './data';
 import {
   fetchTournaments,
@@ -45,24 +45,48 @@ export function useApiData() {
   return { loading, error };
 }
 
-export function useTournamentData(tournamentId: string) {
+const DEFAULT_POLL_INTERVAL_MS = 60_000;
+
+export function useTournamentData(
+  tournamentId: string,
+  options?: { pollInterval?: number }
+) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const pollInterval = options?.pollInterval ?? DEFAULT_POLL_INTERVAL_MS;
+
+  const refetch = useRefCallback(async () => {
+    if (!tournamentId) return;
+    try {
+      const [golfers, results] = await Promise.all([
+        fetchGolfers(tournamentId),
+        fetchTournamentResult(tournamentId),
+      ]);
+      updateDataCache(`golfers-${tournamentId}`, golfers);
+      updateDataCache(`results-${tournamentId}`, results);
+      setRefreshTrigger((t) => t + 1); // cause re-render so UI shows fresh data
+    } catch (err) {
+      console.warn('Failed to refresh tournament data:', err);
+    }
+  });
 
   useEffect(() => {
+    if (!tournamentId) return;
+
     async function loadTournamentData() {
       try {
         setLoading(true);
         setError(null);
-        
+
         const [golfers, results] = await Promise.all([
           fetchGolfers(tournamentId),
           fetchTournamentResult(tournamentId),
         ]);
-        
+
         updateDataCache(`golfers-${tournamentId}`, golfers);
         updateDataCache(`results-${tournamentId}`, results);
-        
+
         setLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Failed to load tournament data'));
@@ -73,48 +97,103 @@ export function useTournamentData(tournamentId: string) {
     loadTournamentData();
   }, [tournamentId]);
 
+  // Poll + visibility/focus refresh for live results
+  useEffect(() => {
+    if (!tournamentId || pollInterval <= 0) return;
+
+    const id = setInterval(refetch, pollInterval);
+    const onFocus = () => refetch();
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') refetch();
+    };
+    window.addEventListener('focus', onFocus);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      clearInterval(id);
+      window.removeEventListener('focus', onFocus);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, [tournamentId, pollInterval, refetch]);
+
   return { loading, error };
 }
 
-export function useAllTournamentData() {
+function useRefCallback<T extends (...args: unknown[]) => unknown>(cb: T): T {
+  const ref = useRef(cb);
+  ref.current = cb;
+  return useCallback(
+    ((...args: unknown[]) => ref.current(...args)) as T,
+    []
+  );
+}
+
+export function useAllTournamentData(options?: { pollInterval?: number }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const pollInterval = options?.pollInterval ?? DEFAULT_POLL_INTERVAL_MS;
+
+  const refetch = useRefCallback(async () => {
+    try {
+      const [tournaments, players] = await Promise.all([
+        fetchTournaments(),
+        fetchPlayers(),
+      ]);
+      updateDataCache('tournaments', tournaments);
+      updateDataCache('players', players);
+
+      const completedTournaments = tournaments.filter((t) => t.state === 'completed');
+      await Promise.all(
+        completedTournaments.map(async (tournament) => {
+          try {
+            const [golfers, results] = await Promise.all([
+              fetchGolfers(tournament.id),
+              fetchTournamentResult(tournament.id),
+            ]);
+            updateDataCache(`golfers-${tournament.id}`, golfers);
+            updateDataCache(`results-${tournament.id}`, results);
+          } catch (err) {
+            console.warn(`Failed to load data for tournament ${tournament.id}:`, err);
+          }
+        })
+      );
+      setRefreshTrigger((t) => t + 1);
+    } catch (err) {
+      console.warn('Failed to refresh season data:', err);
+    }
+  });
 
   useEffect(() => {
     async function loadAllTournamentData() {
       try {
         setLoading(true);
         setError(null);
-        
-        // First load tournaments and players
+
         const [tournaments, players] = await Promise.all([
           fetchTournaments(),
           fetchPlayers(),
         ]);
-        
+
         updateDataCache('tournaments', tournaments);
         updateDataCache('players', players);
-        // currentUser is set by auth-context based on logged-in user
-        
-        // Then load data for all completed tournaments
-        const completedTournaments = tournaments.filter(t => t.state === 'completed');
+
+        const completedTournaments = tournaments.filter((t) => t.state === 'completed');
         const tournamentDataPromises = completedTournaments.map(async (tournament) => {
           try {
             const [golfers, results] = await Promise.all([
               fetchGolfers(tournament.id),
               fetchTournamentResult(tournament.id),
             ]);
-            
+
             updateDataCache(`golfers-${tournament.id}`, golfers);
             updateDataCache(`results-${tournament.id}`, results);
           } catch (err) {
-            // If a tournament fails to load, continue with others
             console.warn(`Failed to load data for tournament ${tournament.id}:`, err);
           }
         });
-        
+
         await Promise.all(tournamentDataPromises);
-        
+
         setLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Failed to load tournament data'));
@@ -124,6 +203,24 @@ export function useAllTournamentData() {
 
     loadAllTournamentData();
   }, []);
+
+  // Poll + visibility/focus refresh for live season standings
+  useEffect(() => {
+    if (pollInterval <= 0) return;
+
+    const id = setInterval(refetch, pollInterval);
+    const onFocus = () => refetch();
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') refetch();
+    };
+    window.addEventListener('focus', onFocus);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      clearInterval(id);
+      window.removeEventListener('focus', onFocus);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, [pollInterval, refetch]);
 
   return { loading, error };
 }

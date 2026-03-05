@@ -13,6 +13,18 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
 /** Drafts always go to the backend (Postgres or file storage). */
 export const USE_DRAFT_API = true;
 
+/** Base URL for SSE (EventSource needs absolute URL when API is cross-origin). */
+export function getApiBaseUrl(): string {
+  if (typeof window === 'undefined') return API_URL;
+  if (API_URL.startsWith('http')) return API_URL.replace(/\/$/, '');
+  return `${window.location.origin}${API_URL.startsWith('/') ? '' : '/'}${API_URL}`;
+}
+
+/** SSE stream URL for draft updates. */
+export function getDraftStreamUrl(tournamentId: string): string {
+  return `${getApiBaseUrl()}/tournaments/${tournamentId}/draft/stream`;
+}
+
 function getWriteSecret(): string {
   return (process.env.NEXT_PUBLIC_MAJOR_PAIN_WRITE_SECRET || '').trim();
 }

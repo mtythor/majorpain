@@ -34,6 +34,7 @@ import {
   fetchDraftState,
   saveDraftStateToApi,
   saveCompletedDraftToApi,
+  getDraftStreamUrl,
   USE_DRAFT_API,
 } from '@/lib/api-client';
 import { useApiData, useTournamentData } from '@/lib/use-api-data';
@@ -106,6 +107,7 @@ export default function DraftPage() {
   const [completingDraftError, setCompletingDraftError] = useState<string | null>(null);
   const pendingCompletionRef = useRef<{ teamDrafts: import('@/lib/types').TeamDraft[]; fatRandoStolenGolfers: string[] } | null>(null);
   const lastKnownUpdatedAtRef = useRef<string | null>(null);
+  const lastSaveCompletedAtRef = useRef<number>(0);
   const saveInProgressRef = useRef(false);
   const skipSaveFromPollRef = useRef(false);
   const lastLoadAtRef = useRef<number>(0);
@@ -410,11 +412,15 @@ export default function DraftPage() {
     return () => { cancelled = true; };
   }, [USE_DRAFT_API, selectedTournament?.id, tournamentState, golfers.length, players.length, router]);
 
-  // Poll draft state when USE_DRAFT_API and draft in progress
+  // SSE or polling: keep draft state in sync when another player makes a pick
   useEffect(() => {
     if (!USE_DRAFT_API || !selectedTournament || tournamentState !== 'draft' || !internalDraftState) return;
-    const poll = async () => {
+
+    const fetchAndApply = async () => {
       if (saveInProgressRef.current || skipSaveFromPollRef.current) return;
+      // Brocation: skip apply when <1s since our save or since load (avoid race)
+      if (Date.now() - lastSaveCompletedAtRef.current < 1000) return;
+      if (Date.now() - lastLoadAtRef.current < 1000) return;
       try {
         const res = await fetchDraftState(selectedTournament.id);
         if (!res) return;
@@ -435,15 +441,50 @@ export default function DraftPage() {
         // ignore
       }
     };
-    const id1 = window.setTimeout(poll, 1500);
-    const id2 = window.setInterval(poll, 2000);
-    const onFocus = () => poll();
-    const onVisibility = () => { if (document.visibilityState === 'visible') poll(); };
+
+    let pollIntervalId: number | null = null;
+
+    const startPolling = () => {
+      if (pollIntervalId) return;
+      pollIntervalId = window.setInterval(fetchAndApply, 2000) as unknown as number;
+      window.setTimeout(fetchAndApply, 1500);
+    };
+
+    const onFocus = () => fetchAndApply();
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') fetchAndApply();
+    };
     window.addEventListener('focus', onFocus);
     document.addEventListener('visibilitychange', onVisibility);
+
+    // Try SSE first; fall back to polling on error
+    let eventSource: EventSource | null = null;
+    try {
+      eventSource = new EventSource(getDraftStreamUrl(selectedTournament.id));
+      eventSource.onopen = () => fetchAndApply(); // sync on connect in case we missed an update
+      eventSource.onmessage = (e) => {
+        try {
+          const data = JSON.parse(e.data || '{}');
+          if (data.type === 'update') fetchAndApply();
+        } catch {
+          fetchAndApply();
+        }
+      };
+      eventSource.onerror = () => {
+        eventSource?.close();
+        eventSource = null;
+        startPolling();
+      };
+    } catch {
+      startPolling();
+    }
+
+    // If SSE failed to connect, we might have started polling in onerror. Otherwise start poll as backup after a delay.
+    if (!eventSource) startPolling();
+
     return () => {
-      clearTimeout(id1);
-      clearInterval(id2);
+      eventSource?.close();
+      if (pollIntervalId !== null) clearInterval(pollIntervalId);
       window.removeEventListener('focus', onFocus);
       document.removeEventListener('visibilitychange', onVisibility);
     };
@@ -653,6 +694,7 @@ export default function DraftPage() {
           try {
             await saveDraftStateToApi(selectedTournament.id, updatedState);
             await saveCompletedDraftToApi(selectedTournament.id, teamDrafts, updatedState.fatRandoStolenGolfers);
+            lastSaveCompletedAtRef.current = Date.now();
             pendingCompletionRef.current = null;
             router.push(`/tournament/${selectedTournament.id}/list`);
           } catch (e) {
@@ -669,6 +711,7 @@ export default function DraftPage() {
         saveDraftStateToApi(selectedTournament.id, updatedState)
           .then((res) => {
             lastKnownUpdatedAtRef.current = res.updatedAt ?? null;
+            lastSaveCompletedAtRef.current = Date.now();
             skipSaveFromPollRef.current = false;
           })
           .catch((e) => console.error('Failed to save draft state:', e))

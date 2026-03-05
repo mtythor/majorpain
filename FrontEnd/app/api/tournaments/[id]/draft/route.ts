@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getData, saveData } from '@/lib/api-db';
 import { calculateTeamScoresFromDrafts } from '@/lib/dummyData';
+import { emitDraftUpdate } from '@/lib/draft-events';
 import type { Tournament, TournamentResult } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
@@ -132,6 +133,8 @@ export async function POST(
     };
 
     const newUpdatedAt = await saveData(newData);
+    emitDraftUpdate(tournamentId);
+
     const response = NextResponse.json({ ok: true, updatedAt: newUpdatedAt.toISOString() });
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
     return response;
