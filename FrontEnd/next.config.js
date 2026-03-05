@@ -1,3 +1,8 @@
+const withPWA = require("@ducanh2912/next-pwa").default({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -9,6 +14,6 @@ const nextConfig = {
   generateEtags: true,
   // Power the app with the React compiler (Next.js 14+)
   reactStrictMode: true,
-}
+};
 
-module.exports = nextConfig
+module.exports = withPWA(nextConfig);

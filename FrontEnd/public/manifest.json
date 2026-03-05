@@ -1,0 +1,23 @@
+{
+  "name": "Major Pain Fantasy Golf",
+  "short_name": "Major Pain",
+  "description": "Major Pain Fantasy Golf - Draft and manage your fantasy golf team",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0f0f",
+  "theme_color": "#fdc71c",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

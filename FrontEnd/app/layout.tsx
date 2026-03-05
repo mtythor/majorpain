@@ -10,6 +10,7 @@ import MobileLayoutWrapper from "@/components/layout/MobileLayoutWrapper";
 export const metadata: Metadata = {
   title: "Major Pain Fantasy Golf",
   description: "Major Pain Fantasy Golf - Draft and manage your fantasy golf team",
+  manifest: "/manifest.json",
 };
 
 export const viewport: Viewport = {
