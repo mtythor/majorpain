@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect } from 'react';
@@ -17,6 +18,20 @@ import { useApiData, useTournamentData } from '@/lib/use-api-data';
 import { getTournamentState, shouldShowPreDraftBanner } from '@/lib/tournament-view';
 
 export default function TournamentResultsPage({ params }: { params: { id: string } }) {
+  return (
+    <Suspense fallback={
+      <ProtectedRoute>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', color: '#fff' }}>
+          Loading...
+        </div>
+      </ProtectedRoute>
+    }>
+      <TournamentResultsPageContent params={params} />
+    </Suspense>
+  );
+}
+
+function TournamentResultsPageContent({ params }: { params: { id: string } }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const backToView = (searchParams.get('view') === 'list' ? 'list' : 'table') as 'list' | 'table';

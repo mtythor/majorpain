@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { openSans, notoSans } from "@/lib/fonts";
@@ -31,7 +32,9 @@ export default function RootLayout({
             <div className="mobile-layout-main">
               {children}
             </div>
-            <MobileFooterNav />
+            <Suspense fallback={null}>
+              <MobileFooterNav />
+            </Suspense>
           </AuthProvider>
         </MobileLayoutWrapper>
       </body>

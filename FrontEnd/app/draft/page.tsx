@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { Suspense, useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Header from '@/components/layout/Header';
 import BackgroundImage from '@/components/layout/BackgroundImage';
@@ -65,7 +65,23 @@ function getPlayerImageUrl(playerId: string, players: Player[]): string {
   return player?.imageUrl || '';
 }
 
+function DraftPageSkeleton() {
+  return (
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+      Loading...
+    </div>
+  );
+}
+
 export default function DraftPage() {
+  return (
+    <Suspense fallback={<DraftPageSkeleton />}>
+      <DraftPageContent />
+    </Suspense>
+  );
+}
+
+function DraftPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tournamentIdFromUrl = searchParams.get('tournament');
