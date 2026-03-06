@@ -104,6 +104,7 @@ The server script pulls, builds, and restarts. This is slower than CI (~2–5 mi
 - The write secret must match between client build and server runtime.
 - **CI deploy:** Ensure `MAJOR_PAIN_WRITE_SECRET` is set in GitHub Actions secrets and matches the server `.env`. The workflow bakes it into the client at build time.
 - **Manual deploy:** The server build needs both `MAJOR_PAIN_WRITE_SECRET` and `NEXT_PUBLIC_MAJOR_PAIN_WRITE_SECRET` in `FrontEnd/.env` (same value).
+- **`#` in secret:** In `.env` files, `#` starts a comment and truncates the value. If your secret contains `#`, wrap it in double quotes: `MAJOR_PAIN_WRITE_SECRET="yourkey#here"`.
 - After fixing: run a fresh deploy; client bundles are built at deploy time.
 
 ---
