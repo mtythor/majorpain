@@ -21,6 +21,13 @@ jobs:
           cache: "npm"
           cache-dependency-path: FrontEnd/package-lock.json
 
+      - name: Restore Next.js cache
+        uses: actions/cache@v4
+        with:
+          path: FrontEnd/.next/cache
+          key: nextjs-${{ runner.os }}-${{ hashFiles('FrontEnd/package-lock.json') }}
+          restore-keys: nextjs-${{ runner.os }}-
+
       - name: Install dependencies
         working-directory: FrontEnd
         run: npm ci
@@ -29,11 +36,21 @@ jobs:
         working-directory: FrontEnd
         run: npm run build
 
+      - name: Save Next.js cache
+        uses: actions/cache@v4
+        with:
+          path: FrontEnd/.next/cache
+          key: nextjs-${{ runner.os }}-${{ hashFiles('FrontEnd/package-lock.json') }}
+
       - name: Deploy to server
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
+          if [ -z "$DEPLOY_HOST" ] || [ -z "$SSH_PRIVATE_KEY" ]; then
+            echo "::error::DEPLOY_HOST and SSH_PRIVATE_KEY secrets must be set"
+            exit 1
+          fi
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
@@ -41,11 +58,14 @@ jobs:
 
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new" \
+            --filter 'P .env' \
+            --filter 'P .env.local' \
             --exclude 'node_modules' \
             --exclude '.git' \
             --exclude '.env' \
             --exclude '.env.local' \
             --exclude '.env.*' \
+            --exclude 'FrontEnd/.next/cache' \
             ./ "root@$DEPLOY_HOST:~/majorpain/"
 
           ssh -i ~/.ssh/deploy_key "root@$DEPLOY_HOST" "cd ~/majorpain/FrontEnd && npm ci && pm2 restart major-pain"
