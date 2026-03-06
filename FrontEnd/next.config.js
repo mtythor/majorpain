@@ -26,6 +26,23 @@ const nextConfig = {
   generateEtags: true,
   // Power the app with the React compiler (Next.js 14+)
   reactStrictMode: true,
+  // Prevent caching of PWA assets so icon/manifest updates are picked up promptly
+  async headers() {
+    return [
+      {
+        source: "/sw.js",
+        headers: [{ key: "Cache-Control", value: "no-store, max-age=0" }],
+      },
+      {
+        source: "/workbox-:path",
+        headers: [{ key: "Cache-Control", value: "no-store, max-age=0" }],
+      },
+      {
+        source: "/icons/:path*",
+        headers: [{ key: "Cache-Control", value: "no-store, max-age=0" }],
+      },
+    ];
+  },
 };
 
 module.exports = withPWA(nextConfig);

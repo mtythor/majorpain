@@ -11,7 +11,7 @@ import ViewportHeightProvider from "@/components/layout/ViewportHeightProvider";
 export const metadata: Metadata = {
   title: "Major Pain Fantasy Golf",
   description: "Major Pain Fantasy Golf - Draft and manage your fantasy golf team",
-  manifest: "/manifest.json",
+  manifest: "/api/manifest",
 };
 
 export const viewport: Viewport = {
