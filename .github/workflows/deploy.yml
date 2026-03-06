@@ -6,6 +6,10 @@ on:
         description: "Branch to deploy"
         required: true
         default: "master"
+        type: choice
+        options:
+          - master
+          - refactor/frontend-tokens
 jobs:
   deploy:
     runs-on: ubuntu-latest
