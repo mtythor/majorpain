@@ -60,7 +60,6 @@ jobs:
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new" \
             --filter 'P .env' \
             --filter 'P .env.local' \
-            --exclude 'node_modules' \
             --exclude '.git' \
             --exclude '.env' \
             --exclude '.env.local' \
@@ -68,5 +67,5 @@ jobs:
             --exclude 'FrontEnd/.next/cache' \
             ./ "root@$DEPLOY_HOST:~/majorpain/"
 
-          ssh -i ~/.ssh/deploy_key "root@$DEPLOY_HOST" "cd ~/majorpain/FrontEnd && npm ci && pm2 restart major-pain"
+          ssh -i ~/.ssh/deploy_key "root@$DEPLOY_HOST" "cd ~/majorpain/FrontEnd && pm2 restart major-pain"
           echo "Deploy complete"
