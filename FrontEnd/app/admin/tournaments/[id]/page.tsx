@@ -28,8 +28,11 @@ function getWriteSecret(): string {
 }
 
 function getWriteSecretError(res: Response, json: { error?: string }, defaultMsg: string): string {
-  if (res.status === 401 && !getWriteSecret()) {
-    return 'Write secret not in build. Redeploy from GitHub Actions (set MAJOR_PAIN_WRITE_SECRET), or for manual deploy add NEXT_PUBLIC_MAJOR_PAIN_WRITE_SECRET to server .env';
+  if (res.status === 401) {
+    if (!getWriteSecret()) {
+      return 'Write secret not in build. Redeploy from GitHub Actions (set MAJOR_PAIN_WRITE_SECRET), or for manual deploy add NEXT_PUBLIC_MAJOR_PAIN_WRITE_SECRET to server .env';
+    }
+    return 'Unauthorized: write secret does not match. Ensure MAJOR_PAIN_WRITE_SECRET in GitHub Actions exactly matches server .env (no extra spaces/newlines).';
   }
   return json.error || defaultMsg;
 }

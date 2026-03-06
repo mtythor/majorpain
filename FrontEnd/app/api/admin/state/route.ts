@@ -37,8 +37,10 @@ export async function PATCH(request: Request) {
   }
 
   const secret = (process.env.MAJOR_PAIN_WRITE_SECRET || '').trim();
+  console.log('[admin/state PATCH] secret length:', secret.length, 'required:', !!secret);
   if (secret) {
     const provided = getSecretFromRequest(request, body);
+    console.log('[admin/state PATCH] provided length:', provided.length, 'match:', provided === secret);
     if (provided !== secret) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
