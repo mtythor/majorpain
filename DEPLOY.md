@@ -18,7 +18,7 @@ git push origin master
 
 ### 2. Deploy when ready
 
-Go to **GitHub → Actions → Deploy to production** → **Run workflow**. Choose the branch (default: `master`) and click **Run workflow**.
+Go to **GitHub → Actions → Deploy to production** → **Run workflow**.
 
 No auto-deploy on push—you decide when to deploy.
 

@@ -1,22 +1,13 @@
 name: Deploy to production
 on:
   workflow_dispatch:
-    inputs:
-      branch:
-        description: "Branch to deploy"
-        required: true
-        default: "master"
-        type: choice
-        options:
-          - master
-          - refactor/frontend-tokens
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.branch }}
+          ref: master
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
