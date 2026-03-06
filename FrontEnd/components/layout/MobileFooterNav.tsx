@@ -48,7 +48,7 @@ export default function MobileFooterNav() {
 
   return (
     <div
-      className={`mobile-footer-nav${showFooter ? ' mobile-footer-nav-visible' : ''}`}
+      className="mobile-footer-nav"
       style={{
         display: showFooter ? 'flex' : 'none',
         width: '100%',
@@ -60,12 +60,6 @@ export default function MobileFooterNav() {
         paddingLeft: 'env(safe-area-inset-left, 0px)',
         paddingRight: 'env(safe-area-inset-right, 0px)',
         boxSizing: 'border-box',
-        ...(showFooter && {
-          position: 'fixed' as const,
-          bottom: 0,
-          left: 0,
-          right: 0,
-        }),
       }}
     >
       {isDraftPage ? (

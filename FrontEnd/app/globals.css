@@ -115,11 +115,6 @@ body {
     box-sizing: border-box;
   }
 
-  /* When footer is fixed (visible), add bottom padding so content doesn't hide behind it */
-  .mobile-layout-wrapper:has(.mobile-footer-nav-visible) .mobile-layout-main {
-    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
-  }
-
   /* Force header logo smaller on mobile - works regardless of JS/hydration */
   .header-logo {
     width: 140px !important;
@@ -294,6 +289,76 @@ body {
   .tournament-venue-desktop {
     display: block;
   }
+}
+
+/* Login page header - CSS media queries only (no JS), works in PWA */
+.login-header {
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 100%;
+  padding: 0;
+  z-index: 10;
+  overflow: visible;
+}
+.login-header-stripe {
+  position: absolute;
+  overflow: hidden;
+  z-index: 1;
+}
+.login-header-stripe-left {
+  left: 0;
+}
+.login-header-stripe-right {
+  right: 0;
+}
+/* Mobile: show compact stripes at top 47px */
+.login-header-stripe-mobile {
+  display: none;
+  top: 47px;
+  width: calc(50% - 70px - 4px);
+}
+@media (max-width: 767px) {
+  .login-header-stripe-mobile {
+    display: block;
+  }
+  .login-header-stripe-desktop {
+    display: none;
+  }
+  .login-header-logo-mobile {
+    display: block;
+  }
+  .login-header-logo-desktop {
+    display: none;
+  }
+}
+/* Desktop: show full stripes at top 73px */
+.login-header-stripe-desktop {
+  display: none;
+  top: 73px;
+  width: calc(50% - 116px - 4px);
+}
+@media (min-width: 768px) {
+  .login-header-stripe-mobile {
+    display: none;
+  }
+  .login-header-stripe-desktop {
+    display: block;
+  }
+  .login-header-logo-mobile {
+    display: none;
+  }
+  .login-header-logo-desktop {
+    display: block;
+  }
+}
+.login-header-logo {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  flex-shrink: 0;
+  z-index: 2;
 }
 
 /* Identity menu action sheet (mobile) */

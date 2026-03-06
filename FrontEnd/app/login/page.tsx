@@ -107,67 +107,28 @@ export default function LoginPage() {
         />
       </div>
 
-      {/* Header - stripes + logo, matches Header layout on other pages */}
-      <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          top: '10px',
-          width: '100%',
-          padding: 0,
-          zIndex: 10,
-          overflow: 'visible',
-        }}
-      >
-        {/* Stripes - from screen edges toward logo (both mobile and desktop) */}
-        {(() => {
-          const logoHalfWidth = isMobile ? 70 : 116;
-          const stripeGap = 4;
-          const stripeTop = isMobile ? 47 : 73;
-          const stripeWidth = `calc(50% - ${logoHalfWidth}px - ${stripeGap}px)`;
-          return (
-            <>
-              <div
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  top: stripeTop,
-                  width: stripeWidth,
-                  overflow: 'hidden',
-                  zIndex: 1,
-                }}
-              >
-                <Stripe width="100%" compact={isMobile} />
-              </div>
-              <div
-                style={{
-                  position: 'absolute',
-                  right: 0,
-                  top: stripeTop,
-                  width: stripeWidth,
-                  overflow: 'hidden',
-                  zIndex: 1,
-                }}
-              >
-                <Stripe width="100%" compact={isMobile} />
-              </div>
-            </>
-          );
-        })()}
-        {/* Logo centered on top of stripes */}
-        <div
-          style={{
-            position: 'absolute',
-            left: '50%',
-            top: 0,
-            transform: 'translateX(-50%)',
-            flexShrink: 0,
-            zIndex: 2,
-          }}
-        >
-          <Logo
-            size={isMobile ? { width: 140, height: 97 } : { width: 232, height: 160 }}
-          />
+      {/* Header - stripes + logo. Uses CSS media queries so stripes show on mobile without JS. */}
+      <div className="login-header">
+        {/* Mobile stripes (CSS shows @max-width 767px) */}
+        <div className="login-header-stripe login-header-stripe-left login-header-stripe-mobile">
+          <Stripe width="100%" compact />
+        </div>
+        <div className="login-header-stripe login-header-stripe-right login-header-stripe-mobile">
+          <Stripe width="100%" compact />
+        </div>
+        {/* Desktop stripes (CSS shows @min-width 768px) */}
+        <div className="login-header-stripe login-header-stripe-left login-header-stripe-desktop">
+          <Stripe width="100%" />
+        </div>
+        <div className="login-header-stripe login-header-stripe-right login-header-stripe-desktop">
+          <Stripe width="100%" />
+        </div>
+        {/* Logo centered - mobile/desktop versions, CSS show/hide */}
+        <div className="login-header-logo login-header-logo-mobile">
+          <Logo size={{ width: 140, height: 97 }} />
+        </div>
+        <div className="login-header-logo login-header-logo-desktop">
+          <Logo size={{ width: 232, height: 160 }} />
         </div>
       </div>
 
