@@ -9,6 +9,12 @@ const withPWA = require("@ducanh2912/next-pwa").default({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: {
+    NEXT_PUBLIC_BUILD_ID: process.env.NEXT_PUBLIC_BUILD_ID || "dev",
+    NEXT_PUBLIC_BUILD_TIMESTAMP:
+      process.env.NEXT_PUBLIC_BUILD_TIMESTAMP ||
+      new Date().toISOString(),
+  },
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   images: {

@@ -252,6 +252,20 @@ export default function LoginPage() {
             <p style={{ margin: 0 }}>{submitting ? 'LOGGING IN...' : 'LOG IN'}</p>
           </button>
         </form>
+        {/* Build info for prod verification */}
+        <div
+          style={{
+            marginTop: 8,
+            fontSize: 11,
+            color: '#666',
+            fontFamily: "monospace",
+          }}
+        >
+          {process.env.NEXT_PUBLIC_BUILD_ID || 'dev'}
+          {process.env.NEXT_PUBLIC_BUILD_TIMESTAMP && (
+            <> · {new Date(process.env.NEXT_PUBLIC_BUILD_TIMESTAMP).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}</>
+          )}
+        </div>
       </div>
     </div>
   );
