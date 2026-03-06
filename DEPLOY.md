@@ -26,10 +26,11 @@ No auto-deploy on push—you decide when to deploy.
 
 Add these to **Settings → Secrets and variables → Actions**:
 
-| Secret           | Value                                           |
-|------------------|-------------------------------------------------|
-| `DEPLOY_HOST`    | `157.230.172.202` (or your droplet IP)          |
-| `SSH_PRIVATE_KEY`| Contents of your `~/.ssh/id_ed25519` (or equivalent) |
+| Secret                      | Value                                           |
+|-----------------------------|-------------------------------------------------|
+| `DEPLOY_HOST`               | `157.230.172.202` (or your droplet IP)          |
+| `SSH_PRIVATE_KEY`           | Contents of your `~/.ssh/id_ed25519` (or equivalent) |
+| `MAJOR_PAIN_WRITE_SECRET`   | Same value as `MAJOR_PAIN_WRITE_SECRET` in server `.env` (required for admin/draft writes) |
 
 ---
 
