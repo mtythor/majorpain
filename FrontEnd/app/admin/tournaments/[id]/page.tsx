@@ -27,6 +27,13 @@ function getWriteSecret(): string {
   return (process.env.NEXT_PUBLIC_MAJOR_PAIN_WRITE_SECRET || '').trim();
 }
 
+function getWriteSecretError(res: Response, json: { error?: string }, defaultMsg: string): string {
+  if (res.status === 401 && !getWriteSecret()) {
+    return 'Write secret not in build. Redeploy from GitHub Actions (set MAJOR_PAIN_WRITE_SECRET), or for manual deploy add NEXT_PUBLIC_MAJOR_PAIN_WRITE_SECRET to server .env';
+  }
+  return json.error || defaultMsg;
+}
+
 const TOURNAMENT_STATES: TournamentState[] = ['pre-draft', 'draft', 'playing', 'completed'];
 
 export default function AdminTournamentEditorPage({
@@ -44,6 +51,7 @@ export default function AdminTournamentEditorPage({
   const [saveBtnHover, setSaveBtnHover] = useState(false);
   const [saveBtnActive, setSaveBtnActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [writeSecretWarning, setWriteSecretWarning] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
   const [seedMessage, setSeedMessage] = useState<string | null>(null);
 
@@ -90,6 +98,23 @@ export default function AdminTournamentEditorPage({
     return () => clearTimeout(t);
   }, [saveSuccess]);
 
+  // Check write secret: server requires it but client build doesn't have it
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`${API_URL}/admin/write-secret-status`, { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((data: { required?: boolean }) => {
+        if (cancelled) return;
+        if (data.required && !getWriteSecret()) {
+          setWriteSecretWarning('Saves will fail: write secret not in build. Redeploy from GitHub Actions (set MAJOR_PAIN_WRITE_SECRET) or add NEXT_PUBLIC_MAJOR_PAIN_WRITE_SECRET to server .env for manual deploy.');
+        } else {
+          setWriteSecretWarning(null);
+        }
+      })
+      .catch(() => { if (!cancelled) setWriteSecretWarning(null); });
+    return () => { cancelled = true; };
+  }, []);
+
   const saveTournament = async (updated: Tournament) => {
     // Safeguard: moving to draft/pre-draft with results present → require erase first
     const backwardStates = ['draft', 'pre-draft'];
@@ -127,7 +152,7 @@ export default function AdminTournamentEditorPage({
           body: JSON.stringify(payload),
         });
         const json = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(json.error || 'Failed to erase results');
+        if (!res.ok) throw new Error(getWriteSecretError(res, json, 'Failed to erase results'));
         updateDataCache(`results-${params.id}`, clearedResults);
         setResults(clearedResults);
       } catch (e) {
@@ -160,7 +185,7 @@ export default function AdminTournamentEditorPage({
         body: JSON.stringify(payload),
       });
       const json = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(json.error || 'Failed to save');
+      if (!res.ok) throw new Error(getWriteSecretError(res, json, 'Failed to save'));
       updateDataCache('tournaments', newTournaments);
       setTournament(updated);
       setSaveSuccess(true);
@@ -192,7 +217,7 @@ export default function AdminTournamentEditorPage({
         body: JSON.stringify(payload),
       });
       const json = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(json.error || 'Failed to save');
+      if (!res.ok) throw new Error(getWriteSecretError(res, json, 'Failed to save'));
       updateDataCache(`results-${params.id}`, updated);
       setResults(updated);
     } catch (e) {
@@ -234,7 +259,7 @@ export default function AdminTournamentEditorPage({
         body: JSON.stringify(payload),
       });
       const json = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(json.error || 'Failed to save');
+      if (!res.ok) throw new Error(getWriteSecretError(res, json, 'Failed to save'));
       updateDataCache(`results-${params.id}`, updated);
       setResults(updated);
       setTeamDraftsFromDraft(null);
@@ -261,7 +286,7 @@ export default function AdminTournamentEditorPage({
         body: JSON.stringify({ mode }),
       });
       const json = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(json.error || 'Failed to seed');
+      if (!res.ok) throw new Error(getWriteSecretError(res, json, 'Failed to seed'));
       setSeedMessage(json.message || 'Tournament seeded successfully.');
       updateDataCache(`golfers-${params.id}`, undefined);
       updateDataCache(`results-${params.id}`, undefined);
@@ -313,7 +338,7 @@ export default function AdminTournamentEditorPage({
         body: JSON.stringify({ results: resultsMap }),
       });
       const json = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(json.error || 'Failed to reset scores');
+      if (!res.ok) throw new Error(getWriteSecretError(res, json, 'Failed to reset scores'));
       updateDataCache(`results-${params.id}`, updated);
       setResults(updated);
     } catch (e) {
@@ -362,7 +387,7 @@ export default function AdminTournamentEditorPage({
         body: JSON.stringify(payload),
       });
       const json = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(json.error || 'Failed to reset drafts');
+      if (!res.ok) throw new Error(getWriteSecretError(res, json, 'Failed to reset drafts'));
       updateDataCache(`results-${params.id}`, updated);
       updateDataCache('tournaments', newTournaments);
       setResults(updated);
@@ -412,6 +437,11 @@ export default function AdminTournamentEditorPage({
         </Link>
         <h1 style={{ fontSize: '24px', fontWeight: 800 }}>{tournament.name}</h1>
       </div>
+      {writeSecretWarning && (
+        <div style={{ color: '#e12c55', marginBottom: '16px', padding: '12px', background: 'rgba(225,44,85,0.1)', borderRadius: '8px' }}>
+          {writeSecretWarning}
+        </div>
+      )}
       {error && (
         <div style={{ color: '#e12c55', marginBottom: '16px' }}>{error}</div>
       )}
@@ -753,7 +783,7 @@ export default function AdminTournamentEditorPage({
                         body: JSON.stringify({ teamDrafts: drafts, fatRandoStolenGolfers: fatRando }),
                       });
                       const json = await res.json().catch(() => ({}));
-                      if (!res.ok) throw new Error(json.error || 'Failed to save');
+                      if (!res.ok) throw new Error(getWriteSecretError(res, json, 'Failed to save'));
                       updateDataCache(`results-${params.id}`, {
                         tournamentId: params.id,
                         teamDrafts: drafts,
