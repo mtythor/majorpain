@@ -6,6 +6,7 @@ import { openSans, notoSans } from "@/lib/fonts";
 import FontAwesomeLoader from "@/components/layout/FontAwesomeLoader";
 import MobileFooterNav from "@/components/layout/MobileFooterNav";
 import MobileLayoutWrapper from "@/components/layout/MobileLayoutWrapper";
+import ViewportHeightProvider from "@/components/layout/ViewportHeightProvider";
 
 export const metadata: Metadata = {
   title: "Major Pain Fantasy Golf",
@@ -28,6 +29,7 @@ export default function RootLayout({
     <html lang="en" className={`${openSans.variable} ${notoSans.variable}`}>
       <body className={openSans.className} style={{ backgroundColor: '#0f0f0f' }}>
         <FontAwesomeLoader />
+        <ViewportHeightProvider />
         <MobileLayoutWrapper>
           <AuthProvider>
             <div className="mobile-layout-main">

@@ -13,12 +13,12 @@ Build runs in GitHub Actions; the server receives pre-built artifacts. **~30–6
 ```powershell
 git add -A
 git commit -m "Your commit message"
-git push origin refactor/frontend-tokens
+git push origin master
 ```
 
 ### 2. Deploy when ready
 
-Go to **GitHub → Actions → Deploy to production** → **Run workflow**. Choose the branch (default: `refactor/frontend-tokens`) and click **Run workflow**.
+Go to **GitHub → Actions → Deploy to production** → **Run workflow**. Choose the branch (default: `master`) and click **Run workflow**.
 
 No auto-deploy on push—you decide when to deploy.
 
@@ -43,7 +43,7 @@ Use this if CI is unavailable or you need to deploy without pushing.
 ```powershell
 git add -A
 git commit -m "Your commit message"
-git push origin refactor/frontend-tokens
+git push origin master
 ```
 
 ### 2. Run deploy script on server
@@ -98,6 +98,13 @@ The server script pulls, builds, and restarts. This is slower than CI (~2–5 mi
 
 - Run migrations before restart: `cd ~/majorpain/FrontEnd && npm run migrate`
 - For schema-only: `cat ~/majorpain/migrations/XXX_name.sql | sudo -u postgres psql -d major_pain`
+
+**Unauthorized when saving (admin, tournament state, draft)**
+
+- The write secret must match between client build and server runtime.
+- **CI deploy:** Ensure `MAJOR_PAIN_WRITE_SECRET` is set in GitHub Actions secrets and matches the server `.env`. The workflow bakes it into the client at build time.
+- **Manual deploy:** The server build needs both `MAJOR_PAIN_WRITE_SECRET` and `NEXT_PUBLIC_MAJOR_PAIN_WRITE_SECRET` in `FrontEnd/.env` (same value).
+- After fixing: run a fresh deploy; client bundles are built at deploy time.
 
 ---
 

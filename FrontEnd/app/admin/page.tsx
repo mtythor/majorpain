@@ -62,10 +62,12 @@ export default function AdminPage() {
       const secret = getWriteSecret();
       if (secret) headers['X-Major-Pain-Write-Secret'] = secret;
 
+      const payload: Record<string, unknown> = { players: updated };
+      if (secret) payload.writeSecret = secret;
       const res = await fetch(`${API_URL}/admin/state`, {
         method: 'PATCH',
         headers,
-        body: JSON.stringify({ players: updated }),
+        body: JSON.stringify(payload),
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(json.error || 'Failed to save');

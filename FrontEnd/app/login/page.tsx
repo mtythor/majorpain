@@ -69,21 +69,23 @@ export default function LoginPage() {
       style={{
         position: 'relative',
         minHeight: '100vh',
+        minHeight: '100dvh',
         width: '100%',
         overflowX: 'hidden',
         backgroundColor: '#0f0f0f',
         fontFamily: "'Open Sans', sans-serif",
       }}
     >
-      {/* Background Image */}
+      {/* Background Image - position:fixed to fill viewport in PWA (avoids 100vh gaps) */}
       <div
         style={{
-          position: 'absolute',
-          top: '100px',
+          position: 'fixed',
+          top: 0,
           left: 0,
           right: 0,
           bottom: 0,
           width: '100%',
+          height: '100%',
           zIndex: 0,
         }}
       >
@@ -105,73 +107,68 @@ export default function LoginPage() {
         />
       </div>
 
-      {/* Header */}
+      {/* Header - stripes + logo, matches Header layout on other pages */}
       <div
         style={{
           position: 'absolute',
-          display: 'flex',
-          gap: '9px',
-          alignItems: 'flex-start',
-          justifyContent: isMobile ? 'center' : 'space-between',
           left: 0,
           top: '10px',
           width: '100%',
           padding: 0,
           zIndex: 10,
+          overflow: 'visible',
         }}
       >
-        {!isMobile && (
-          <>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                height: '97px',
-                alignItems: 'flex-start',
-                justifyContent: 'flex-end',
-                paddingTop: '8px',
-                flex: '1 1 0',
-                minWidth: '595px',
-                maxWidth: 'calc(50% - 120px)',
-              }}
-            >
-              <Stripe />
-            </div>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                position: 'absolute',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                flexShrink: 0,
-              }}
-            >
-              <Logo />
-            </div>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                height: '97px',
-                alignItems: 'flex-end',
-                justifyContent: 'flex-end',
-                paddingTop: '8px',
-                flex: '1 1 0',
-                minWidth: '595px',
-                maxWidth: 'calc(50% - 120px)',
-              }}
-            >
-              <Stripe />
-            </div>
-          </>
-        )}
-        {isMobile && (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Logo size={{ width: 152, height: Math.round(152 * (160 / 232)) }} />
-          </div>
-        )}
+        {/* Stripes - from screen edges toward logo (both mobile and desktop) */}
+        {(() => {
+          const logoHalfWidth = isMobile ? 70 : 116;
+          const stripeGap = 4;
+          const stripeTop = isMobile ? 47 : 73;
+          const stripeWidth = `calc(50% - ${logoHalfWidth}px - ${stripeGap}px)`;
+          return (
+            <>
+              <div
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  top: stripeTop,
+                  width: stripeWidth,
+                  overflow: 'hidden',
+                  zIndex: 1,
+                }}
+              >
+                <Stripe width="100%" compact={isMobile} />
+              </div>
+              <div
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  top: stripeTop,
+                  width: stripeWidth,
+                  overflow: 'hidden',
+                  zIndex: 1,
+                }}
+              >
+                <Stripe width="100%" compact={isMobile} />
+              </div>
+            </>
+          );
+        })()}
+        {/* Logo centered on top of stripes */}
+        <div
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: 0,
+            transform: 'translateX(-50%)',
+            flexShrink: 0,
+            zIndex: 2,
+          }}
+        >
+          <Logo
+            size={isMobile ? { width: 140, height: 97 } : { width: 232, height: 160 }}
+          />
+        </div>
       </div>
 
       {/* Login Modal */}

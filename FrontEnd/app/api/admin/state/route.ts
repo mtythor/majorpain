@@ -5,10 +5,12 @@ import type { TournamentResult } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
-function getSecretFromRequest(request: Request): string {
+function getSecretFromRequest(request: Request, body: unknown): string {
   const header = request.headers.get('x-major-pain-write-secret') ||
     request.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
-  return (header ?? '').trim();
+  if (header) return header.trim();
+  const b = body as { writeSecret?: string };
+  return (b?.writeSecret ?? '').trim();
 }
 
 export async function GET() {
@@ -27,16 +29,22 @@ export async function GET() {
 }
 
 export async function PATCH(request: Request) {
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+  }
+
   const secret = (process.env.MAJOR_PAIN_WRITE_SECRET || '').trim();
   if (secret) {
-    const provided = getSecretFromRequest(request);
+    const provided = getSecretFromRequest(request, body);
     if (provided !== secret) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
   }
 
   try {
-    const body = await request.json();
     const { data } = await getData();
     const current = data ?? {};
     let tournaments = body.tournaments !== undefined ? body.tournaments : current.tournaments;
