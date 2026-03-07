@@ -19,12 +19,14 @@ export default function TournamentVenue({ tournament, viewMode }: TournamentVenu
 
   return (
     <div
+      className="tournament-venue-bar"
       style={{
         position: 'absolute',
         right: '50%',
-        top: '168px', // Same row as tournament picker on desktop
+        top: '168px',
         width: '360px',
-        height: 'var(--picker-height)',
+        height: 48,
+        minHeight: 48,
         zIndex: 1000,
         transform: `translateX(${contentHalfWidth}px)`, // Right edge aligns with page content right edge
         display: 'flex',

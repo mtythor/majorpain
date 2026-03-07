@@ -51,6 +51,9 @@ html {
   --results-col-pos: 92px;
   --results-col-player: 238px;
   --results-col-score: 92px;
+
+  /* Picker and venue bar - shared height */
+  --picker-height: 48px;
 }
 
 /* Results leaderboard table - mobile: stretch to full width */
@@ -314,11 +317,16 @@ body {
 }
 
 /* Tournament picker - fluid layout, 8px below header, edge to edge on mobile, fixed on desktop */
+.tournament-picker,
+.tournament-venue-bar {
+  box-sizing: border-box;
+  height: var(--picker-height);
+}
+
 .tournament-picker {
   position: absolute;
   /* Mobile: header logo 97px + 8px gap; Desktop: header 160px + 8px gap */
   top: 105px;
-  height: var(--picker-height);
   z-index: 1000;
   left: 50%;
   transform: translateX(-50%);
@@ -373,6 +381,7 @@ body {
     display: block;
   }
 }
+
 
 /* Login page header - CSS media queries only (no JS), works in PWA */
 .login-header {
