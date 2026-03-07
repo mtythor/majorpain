@@ -1,5 +1,7 @@
 'use client';
 
+import { Trophy, ChevronDown } from 'lucide-react';
+
 interface SeasonPickerProps {
   season: string;
   onSelect?: () => void;
@@ -31,7 +33,7 @@ export default function SeasonPicker({ season, onSelect }: SeasonPickerProps) {
           justifyContent: 'center',
         }}
       >
-        <i className="fa-solid fa-trophy" style={{ fontSize: '18px', color: '#ffffff' }} />
+        <Trophy size={18} color="#ffffff" />
       </div>
       <div
         style={{
@@ -72,7 +74,7 @@ export default function SeasonPicker({ season, onSelect }: SeasonPickerProps) {
           justifyContent: 'center',
         }}
       >
-        <i className="fa-solid fa-caret-down" style={{ fontSize: '10px', color: '#ffffff' }} />
+        <ChevronDown size={10} color="#ffffff" />
       </div>
     </div>
   );

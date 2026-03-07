@@ -1,3 +1,4 @@
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { SortDirection } from '@/lib/types';
 
 interface DraftTableHeaderProps {
@@ -55,13 +56,11 @@ export default function DraftTableHeader({
             zIndex: 1,
           }}
         >
-          <i
-            className={`fa-solid fa-caret-${sortDirection === 'asc' ? 'up' : 'down'}`}
-            style={{
-              fontSize: '8px',
-              color: '#ffffff',
-            }}
-          />
+          {sortDirection === 'asc' ? (
+            <ChevronUp size={8} color="#ffffff" />
+          ) : (
+            <ChevronDown size={8} color="#ffffff" />
+          )}
         </div>
       )}
     </div>

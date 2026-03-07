@@ -3,7 +3,6 @@ import { Suspense } from "react";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { openSans, notoSans } from "@/lib/fonts";
-import FontAwesomeLoader from "@/components/layout/FontAwesomeLoader";
 import MobileFooterNav from "@/components/layout/MobileFooterNav";
 import MobileLayoutWrapper from "@/components/layout/MobileLayoutWrapper";
 import ViewportHeightProvider from "@/components/layout/ViewportHeightProvider";
@@ -28,7 +27,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${openSans.variable} ${notoSans.variable}`}>
       <body className={openSans.className} style={{ backgroundColor: '#0f0f0f' }}>
-        <FontAwesomeLoader />
         <ViewportHeightProvider />
         <MobileLayoutWrapper>
           <AuthProvider>

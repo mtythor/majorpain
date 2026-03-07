@@ -1,5 +1,6 @@
 'use client';
 
+import { List, LayoutGrid } from 'lucide-react';
 import { TableViewMode } from '@/lib/types';
 
 interface ViewToggleProps {
@@ -8,6 +9,7 @@ interface ViewToggleProps {
 }
 
 export default function ViewToggle({ currentView, onViewChange }: ViewToggleProps) {
+  const iconColor = (active: boolean) => (active ? '#fdc71c' : '#ffffff');
   return (
     <div
       style={{
@@ -34,16 +36,7 @@ export default function ViewToggle({ currentView, onViewChange }: ViewToggleProp
           border: 'none',
         }}
       >
-        <i
-          className="fa-solid fa-bars"
-          style={{
-            fontSize: '18px',
-            lineHeight: 'normal',
-            position: 'relative',
-            flexShrink: 0,
-            color: currentView === 'list' ? '#fdc71c' : '#ffffff',
-          }}
-        />
+        <List size={18} color={iconColor(currentView === 'list')} />
       </button>
       <button
         onClick={() => onViewChange('table')}
@@ -62,16 +55,7 @@ export default function ViewToggle({ currentView, onViewChange }: ViewToggleProp
           border: 'none',
         }}
       >
-        <i
-          className="fa-solid fa-grip"
-          style={{
-            fontSize: '18px',
-            lineHeight: 'normal',
-            position: 'relative',
-            flexShrink: 0,
-            color: currentView === 'table' ? '#fdc71c' : '#ffffff',
-          }}
-        />
+        <LayoutGrid size={18} color={iconColor(currentView === 'table')} />
       </button>
     </div>
   );

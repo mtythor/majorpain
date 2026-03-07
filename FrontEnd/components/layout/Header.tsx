@@ -103,22 +103,7 @@ export default function Header({
               <ViewToggle currentView={viewMode} onViewChange={onViewModeChange} />
             )}
           </div>
-          <div
-            style={{
-              position: 'absolute',
-              right: 0,
-              top: 0,
-              display: 'flex',
-              alignItems: 'center',
-              paddingTop: 6,
-              paddingRight: 16,
-              zIndex: 2,
-            }}
-          >
-            {userProfile && (
-              <IdentityMenu userProfile={userProfile} compact />
-            )}
-          </div>
+          {/* Avatar moved to mobile footer nav - no header avatar on mobile */}
         </>
       )}
       {/* Desktop: NavBar and right-side controls above the stripes */}

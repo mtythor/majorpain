@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Tournament } from '@/lib/types';
 import { PICKER_OFFSETS } from '@/lib/design-tokens';
 
@@ -154,13 +155,11 @@ export default function TournamentPicker({
             justifyContent: 'center',
           }}
         >
-          <i
-            className={isOpen ? 'fa-solid fa-caret-up' : 'fa-solid fa-caret-down'}
-            style={{
-              fontSize: '10px',
-              color: '#ffffff',
-            }}
-          />
+          {isOpen ? (
+            <ChevronUp size={10} color="#ffffff" />
+          ) : (
+            <ChevronDown size={10} color="#ffffff" />
+          )}
         </div>
       </div>
 

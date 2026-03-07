@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
+import { X } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { useIsMobile } from '@/hooks/useMediaQuery';
 import ProfilePicture from '@/components/ui/ProfilePicture';
@@ -12,6 +13,8 @@ import ChangePasswordModal from './ChangePasswordModal';
 interface IdentityMenuProps {
   userProfile?: Player | null;
   compact?: boolean;
+  /** Nav bar variant: small avatar + username for mobile footer */
+  variant?: 'default' | 'nav';
 }
 
 const menuButtonStyle = {
@@ -27,7 +30,7 @@ const menuButtonStyle = {
   fontFamily: "'Open Sans', sans-serif",
 };
 
-export default function IdentityMenu({ userProfile, compact }: IdentityMenuProps) {
+export default function IdentityMenu({ userProfile, compact, variant = 'default' }: IdentityMenuProps) {
   const router = useRouter();
   const isMobile = useIsMobile();
   const { currentUser, logout, clearForcePasswordChange } = useAuth();
@@ -65,20 +68,57 @@ export default function IdentityMenu({ userProfile, compact }: IdentityMenuProps
 
   if (!userProfile || !currentUser) return null;
 
-  const size = compact ? 32 : 36;
+  const size = variant === 'nav' ? 22 : compact ? 32 : 36;
+
+  const headerRow = (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '12px 16px',
+        paddingTop: 16,
+        borderBottom: '1px solid #333',
+      }}
+    >
+      <span style={{ color: '#888', fontSize: '11px' }}>
+        LOGGED IN AS {currentUser.playerName.toUpperCase()}
+      </span>
+      <button
+        onClick={() => setOpen(false)}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 8,
+          margin: -8,
+          backgroundColor: 'transparent',
+          border: 'none',
+          cursor: 'pointer',
+          color: '#ffffff',
+        }}
+        aria-label="Close menu"
+      >
+        <X size={24} />
+      </button>
+    </div>
+  );
+
+  const desktopHeader = (
+    <div
+      style={{
+        padding: '12px 16px',
+        borderBottom: '1px solid #333',
+        color: '#888',
+        fontSize: '11px',
+      }}
+    >
+      LOGGED IN AS {currentUser.playerName.toUpperCase()}
+    </div>
+  );
 
   const menuContent = (
     <>
-      <div
-        style={{
-          padding: '12px 16px',
-          borderBottom: '1px solid #333',
-          color: '#888',
-          fontSize: '11px',
-        }}
-      >
-        LOGGED IN AS {currentUser.playerName.toUpperCase()}
-      </div>
       {currentUser.isAdmin && (
         <button
           onClick={() => closeAnd(() => router.push('/admin'))}
@@ -109,23 +149,28 @@ export default function IdentityMenu({ userProfile, compact }: IdentityMenuProps
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '6px',
-          padding: '4px 8px',
+          justifyContent: variant === 'nav' ? 'center' : undefined,
+          gap: variant === 'nav' ? 2 : 6,
+          padding: variant === 'nav' ? '0 12px' : '4px 8px',
+          minHeight: variant === 'nav' ? 52 : undefined,
           backgroundColor: 'transparent',
           border: 'none',
           cursor: 'pointer',
           borderRadius: '4px',
+          flexDirection: variant === 'nav' ? 'column' : 'row',
         }}
         aria-label="Account menu"
       >
         <ProfilePicture src={userProfile.imageUrl} alt={userProfile.name} size={size} />
-        {!compact && (
+        {(variant === 'nav' || !compact) && (
           <span
             style={{
               color: '#fff',
-              fontSize: '12px',
-              fontWeight: 600,
-              maxWidth: '100px',
+              fontSize: variant === 'nav' ? 10 : 12,
+              fontWeight: variant === 'nav' ? 500 : 600,
+              lineHeight: variant === 'nav' ? 1 : undefined,
+              margin: variant === 'nav' ? 0 : undefined,
+              maxWidth: variant === 'nav' ? 72 : 100,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
             }}
@@ -163,11 +208,11 @@ export default function IdentityMenu({ userProfile, compact }: IdentityMenuProps
                   boxShadow: '0 -8px 24px rgba(0,0,0,0.4)',
                   overflow: 'hidden',
                   zIndex: 1101,
-                  paddingTop: '16px',
                   paddingBottom: 'calc(24px + env(safe-area-inset-bottom, 0px))',
                   animation: 'identity-menu-slide-in 0.25s ease-out',
                 }}
               >
+                {headerRow}
                 {menuContent}
               </div>
             </>,
@@ -188,6 +233,7 @@ export default function IdentityMenu({ userProfile, compact }: IdentityMenuProps
             zIndex: 50,
           }}
         >
+          {desktopHeader}
           {menuContent}
         </div>
       ) : null}

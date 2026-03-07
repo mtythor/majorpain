@@ -123,11 +123,11 @@ body {
   .mobile-footer-nav {
     flex-shrink: 0;
     min-width: 0;
-    min-height: 56px;
+    min-height: 52px;
     box-sizing: border-box;
   }
 
-  /* Footer fixed: add padding so content doesn't hide behind it */
+  /* Footer fixed: add padding so content doesn't hide behind icon bar */
   .mobile-layout-wrapper:has(.mobile-footer-nav-visible) .mobile-layout-main {
     padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
   }

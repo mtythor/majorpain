@@ -2,6 +2,7 @@
 
 import type React from 'react';
 import Image from 'next/image';
+import { Trophy } from 'lucide-react';
 import { useIsMobile } from '@/hooks/useMediaQuery';
 import styles from './SeasonTable.module.css';
 
@@ -114,7 +115,7 @@ export default function SeasonTable({ players, tournamentNames }: SeasonTablePro
                 margin: 0,
               }}
             >
-              <i className="fa-solid fa-trophy" />
+              <Trophy size={14} color="#fdc71c" />
             </p>
           )}
           <p className={styles.dataValue}>
