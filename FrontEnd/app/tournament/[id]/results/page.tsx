@@ -8,6 +8,7 @@ import Header from '@/components/layout/Header';
 import BackgroundImage from '@/components/layout/BackgroundImage';
 import MainContainer from '@/components/layout/MainContainer';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import { useIsMobile } from '@/hooks/useMediaQuery';
 import {
   getCurrentUser,
   getTournament,
@@ -34,6 +35,7 @@ export default function TournamentResultsPage({ params }: { params: { id: string
 function TournamentResultsPageContent({ params }: { params: { id: string } }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const isMobile = useIsMobile();
   const backToView = (searchParams.get('view') === 'list' ? 'list' : 'table') as 'list' | 'table';
   const { loading: loadingData, error: dataError } = useApiData();
   const { loading: loadingTournament, error: tournamentError } = useTournamentData(params.id);
@@ -261,63 +263,97 @@ function TournamentResultsPageContent({ params }: { params: { id: string } }) {
           userProfile={getCurrentUser()}
           onViewChange={handleViewChange}
           onViewModeChange={handleViewModeChange}
+          showListTableToggle={false}
         />
-        {/* FULL LEADERBOARD Header */}
-        <div
-          style={{
-            position: 'absolute',
-            left: '50%',
-            top: '184px',
-            transform: 'translateX(calc(-1 * var(--results-header-offset-x)))',
-            zIndex: 1000,
-          }}
-        >
-          <p
+        {/* FULL LEADERBOARD Header + BACK TO TOURNAMENT Link - responsive layout */}
+        {isMobile ? (
+          <div
             style={{
-              fontFamily: "'Open Sans', sans-serif",
-              fontWeight: 700,
-              fontSize: '16px',
-              lineHeight: 'normal',
-              color: '#ffffff',
-              margin: 0,
-              textTransform: 'uppercase',
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: '105px',
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0 16px 0 8px',
+              zIndex: 1000,
             }}
           >
-            FULL LEADERBOARD
-          </p>
-        </div>
-        {/* BACK TO TOURNAMENT Link */}
-        <div
-          style={{
-            position: 'absolute',
-            right: '50%',
-            top: '184px',
-            transform: 'translateX(var(--results-header-offset-x))',
-            zIndex: 1000,
-          }}
-        >
-          <Link
-            href={`/tournament/${params.id}/${backToView}`}
-            style={{
-              fontFamily: "var(--font-noto-sans), sans-serif",
-              fontWeight: 400,
-              fontSize: '14px',
-              lineHeight: 'normal',
-              color: '#3fa2ff',
-              cursor: 'pointer',
-              textDecoration: 'none',
-            }}
-          >
-            BACK TO TOURNAMENT
-          </Link>
-        </div>
-        <MainContainer top="252px" noPadding={true}>
+            <p
+              style={{
+                fontFamily: "'Open Sans', sans-serif",
+                fontWeight: 700,
+                fontSize: '12px',
+                lineHeight: 'normal',
+                color: '#ffffff',
+                margin: 0,
+                textTransform: 'uppercase',
+                textAlign: 'center',
+                flex: 1,
+              }}
+            >
+              FULL LEADERBOARD
+            </p>
+          </div>
+        ) : (
+          <>
+            <div
+              style={{
+                position: 'absolute',
+                left: '50%',
+                top: '184px',
+                transform: 'translateX(calc(-1 * var(--results-header-offset-x)))',
+                zIndex: 1000,
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "'Open Sans', sans-serif",
+                  fontWeight: 700,
+                  fontSize: '16px',
+                  lineHeight: 'normal',
+                  color: '#ffffff',
+                  margin: 0,
+                  textTransform: 'uppercase',
+                }}
+              >
+                FULL LEADERBOARD
+              </p>
+            </div>
+            <div
+              style={{
+                position: 'absolute',
+                right: '50%',
+                top: '184px',
+                transform: 'translateX(var(--results-header-offset-x))',
+                zIndex: 1000,
+              }}
+            >
+              <Link
+                href={`/tournament/${params.id}/${backToView}`}
+                style={{
+                  fontFamily: "var(--font-noto-sans), sans-serif",
+                  fontWeight: 400,
+                  fontSize: '14px',
+                  lineHeight: 'normal',
+                  color: '#3fa2ff',
+                  cursor: 'pointer',
+                  textDecoration: 'none',
+                }}
+              >
+                BACK TO TOURNAMENT
+              </Link>
+            </div>
+          </>
+        )}
+        <MainContainer top="252px" mobileTop="133px" noPadding={true}>
           {!results || !hasGolferResults || shouldShowPreDraftBanner(tournamentState) ? (
             <div style={{ padding: '40px', width: '100%', textAlign: 'center', color: '#ffffff' }}>
               <p>No results available for this tournament.</p>
             </div>
           ) : (
             <div
+              className="results-leaderboard-table"
               style={{
                 width: 'var(--table-width)',
                 minWidth: 'var(--table-width)',
@@ -326,10 +362,12 @@ function TournamentResultsPageContent({ params }: { params: { id: string } }) {
                 gap: 0,
                 alignSelf: 'center',
                 overflowX: 'auto',
+                paddingBottom: isMobile ? '80px' : 0,
               }}
             >
               {/* Table Header */}
               <div
+                className="results-header-row"
                 style={{
                   display: 'flex',
                   backgroundColor: '#151515',
@@ -340,6 +378,7 @@ function TournamentResultsPageContent({ params }: { params: { id: string } }) {
               >
                 {/* POS Column */}
                 <div
+                  className="results-header-cell results-pos-cell"
                   style={{
                     width: 'var(--results-col-pos)',
                     display: 'flex',
@@ -366,6 +405,7 @@ function TournamentResultsPageContent({ params }: { params: { id: string } }) {
                 </div>
                 {/* PLAYER Column */}
                 <div
+                  className="results-header-cell results-player-cell"
                   style={{
                     width: 'var(--results-col-player)',
                     display: 'flex',
@@ -392,6 +432,7 @@ function TournamentResultsPageContent({ params }: { params: { id: string } }) {
                 </div>
                 {/* STROKES Column */}
                 <div
+                  className="results-header-cell results-scr-round-cell"
                   style={{
                     width: 'var(--results-col-pos)',
                     display: 'flex',
@@ -413,13 +454,14 @@ function TournamentResultsPageContent({ params }: { params: { id: string } }) {
                       margin: 0,
                     }}
                   >
-                    STROKES
+                    {isMobile ? 'SCR' : 'STROKES'}
                   </p>
                 </div>
                 {/* ROUND Columns */}
                 {[1, 2, 3, 4].map((roundNum, index) => (
                   <div
                     key={roundNum}
+                    className="results-header-cell results-scr-round-cell"
                     style={{
                       width: 'var(--results-col-pos)',
                       display: 'flex',
@@ -441,7 +483,7 @@ function TournamentResultsPageContent({ params }: { params: { id: string } }) {
                         margin: 0,
                       }}
                     >
-                      ROUND {roundNum}
+                      {isMobile ? `R${roundNum}` : `ROUND ${roundNum}`}
                     </p>
                   </div>
                 ))}
@@ -451,6 +493,7 @@ function TournamentResultsPageContent({ params }: { params: { id: string } }) {
               {golferResultsData.map((result, index) => (
                 <div
                   key={result.golferId}
+                  className="results-data-row"
                   style={{
                     display: 'flex',
                     backgroundColor: index % 2 === 0 ? '#262626' : '#1a1a1a',
@@ -462,6 +505,7 @@ function TournamentResultsPageContent({ params }: { params: { id: string } }) {
                 >
                   {/* POS */}
                   <div
+                    className="results-data-cell results-pos-cell"
                     style={{
                       width: 'var(--results-col-pos)',
                       display: 'flex',
@@ -487,6 +531,7 @@ function TournamentResultsPageContent({ params }: { params: { id: string } }) {
                   </div>
                   {/* PLAYER */}
                   <div
+                    className="results-data-cell results-player-cell"
                     style={{
                       width: 'var(--results-col-player)',
                       display: 'flex',
@@ -512,6 +557,7 @@ function TournamentResultsPageContent({ params }: { params: { id: string } }) {
                   </div>
                   {/* STROKES */}
                   <div
+                    className="results-data-cell results-scr-round-cell"
                     style={{
                       width: 'var(--results-col-pos)',
                       display: 'flex',
@@ -544,6 +590,7 @@ function TournamentResultsPageContent({ params }: { params: { id: string } }) {
                   {[1, 2, 3, 4].map((roundNum, index) => (
                     <div
                       key={roundNum}
+                      className="results-data-cell results-scr-round-cell"
                       style={{
                         width: 'var(--results-col-pos)',
                         display: 'flex',

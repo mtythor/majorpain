@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Trophy, ChartLine, SquareCheck, ListOrdered } from 'lucide-react';
 import { useIsMobile } from '@/hooks/useMediaQuery';
@@ -18,6 +19,9 @@ export default function MobileFooterNav() {
   const userProfile = getCurrentUser();
 
   const isDraftPage = pathname?.startsWith('/draft');
+  const isResultsPage = pathname?.match(/^\/tournament\/[^/]+\/results$/);
+  const tournamentId = isResultsPage ? pathname?.split('/')[2] : null;
+  const backToView = searchParams?.get('view') === 'list' ? 'list' : 'table';
   const showFooter =
     isMobile &&
     (pathname?.startsWith('/season') ||
@@ -76,6 +80,50 @@ export default function MobileFooterNav() {
   });
 
   if (!showFooter) return null;
+
+  /* Results page: show back link instead of nav */
+  if (isResultsPage && tournamentId) {
+    return (
+      <div
+        className="mobile-footer-nav mobile-footer-nav-visible"
+        style={{
+          display: 'flex',
+          width: '100%',
+          maxWidth: '100%',
+          flexShrink: 0,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#0f0f0f',
+          borderTop: '4px solid #0E0E0E',
+          paddingTop: 6,
+          paddingBottom: 'calc(12px + env(safe-area-inset-bottom, 0px))',
+          paddingLeft: 'env(safe-area-inset-left, 0px)',
+          paddingRight: 'env(safe-area-inset-right, 0px)',
+          boxSizing: 'border-box',
+          position: 'fixed' as const,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
+        }}
+      >
+        <Link
+          href={`/tournament/${tournamentId}/${backToView}`}
+          style={{
+            fontFamily: "var(--font-noto-sans), sans-serif",
+            fontWeight: 400,
+            fontSize: '12px',
+            lineHeight: 'normal',
+            color: '#3fa2ff',
+            textDecoration: 'none',
+            padding: '8px 0',
+          }}
+        >
+          ‹ BACK TO TOURNAMENT
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div

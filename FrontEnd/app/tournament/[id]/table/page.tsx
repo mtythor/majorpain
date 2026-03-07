@@ -752,17 +752,19 @@ export default function TournamentTableView({ params }: { params: { id: string }
       ) : playerTableData.length > 0 ? (
         <div
           style={{
-            position: 'absolute',
+            position: isMobile ? 'relative' : 'absolute',
             display: 'flex',
             flexDirection: 'column',
             gap: '24px',
             alignItems: 'flex-start',
             left: isMobile ? 0 : '50%',
-            top: isMobile ? '169px' : '232px',
+            top: isMobile ? undefined : '232px',
+            marginTop: isMobile ? '169px' : undefined,
             transform: isMobile ? 'none' : 'translateX(-50%)',
             zIndex: 5,
             width: isMobile ? '100%' : undefined,
-            padding: 0,
+            padding: isMobile ? '0 8px' : 0,
+            paddingBottom: isMobile ? '24px' : undefined,
             boxSizing: 'border-box',
             overflowX: isMobile ? 'auto' : 'visible',
           }}

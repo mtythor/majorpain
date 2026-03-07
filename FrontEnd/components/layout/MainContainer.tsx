@@ -7,11 +7,14 @@ interface MainContainerProps {
   children: ReactNode;
   className?: string;
   top?: string;
+  /** Override top position on mobile (e.g. results page has no picker, needs different offset) */
+  mobileTop?: string;
   noPadding?: boolean;
 }
 
-export default function MainContainer({ children, className = '', top = '147px', noPadding = false }: MainContainerProps) {
+export default function MainContainer({ children, className = '', top = '147px', mobileTop, noPadding = false }: MainContainerProps) {
   const isMobile = useIsMobile();
+  const resolvedTop = isMobile ? (mobileTop ?? '169px') : top;
 
   return (
     <div
@@ -23,7 +26,7 @@ export default function MainContainer({ children, className = '', top = '147px',
         gap: '8px',
         alignItems: 'flex-start',
         left: '50%',
-        top: isMobile ? '169px' : top,
+        top: resolvedTop,
         transform: 'translateX(-50%)',
         zIndex: 5,
         width: isMobile ? '100%' : 'var(--max-content-width)',
