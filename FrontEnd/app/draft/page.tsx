@@ -845,7 +845,7 @@ function DraftPageContent() {
         viewMode="draft"
       />
       {!isMobile && <TournamentVenue tournament={selectedTournament} viewMode="draft" />}
-      <MainContainer top="252px" noPadding={true}>
+      <MainContainer top="232px" noPadding={true}>
         
         {tournamentState === 'pre-draft' && (
           <div className="p-4 md:p-10 w-full">
