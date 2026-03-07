@@ -21,6 +21,7 @@ import {
 } from '@/lib/data';
 import { useApiData, useTournamentData } from '@/lib/use-api-data';
 import { getTournamentState, shouldShowPreDraftBanner } from '@/lib/tournament-view';
+import { isUpcomingTournament } from '@/lib/tournament-utils';
 import { pointsFromPosition } from '@/lib/constants';
 
 // Player colors
@@ -699,6 +700,7 @@ export default function TournamentTableView({ params }: { params: { id: string }
         userProfile={getCurrentUser()}
         onViewChange={handleViewChange}
         onViewModeChange={handleViewModeChange}
+        showListTableToggle={!isUpcomingTournament(tournament)}
       />
       <TournamentPicker
         tournaments={tournaments}

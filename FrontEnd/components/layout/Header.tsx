@@ -15,6 +15,8 @@ interface HeaderProps {
   userProfile?: Player;
   onViewChange?: (view: ViewMode) => void;
   onViewModeChange?: (mode: TableViewMode) => void;
+  /** When false, hide list/table toggle only (e.g. when tournament is in draft/pre-draft). Tournament/Season tabs and avatar stay visible. Default: true */
+  showListTableToggle?: boolean;
 }
 
 export default function Header({
@@ -23,6 +25,7 @@ export default function Header({
   userProfile,
   onViewChange = () => {},
   onViewModeChange = () => {},
+  showListTableToggle = true,
 }: HeaderProps) {
   const isMobile = useIsMobile();
 
@@ -84,29 +87,24 @@ export default function Header({
           size={isMobile ? { width: 140, height: 97 } : { width: 232, height: 160 }}
         />
       </div>
-      {/* Mobile: ViewToggle left, avatar right, no divider */}
-      {isMobile && (
-        <>
-          <div
-            style={{
-              position: 'absolute',
-              left: 0,
-              top: 0,
-              display: 'flex',
-              alignItems: 'center',
-              paddingTop: 6,
-              paddingLeft: 16,
-              zIndex: 2,
-            }}
-          >
-            {currentView === 'tournament' && (
-              <ViewToggle currentView={viewMode} onViewChange={onViewModeChange} />
-            )}
-          </div>
-          {/* Avatar moved to mobile footer nav - no header avatar on mobile */}
-        </>
+      {/* Mobile: ViewToggle right, avatar in footer nav */}
+      {isMobile && currentView === 'tournament' && showListTableToggle && (
+        <div
+          style={{
+            position: 'absolute',
+            right: 0,
+            top: 0,
+            display: 'flex',
+            alignItems: 'center',
+            paddingTop: 6,
+            paddingRight: 16,
+            zIndex: 2,
+          }}
+        >
+          <ViewToggle currentView={viewMode} onViewChange={onViewModeChange} />
+        </div>
       )}
-      {/* Desktop: NavBar and right-side controls above the stripes */}
+      {/* Desktop: NavBar and right-side controls */}
       {!isMobile && (
         <>
           <div
@@ -145,23 +143,14 @@ export default function Header({
               zIndex: 2,
             }}
           >
-            <div
-              style={{
-                display: 'flex',
-                gap: '8px',
-                alignItems: 'center',
-                height: '40px',
-              }}
-            >
-              {currentView === 'tournament' && (
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', height: '40px' }}>
+              {currentView === 'tournament' && showListTableToggle && (
                 <>
                   <ViewToggle currentView={viewMode} onViewChange={onViewModeChange} />
                   <Divider />
                 </>
               )}
-              {userProfile && (
-                <IdentityMenu userProfile={userProfile} compact />
-              )}
+              {userProfile && <IdentityMenu userProfile={userProfile} compact />}
             </div>
           </div>
         </>

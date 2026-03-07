@@ -831,6 +831,7 @@ function DraftPageContent() {
           if (mode === 'list') router.push(`/tournament/${selectedTournament.id}/list`);
           else router.push(`/tournament/${selectedTournament.id}/table`);
         }}
+        showListTableToggle={false}
       />
       <TournamentPicker
         tournaments={getTournaments()}

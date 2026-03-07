@@ -220,7 +220,7 @@ export default function SeasonTable({ players, tournamentNames }: SeasonTablePro
             <div
               key={player.playerId}
               className={styles.leftCell}
-              style={{ marginBottom: playerIndex < players.length - 1 ? '24px' : 0 }}
+              style={{ marginBottom: playerIndex < players.length - 1 ? '8px' : 0 }}
             >
               <div className={styles.leftScoreRow}>
                 <div className={styles.playerTag}>
@@ -278,7 +278,7 @@ export default function SeasonTable({ players, tournamentNames }: SeasonTablePro
           </div>
 
           {players.map((player, playerIndex) => (
-            <div key={player.playerId} className={styles.card} style={{ marginBottom: playerIndex < players.length - 1 ? '24px' : 0 }}>
+            <div key={player.playerId} className={styles.card} style={{ marginBottom: playerIndex < players.length - 1 ? '8px' : 0 }}>
               <div className={styles.scoreRow}>{renderMobileScoreRow(player)}</div>
               <div style={{ backgroundColor: dividerColors[player.playerColor] || '#707070', height: '1px', flexShrink: 0, width: '100%' }} />
             </div>
@@ -323,7 +323,7 @@ export default function SeasonTable({ players, tournamentNames }: SeasonTablePro
       </div>
 
       {players.map((player, playerIndex) => (
-        <div key={player.playerId} className={styles.desktopCard} style={{ marginBottom: playerIndex < players.length - 1 ? '24px' : 0 }}>
+        <div key={player.playerId} className={styles.desktopCard} style={{ marginBottom: playerIndex < players.length - 1 ? '8px' : 0 }}>
           <div className={styles.scoreRow}>{renderDesktopScoreRow(player)}</div>
           <div style={{ backgroundColor: dividerColors[player.playerColor] || '#707070', height: '1px', flexShrink: 0, width: '100%' }} />
         </div>

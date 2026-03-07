@@ -56,7 +56,8 @@ export default function SeasonPage() {
         style={{
           position: 'relative',
           width: '100%',
-          minHeight: '100vh',
+          minHeight: isMobile ? 'calc(100vh + 80px)' : '100vh',
+          boxSizing: 'border-box',
         }}
       >
         <BackgroundImage imageSrc="/images/Masters.jpg" alt="Background" />
