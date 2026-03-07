@@ -23,6 +23,7 @@ export interface Tournament {
   startDate?: string; // ISO date string for when tournament starts
   endDate?: string; // ISO date string for when tournament ends
   state?: TournamentState; // Current state of the tournament
+  manualTestingMode?: boolean; // When true, shows player selector on draft page for testing picks as any player. Default false.
   cutLineScore?: number; // Score relative to par for cut line (e.g., +4 means golfers at +4 or better make cut). Omit for no-cut events.
   venue?: {
     name: string; // Course name

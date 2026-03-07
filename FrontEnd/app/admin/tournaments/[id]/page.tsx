@@ -486,6 +486,20 @@ export default function AdminTournamentEditorPage({
             </select>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <label style={{ width: '120px' }}>Manual Testing Mode</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+              <input
+                type="checkbox"
+                checked={!!tournament.manualTestingMode}
+                onChange={(e) => updateT({ manualTestingMode: e.target.checked })}
+                style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+              />
+              <span style={{ fontSize: '14px' }}>
+                Show player selector on draft page (for testing picks as any player)
+              </span>
+            </label>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <label style={{ width: '120px' }}>Draft Start</label>
             <input
               type="date"

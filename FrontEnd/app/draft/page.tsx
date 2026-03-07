@@ -251,6 +251,11 @@ function DraftPageContent() {
   // Manual testing mode: allow selecting which player is making the pick
   const [manualTestPlayerId, setManualTestPlayerId] = useState<string | null>(null);
 
+  // Clear manual test selection when tournament has manual testing mode disabled
+  useEffect(() => {
+    if (!selectedTournament?.manualTestingMode) setManualTestPlayerId(null);
+  }, [selectedTournament?.manualTestingMode]);
+
   // Update state when tournament changes
   useEffect(() => {
     if (!selectedTournament) return;
@@ -916,7 +921,7 @@ function DraftPageContent() {
               pickNumber={draftPickNumber}
               possessivePronoun={nextPlayer.name === 'KristaKay' ? 'her' : 'his'}
             />
-            {/* Manual Testing Mode Selector */}
+            {selectedTournament?.manualTestingMode && (
             <div
               style={{
                 padding: '16px',
@@ -993,6 +998,7 @@ function DraftPageContent() {
                 </div>
               )}
             </div>
+            )}
           </>
         )}
         
