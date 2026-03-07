@@ -129,6 +129,13 @@ const standings = Array.from(playerTotals.entries())
 - These golfers are removed from the draft pool
 - Fat Rando's scores are tracked separately
 
+## Field Source (Testing vs Live)
+
+Per-tournament admin control lets you choose the golfer field source:
+
+- **Dummy (testing)**: Use "Seed Field" to populate with dummy golfers from `dummyGolfers`. Ideal for draft testing without external APIs.
+- **Live API**: Set field source to "Live API", then click "Import from Live API" to fetch the real tournament field from RapidAPI Live Golf Data. Requires `RAPIDAPI_KEY` in `.env.local`. When field source is live and state has no golfers, the golfers API will auto-fetch from the live API on first request.
+
 ## Deterministic Data
 
 All data is **deterministic** - it will be the same every time the app loads. This ensures consistent testing and development.

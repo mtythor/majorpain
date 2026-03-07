@@ -1,6 +1,12 @@
-import { Golfer, Player, DraftEvent, TeamDraft } from './types';
+import { Golfer, Player, DraftEvent, TeamDraft, Tournament, TournamentResult } from './types';
 import { DraftState, DraftPick } from './draft-types';
 import { getTournaments, getTournamentResult, getPlayers } from './data';
+
+/** Minimum golfers required for Fat Rando steals (need 4 steals, ranges up to 1-20) */
+const MIN_FIELD_FOR_RANDO_STEALS = 20;
+
+/** First tournament of season: MtyThor → KristaKay → MrHattyhat → Atticus, then snake. */
+const FIRST_TOURNAMENT_DRAFT_ORDER = ['1', '3', '4', '2'];
 
 /**
  * Generate Fat Rando steals using progressive random selection
@@ -8,10 +14,14 @@ import { getTournaments, getTournamentResult, getPlayers } from './data';
  * Steal #2: Random 1-10 (from remaining)
  * Steal #3: Random 1-15 (from remaining)
  * Steal #4: Random 1-20 (from remaining)
+ * Requires field to be set and sorted by OWGR rank (same order as draft table).
  */
 export function generateFatRandoSteals(golfers: Golfer[]): string[] {
-  // Golfers are already sorted by rank (favorite to longshot)
-  const available = [...golfers];
+  if (!golfers || golfers.length < MIN_FIELD_FOR_RANDO_STEALS) {
+    return [];
+  }
+  // Sort by OWGR rank ascending (same order as draft table: best/favorite first)
+  const available = [...golfers].sort((a, b) => a.rank - b.rank);
   const stolen: string[] = [];
   
   // Steal #1: Random 1-5
@@ -37,95 +47,131 @@ export function generateFatRandoSteals(golfers: Golfer[]): string[] {
 }
 
 /**
- * Get the winner of the most recent completed tournament
+ * Get finish order (1st, 2nd, 3rd, 4th) from the most recent completed tournament.
+ * Returns undefined if no previous tournament with valid results.
  */
-function getPreviousTournamentWinner(currentTournamentId: string): string | undefined {
+function getPreviousTournamentFinishOrder(currentTournamentId: string): string[] | undefined {
   const tournaments = getTournaments();
   const currentIndex = tournaments.findIndex(t => t.id === currentTournamentId);
-  
-  // Find the most recent completed tournament before the current one
+
   for (let i = currentIndex - 1; i >= 0; i--) {
     const tournament = tournaments[i];
     const results = getTournamentResult(tournament.id);
-    
+
     if (results && results.teamScores && results.teamScores.length > 0) {
-      // Sort by totalPoints descending to find winner
       const sorted = [...results.teamScores].sort((a, b) => b.totalPoints - a.totalPoints);
-      return sorted[0]?.playerId;
+      const order = sorted.map(s => s.playerId).filter(Boolean);
+      if (order.length >= 4) return order;
+      if (order.length > 0) return order;
     }
   }
-  
+
   return undefined;
 }
 
 /**
- * Calculate snake draft order based on previous tournament winner
- * Order: Winner → 2nd → 3rd → 4th → 4th → 3rd → 2nd → 1st (repeats for 4 picks per player)
+ * Build snake draft order from a seed order [1st, 2nd, 3rd, 4th].
  */
-export function calculateDraftOrder(players: Player[], currentTournamentId: string): string[] {
-  const previousWinnerId = getPreviousTournamentWinner(currentTournamentId);
-  
-  // If no previous winner, use default order (player IDs 1, 2, 3, 4)
-  if (!previousWinnerId) {
-    const defaultOrder: string[] = [];
-    const numPicks = 4; // 3 active + 1 alternate per player
-    
-    for (let round = 0; round < numPicks; round++) {
-      if (round % 2 === 0) {
-        // Forward order
-        players.forEach(p => defaultOrder.push(p.id));
-      } else {
-        // Reverse order
-        for (let i = players.length - 1; i >= 0; i--) {
-          defaultOrder.push(players[i].id);
-        }
-      }
-    }
-    return defaultOrder;
-  }
-  
-  // Find winner index
-  const winnerIndex = players.findIndex(p => p.id === previousWinnerId);
-  if (winnerIndex === -1) {
-    // Winner not found, use default order (player IDs 1, 2, 3, 4)
-    const defaultOrder: string[] = [];
-    const numPicks = 4; // 3 active + 1 alternate per player
-    
-    for (let round = 0; round < numPicks; round++) {
-      if (round % 2 === 0) {
-        // Forward order
-        players.forEach(p => defaultOrder.push(p.id));
-      } else {
-        // Reverse order
-        for (let i = players.length - 1; i >= 0; i--) {
-          defaultOrder.push(players[i].id);
-        }
-      }
-    }
-    return defaultOrder;
-  }
-  
-  // Snake draft order: Winner → 2nd → 3rd → 4th → 4th → 3rd → 2nd → 1st
+function buildSnakeOrderFromSeed(seed: string[]): string[] {
   const order: string[] = [];
-  const numPicks = 4; // 3 active + 1 alternate per player
-  
+  const numPicks = 4;
   for (let round = 0; round < numPicks; round++) {
     if (round % 2 === 0) {
-      // Forward order
-      for (let i = 0; i < players.length; i++) {
-        const index = (winnerIndex + i) % players.length;
-        order.push(players[index].id);
-      }
+      seed.forEach(id => order.push(id));
     } else {
-      // Reverse order
-      for (let i = players.length - 1; i >= 0; i--) {
-        const index = (winnerIndex + i) % players.length;
-        order.push(players[index].id);
-      }
+      for (let i = seed.length - 1; i >= 0; i--) order.push(seed[i]);
     }
   }
-  
   return order;
+}
+
+/**
+ * Get finish order (1st, 2nd, 3rd, 4th) from the most recent completed tournament.
+ * Uses provided data (for server-side API). Returns undefined if no previous tournament with valid results.
+ */
+function getPreviousTournamentFinishOrderFromData(
+  currentTournamentId: string,
+  tournaments: { id: string }[],
+  results: Record<string, TournamentResult | null | undefined>
+): string[] | undefined {
+  const currentIndex = tournaments.findIndex(t => t.id === currentTournamentId);
+  for (let i = currentIndex - 1; i >= 0; i--) {
+    const tournament = tournaments[i];
+    const res = results[tournament.id];
+    if (res && res.teamScores && res.teamScores.length > 0) {
+      const sorted = [...res.teamScores].sort((a, b) => b.totalPoints - a.totalPoints);
+      const order = sorted.map(s => s.playerId).filter(Boolean);
+      if (order.length >= 4) return order;
+      if (order.length > 0) return order;
+    }
+  }
+  return undefined;
+}
+
+/**
+ * Calculate draft order using provided data (for server-side API).
+ * First tournament: MtyThor → KristaKay → MrHattyhat → Atticus, then snake.
+ * Subsequent: Winner → 2nd → 3rd → 4th from previous tournament, then snake.
+ */
+export function calculateDraftOrderWithData(
+  players: Player[],
+  currentTournamentId: string,
+  tournaments: { id: string }[],
+  results: Record<string, TournamentResult | null | undefined>
+): string[] {
+  const finishOrder = getPreviousTournamentFinishOrderFromData(currentTournamentId, tournaments, results);
+  if (!finishOrder || finishOrder.length === 0) {
+    return getDefaultDraftOrder(players);
+  }
+  const seed = [...finishOrder];
+  for (const p of players) {
+    if (!seed.includes(p.id) && seed.length < 4) seed.push(p.id);
+  }
+  if (seed.length < 4) return getDefaultDraftOrder(players);
+  return buildSnakeOrderFromSeed(seed.slice(0, 4));
+}
+
+/**
+ * Default snake draft order when no previous winner exists (first tournament of season).
+ * Uses fixed order: MtyThor → KristaKay → MrHattyhat → Atticus.
+ * Used by server-side initiate-rando-steals (no access to data cache).
+ */
+export function getDefaultDraftOrder(players: Player[]): string[] {
+  const order: string[] = [];
+  const numPicks = 4; // 3 active + 1 alternate per player
+  const baseOrder = FIRST_TOURNAMENT_DRAFT_ORDER.filter(id => players.some(p => p.id === id));
+  const seed = baseOrder.length === 4 ? [...baseOrder] : players.map(p => p.id);
+  for (let round = 0; round < numPicks; round++) {
+    if (round % 2 === 0) {
+      seed.forEach(id => order.push(id));
+    } else {
+      for (let i = seed.length - 1; i >= 0; i--) order.push(seed[i]);
+    }
+  }
+  return order;
+}
+
+/**
+ * Calculate snake draft order.
+ * First tournament: MtyThor → KristaKay → MrHattyhat → Atticus, then snake.
+ * Subsequent: Winner → 2nd → 3rd → 4th from previous tournament, then snake.
+ */
+export function calculateDraftOrder(players: Player[], currentTournamentId: string): string[] {
+  const finishOrder = getPreviousTournamentFinishOrder(currentTournamentId);
+
+  // No previous tournament (first of season): use fixed order
+  if (!finishOrder || finishOrder.length === 0) {
+    return getDefaultDraftOrder(players);
+  }
+
+  // Build seed: finish order + any missing players (pad to 4)
+  const seed = [...finishOrder];
+  for (const p of players) {
+    if (!seed.includes(p.id) && seed.length < 4) seed.push(p.id);
+  }
+  if (seed.length < 4) return getDefaultDraftOrder(players);
+
+  return buildSnakeOrderFromSeed(seed.slice(0, 4));
 }
 
 /**

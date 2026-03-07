@@ -8,6 +8,7 @@ import MainContainer from '@/components/layout/MainContainer';
 import TournamentPicker from '@/components/tournament/TournamentPicker';
 import TournamentVenue from '@/components/tournament/TournamentVenue';
 import DraftBanner from '@/components/tournament/DraftBanner';
+import ProfilePicture from '@/components/ui/ProfilePicture';
 import PreDraftBanner from '@/components/tournament/PreDraftBanner';
 import DraftTable from '@/components/draft/DraftTable';
 import PlayByPlay from '@/components/tournament/PlayByPlay';
@@ -341,7 +342,8 @@ function DraftPageContent() {
         const saved = getCurrentDraftState(selectedTournament.id);
         if (saved) {
           newInternalDraftState = saved;
-        } else {
+        } else if (newGolfers.length >= 20) {
+          // Only initialize when field is set and large enough for Fat Rando steals (1-20 range)
           newInternalDraftState = initializeDraftState(selectedTournament.id, newGolfers, players);
           saveDraftState(selectedTournament.id, newInternalDraftState);
         }
@@ -392,8 +394,9 @@ function DraftPageContent() {
       if (USE_DRAFT_API) setDraftLoading(false);
       return;
     }
-    if (golfers.length === 0 || players.length === 0) {
-      setDraftLoading(true); // Wait for golfers/players to load
+    // Wait for field to be set and large enough for Fat Rando steals (1-20 range)
+    if (golfers.length < 20 || players.length === 0) {
+      setDraftLoading(true);
       return;
     }
     let cancelled = false;
@@ -412,17 +415,8 @@ function DraftPageContent() {
           lastLoadAtRef.current = Date.now();
           setInternalDraftState(ds as DraftState);
         } else {
-          const initialized = initializeDraftState(selectedTournament.id, golfers, players);
-          skipSaveFromPollRef.current = true;
-          try {
-            await saveDraftStateToApi(selectedTournament.id, initialized);
-            if (cancelled) return;
-            lastKnownUpdatedAtRef.current = new Date().toISOString();
-            lastLoadAtRef.current = Date.now();
-          } catch (saveErr) {
-            if (!cancelled) console.warn('Failed to save draft state to API, using local state:', saveErr);
-          }
-          if (!cancelled) setInternalDraftState(initialized);
+          // No draft state yet - admin must initiate Fat Rando steals first. Do not auto-initialize.
+          setInternalDraftState(null);
         }
       } catch (e) {
         if (!cancelled) console.error('Failed to load draft state:', e);
@@ -432,6 +426,33 @@ function DraftPageContent() {
     })();
     return () => { cancelled = true; };
   }, [USE_DRAFT_API, selectedTournament?.id, tournamentState, golfers.length, players.length, router]);
+
+  // Poll when draft not yet started - pick up when admin initiates Fat Rando steals
+  useEffect(() => {
+    if (!USE_DRAFT_API || !selectedTournament || tournamentState !== 'draft' || internalDraftState || draftLoading) return;
+    if (golfers.length < 20) return;
+    let cancelled = false;
+    const poll = async () => {
+      try {
+        const res = await fetchDraftState(selectedTournament.id);
+        if (cancelled) return;
+        if (res && (res.draftState || (res as { picks?: unknown }).picks !== undefined)) {
+          const { updatedAt, ...ds } = res as { updatedAt?: string } & DraftState;
+          lastKnownUpdatedAtRef.current = updatedAt ?? null;
+          lastLoadAtRef.current = Date.now();
+          setInternalDraftState(ds as DraftState);
+        }
+      } catch {
+        // ignore
+      }
+    };
+    const id = window.setInterval(poll, 3000);
+    poll();
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, [USE_DRAFT_API, selectedTournament?.id, tournamentState, internalDraftState, draftLoading, golfers.length]);
 
   // SSE or polling: keep draft state in sync when another player makes a pick
   useEffect(() => {
@@ -444,7 +465,12 @@ function DraftPageContent() {
       if (Date.now() - lastLoadAtRef.current < 1000) return;
       try {
         const res = await fetchDraftState(selectedTournament.id);
-        if (!res) return;
+        if (!res) {
+          // Server has no draft state (e.g. cleared by import) - clear local state so UI reflects fresh slate
+          setInternalDraftState(null);
+          setDraftState({});
+          return;
+        }
         if (res.teamDrafts && res.teamDrafts.length > 0) {
           router.push(`/tournament/${selectedTournament.id}/list`);
           return;
@@ -911,6 +937,37 @@ function DraftPageContent() {
                 Go to team list
               </button>
             </div>
+          </div>
+        )}
+        {tournamentState === 'draft' && !draftLoading && !completingDraft && !internalDraftState && golfers.length >= 20 && (
+          <div
+            style={{
+              backgroundColor: 'rgba(230, 126, 34, 0.2)',
+              border: '1px solid #e67e22',
+              display: 'flex',
+              gap: '16px',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              flexShrink: 0,
+              width: '100%',
+              maxWidth: '1006px',
+            }}
+          >
+            <ProfilePicture src="/images/Player_FatRando.jpg" alt="Fat Rando" size={24} />
+            <p
+              style={{
+                fontFamily: "'Open Sans', sans-serif",
+                fontWeight: 800,
+                fontSize: '12px',
+                lineHeight: 'normal',
+                color: '#ffffff',
+              }}
+            >
+              <span style={{ fontWeight: 800 }}>Fat Rando</span>{' '}
+              <span style={{ fontWeight: 400 }}>is warming up his grubby little mitts.</span>
+            </p>
           </div>
         )}
         {tournamentState === 'draft' && !draftLoading && !completingDraft && nextPlayer && (

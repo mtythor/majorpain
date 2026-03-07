@@ -57,6 +57,10 @@ export default function AdminTournamentEditorPage({
   const [writeSecretWarning, setWriteSecretWarning] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
   const [seedMessage, setSeedMessage] = useState<string | null>(null);
+  const [importing, setImporting] = useState(false);
+  const [importMessage, setImportMessage] = useState<string | null>(null);
+  const [randoInitiating, setRandoInitiating] = useState(false);
+  const [randoMessage, setRandoMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const t = getTournament(params.id) ?? getTournaments()[0];
@@ -271,6 +275,75 @@ export default function AdminTournamentEditorPage({
       setError(e instanceof Error ? e.message : 'Failed to save');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleImportFromLive = async () => {
+    setImporting(true);
+    setImportMessage(null);
+    setError(null);
+    try {
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      const secret = getWriteSecret();
+      if (secret) headers['X-Major-Pain-Write-Secret'] = secret;
+
+      const res = await fetch(`${API_URL}/admin/tournaments/${params.id}/import-field`, {
+        method: 'POST',
+        headers,
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const errMsg = json?.error || getWriteSecretError(res, json, 'Failed to import');
+        throw new Error(errMsg);
+      }
+      setImportMessage(json.message || 'Imported golfers from live API.');
+      updateDataCache(`golfers-${params.id}`, undefined);
+      updateDataCache(`results-${params.id}`, undefined);
+      // Clear localStorage draft keys so no stale steals persist
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem(`draft-${params.id}`);
+        localStorage.removeItem(`completed-draft-${params.id}`);
+      }
+      // Delay reload so user sees success message
+      if (typeof window !== 'undefined') {
+        setTimeout(() => window.location.reload(), 1500);
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Failed to import from live API';
+      setImportMessage(msg);
+    } finally {
+      setImporting(false);
+    }
+  };
+
+  const handleInitiateRandoSteals = async () => {
+    setRandoInitiating(true);
+    setRandoMessage(null);
+    setError(null);
+    try {
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      const secret = getWriteSecret();
+      if (secret) headers['X-Major-Pain-Write-Secret'] = secret;
+
+      const res = await fetch(`${API_URL}/admin/tournaments/${params.id}/initiate-rando-steals`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({}),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const errMsg = json?.error || getWriteSecretError(res, json, 'Failed to initiate steals');
+        throw new Error(errMsg);
+      }
+      setRandoMessage(json.message || 'Fat Rando steals initiated.');
+      if (typeof window !== 'undefined') {
+        setTimeout(() => window.location.reload(), 1500);
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Failed to initiate Fat Rando steals';
+      setRandoMessage(msg);
+    } finally {
+      setRandoInitiating(false);
     }
   };
 
@@ -500,6 +573,26 @@ export default function AdminTournamentEditorPage({
             </label>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <label style={{ width: '120px' }}>Field Source</label>
+            <select
+              value={tournament.fieldSource ?? 'dummy'}
+              onChange={(e) => updateT({ fieldSource: e.target.value as 'dummy' | 'live' })}
+              style={{
+                padding: '8px',
+                backgroundColor: '#333',
+                color: '#fff',
+                border: '1px solid #555',
+                borderRadius: '4px',
+              }}
+            >
+              <option value="dummy">Dummy (testing)</option>
+              <option value="live">Live API</option>
+            </select>
+            <span style={{ fontSize: '12px', opacity: 0.8 }}>
+              {tournament.fieldSource === 'live' ? 'Use real field from RapidAPI' : 'Use seeded dummy golfers'}
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <label style={{ width: '120px' }}>Draft Start</label>
             <input
               type="date"
@@ -612,6 +705,37 @@ export default function AdminTournamentEditorPage({
             {saving ? 'Saving...' : saveSuccess ? 'Saved!' : 'Save Metadata'}
           </button>
           <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid #444' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, marginBottom: '8px', opacity: 0.9 }}>Current Field</div>
+            <div style={{ fontSize: '12px', display: 'flex', flexDirection: 'column', gap: '4px', opacity: 0.9 }}>
+              <div>
+                <strong>Golfers:</strong> {getGolfers(params.id).length}
+              </div>
+              {tournament.fieldMeta ? (
+                <>
+                  <div>
+                    <strong>Source:</strong> {tournament.fieldMeta.source === 'live' ? 'Live API (RapidAPI)' : 'Dummy (test data)'}
+                  </div>
+                  <div>
+                    <strong>Loaded:</strong> {new Date(tournament.fieldMeta.at).toLocaleString()} ({tournament.fieldMeta.count} golfers)
+                  </div>
+                  {tournament.fieldMeta.source === 'live' && tournament.fieldMeta.liveApiTournId && (
+                    <div style={{ fontSize: '11px', color: '#74a553' }}>
+                      Verified from RapidAPI: tournId={tournament.fieldMeta.liveApiTournId}, year={tournament.fieldMeta.liveApiYear ?? '—'}
+                    </div>
+                  )}
+                </>
+              ) : getGolfers(params.id).length > 0 ? (
+                <div style={{ fontSize: '11px', opacity: 0.8 }}>
+                  Source unknown (loaded before provenance tracking, or via auto-fetch when field was empty).
+                </div>
+              ) : (
+                <div style={{ fontSize: '11px', opacity: 0.8 }}>
+                  No field loaded yet. Seed or import to populate.
+                </div>
+              )}
+            </div>
+          </div>
+          <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid #444' }}>
             <div style={{ fontSize: '13px', fontWeight: 700, marginBottom: '8px', opacity: 0.9 }}>Seed Test Data</div>
             <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center' }}>
               {isRyderCup(params.id) ? (
@@ -693,6 +817,70 @@ export default function AdminTournamentEditorPage({
             {seedMessage && (
               <div style={{ marginTop: '8px', fontSize: '12px', color: seedMessage.includes('Failed') ? '#e12c55' : '#74a553' }}>
                 {seedMessage}
+              </div>
+            )}
+          </div>
+          <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid #444' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, marginBottom: '8px', opacity: 0.9 }}>Import Live Data</div>
+            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center' }}>
+              <button
+                onClick={handleImportFromLive}
+                disabled={importing || seeding || tournament.fieldSource !== 'live'}
+                style={{
+                  padding: '6px 12px',
+                  backgroundColor: importing || seeding || tournament.fieldSource !== 'live' ? '#555' : '#3ca1ff',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: importing || seeding || tournament.fieldSource !== 'live' ? 'not-allowed' : 'pointer',
+                  fontWeight: 600,
+                  fontSize: '11px',
+                }}
+              >
+                {importing ? 'Importing...' : 'Import from Live API'}
+              </button>
+            </div>
+            <div style={{ marginTop: '8px', fontSize: '11px', opacity: 0.8 }}>
+              {tournament.fieldSource === 'live'
+                ? 'Fetch the real tournament field from RapidAPI Live Golf Data. Requires RAPIDAPI_KEY in .env.local.'
+                : 'Set Field Source to Live API above and save to enable.'}
+            </div>
+            {importMessage && (
+              <div style={{ marginTop: '8px', fontSize: '12px', color: importMessage.includes('Failed') || importMessage.includes('error') ? '#e12c55' : '#74a553' }}>
+                {importMessage}
+              </div>
+            )}
+          </div>
+          <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid #444' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, marginBottom: '8px', opacity: 0.9 }}>Initiate Fat Rando Steals</div>
+            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center' }}>
+              <button
+                onClick={handleInitiateRandoSteals}
+                disabled={randoInitiating || getGolfers(params.id).length < 20 || isRyderCup(params.id)}
+                style={{
+                  padding: '6px 12px',
+                  backgroundColor: randoInitiating || getGolfers(params.id).length < 20 || isRyderCup(params.id) ? '#555' : '#fdc71c',
+                  color: randoInitiating || getGolfers(params.id).length < 20 || isRyderCup(params.id) ? '#999' : '#000',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: randoInitiating || getGolfers(params.id).length < 20 || isRyderCup(params.id) ? 'not-allowed' : 'pointer',
+                  fontWeight: 600,
+                  fontSize: '11px',
+                }}
+              >
+                {randoInitiating ? 'Initiating...' : 'Initiate Fat Rando Steals'}
+              </button>
+            </div>
+            <div style={{ marginTop: '8px', fontSize: '11px', opacity: 0.8 }}>
+              {isRyderCup(params.id)
+                ? 'Not available for Ryder Cup / Presidents Cup.'
+                : getGolfers(params.id).length < 20
+                  ? `Need at least 20 golfers in the field (currently ${getGolfers(params.id).length}). Seed or import the field first.`
+                  : 'Generate Fat Rando steals and initialize draft state. Run after seeding or importing the field.'}
+            </div>
+            {randoMessage && (
+              <div style={{ marginTop: '8px', fontSize: '12px', color: randoMessage.includes('Failed') || randoMessage.includes('error') ? '#e12c55' : '#74a553' }}>
+                {randoMessage}
               </div>
             )}
           </div>

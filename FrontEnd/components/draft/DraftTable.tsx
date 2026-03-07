@@ -19,8 +19,8 @@ interface DraftTableProps {
 
 export default function DraftTable({ golfers, draftState, onSelectGolfer, players, isMobile }: DraftTableProps) {
   const playersList = players || getPlayers();
-  const [sortColumn, setSortColumn] = useState<SortColumn>(null);
-  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
+  const [sortColumn, setSortColumn] = useState<SortColumn>('rank');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
 
   const sortedGolfers = useMemo(() => {
     if (!sortColumn) return golfers;

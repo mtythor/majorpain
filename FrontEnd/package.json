@@ -12,7 +12,15 @@
     "seed": "tsx scripts/seed-from-json.ts",
     "migrate": "tsx scripts/migrate.ts",
     "seed-users": "tsx scripts/seed-users.ts",
-    "test-slash-golf": "tsx scripts/test-slash-golf-api.ts"
+    "test-slash-golf": "tsx scripts/test-slash-golf-api.ts",
+    "test-owgr": "tsx scripts/test-owgr-import.ts",
+    "test-owgr": "tsx scripts/test-owgr-import.ts",
+    "test-owgr": "tsx scripts/test-owgr-import.ts",
+    "test-owgr": "tsx scripts/test-owgr-import.ts",
+    "test-owgr": "tsx scripts/test-owgr-import.ts",
+    "test-owgr": "tsx scripts/test-owgr-import.ts",
+    "test-owgr": "tsx scripts/test-owgr-import.ts",
+    "test-owgr": "tsx scripts/test-owgr-import.ts"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",

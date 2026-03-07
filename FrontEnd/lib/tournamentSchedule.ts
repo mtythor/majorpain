@@ -148,7 +148,7 @@ export const TOURNAMENT_SCHEDULE_2026: Tournament[] = [
  * State is date-based by default (getTournamentState); admin override takes precedence.
  */
 export function mergeTournamentsWithSchedule(
-  existing: Array<{ id: string; state?: string; manualTestingMode?: boolean }> = []
+  existing: Array<{ id: string; state?: string; manualTestingMode?: boolean; fieldSource?: 'dummy' | 'live'; fieldMeta?: Tournament['fieldMeta'] }> = []
 ): Tournament[] {
   const existingById = new Map(existing.map((t) => [t.id, t]));
   return TOURNAMENT_SCHEDULE_2026.map((canonical) => {
@@ -157,6 +157,8 @@ export function mergeTournamentsWithSchedule(
       ...canonical,
       state: stored?.state as Tournament['state'] | undefined,
       manualTestingMode: stored?.manualTestingMode,
+      fieldSource: stored?.fieldSource,
+      fieldMeta: stored?.fieldMeta,
     };
   });
 }

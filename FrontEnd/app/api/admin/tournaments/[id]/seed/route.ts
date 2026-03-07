@@ -60,7 +60,18 @@ export async function POST(
       existingGolfers,
       existingResult ? { teamDrafts: existingResult.teamDrafts, fatRandoStolenGolfers: existingResult.fatRandoStolenGolfers } : undefined
     );
-    const tournaments = mergeTournamentsWithSchedule(current?.tournaments as Array<{ id: string; state?: string }> | undefined);
+    let tournaments = mergeTournamentsWithSchedule(current?.tournaments as Array<{ id: string; state?: string; fieldSource?: 'dummy' | 'live'; fieldMeta?: { source: 'dummy' | 'live'; count: number; at: string } }> | undefined);
+    if (mode === 'golfers') {
+      const idx = tournaments.findIndex((t) => t.id === tournamentId);
+      if (idx >= 0) {
+        tournaments = [...tournaments];
+        tournaments[idx] = {
+          ...tournaments[idx],
+          fieldSource: 'dummy' as const,
+          fieldMeta: { source: 'dummy', count: golfers.length, at: new Date().toISOString() },
+        };
+      }
+    }
     const merged = {
       tournaments,
       players: current?.players ?? [],

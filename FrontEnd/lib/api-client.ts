@@ -56,7 +56,7 @@ export async function fetchTournament(id: string): Promise<Tournament | null> {
  * Fetch golfers for a specific tournament (from database via API)
  */
 export async function fetchGolfers(tournamentId: string): Promise<Golfer[]> {
-  const response = await fetch(`${API_URL}/tournaments/${tournamentId}/golfers`);
+  const response = await fetch(`${API_URL}/tournaments/${tournamentId}/golfers`, { cache: 'no-store' });
   if (!response.ok) {
     throw new Error(`Failed to fetch golfers: ${response.statusText}`);
   }
@@ -67,7 +67,7 @@ export async function fetchGolfers(tournamentId: string): Promise<Golfer[]> {
  * Fetch tournament results for a specific tournament (from database via API)
  */
 export async function fetchTournamentResult(tournamentId: string): Promise<TournamentResult | null> {
-  const response = await fetch(`${API_URL}/tournaments/${tournamentId}/results`);
+  const response = await fetch(`${API_URL}/tournaments/${tournamentId}/results`, { cache: 'no-store' });
   if (response.status === 404) return null;
   if (!response.ok) {
     throw new Error(`Failed to fetch tournament results: ${response.statusText}`);
