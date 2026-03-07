@@ -454,9 +454,10 @@ function DraftPageContent() {
     };
   }, [USE_DRAFT_API, selectedTournament?.id, tournamentState, internalDraftState, draftLoading, golfers.length]);
 
-  // SSE or polling: keep draft state in sync when another player makes a pick
+  // SSE + polling: keep draft state in sync when another player makes a pick.
+  // Use draftLoading (not internalDraftState) in deps to avoid teardown/recreate on every update.
   useEffect(() => {
-    if (!USE_DRAFT_API || !selectedTournament || tournamentState !== 'draft' || !internalDraftState) return;
+    if (!USE_DRAFT_API || !selectedTournament || tournamentState !== 'draft' || draftLoading) return;
 
     const fetchAndApply = async () => {
       if (saveInProgressRef.current || skipSaveFromPollRef.current) return;
@@ -504,7 +505,7 @@ function DraftPageContent() {
     window.addEventListener('focus', onFocus);
     document.addEventListener('visibilitychange', onVisibility);
 
-    // Try SSE first; fall back to polling on error
+    // Try SSE for instant updates; always run polling as backup (SSE can miss events in edge cases)
     let eventSource: EventSource | null = null;
     try {
       eventSource = new EventSource(getDraftStreamUrl(selectedTournament.id));
@@ -526,8 +527,8 @@ function DraftPageContent() {
       startPolling();
     }
 
-    // If SSE failed to connect, we might have started polling in onerror. Otherwise start poll as backup after a delay.
-    if (!eventSource) startPolling();
+    // Always run polling as backup (SSE can miss events; only updates state when updatedAt changes)
+    startPolling();
 
     return () => {
       eventSource?.close();
@@ -535,7 +536,7 @@ function DraftPageContent() {
       window.removeEventListener('focus', onFocus);
       document.removeEventListener('visibilitychange', onVisibility);
     };
-  }, [USE_DRAFT_API, selectedTournament?.id, tournamentState, internalDraftState, router]);
+  }, [USE_DRAFT_API, selectedTournament?.id, tournamentState, draftLoading, router]);
 
   // Check on mount if draft is already complete (localStorage only when not using API)
   useEffect(() => {
