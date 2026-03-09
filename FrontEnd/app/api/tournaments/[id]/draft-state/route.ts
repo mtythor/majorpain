@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getData, saveData, saveDataIfUnchanged } from '@/lib/api-db';
 import { emitDraftUpdate } from '@/lib/draft-events';
+import { sendDraftTurnNotification } from '@/lib/notifications';
 
 export const dynamic = 'force-dynamic';
 
@@ -68,6 +69,16 @@ export async function POST(
       }
     } else {
       newUpdatedAt = await saveData(newData);
+    }
+
+    const bodyState = body as { draftOrder?: string[]; currentPick?: number };
+    const draftOrder = bodyState.draftOrder ?? [];
+    const currentPick = bodyState.currentPick ?? 0;
+    if (currentPick < draftOrder.length) {
+      const nextPlayerId = draftOrder[currentPick];
+      const tournament = tournaments.find((t: { id?: string }) => t.id === tournamentId) as { name?: string } | undefined;
+      const tournamentName = tournament?.name;
+      await sendDraftTurnNotification(tournamentId, currentPick, nextPlayerId, tournamentName);
     }
 
     emitDraftUpdate(tournamentId);

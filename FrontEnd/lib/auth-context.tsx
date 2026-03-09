@@ -9,6 +9,8 @@ import {
   ReactNode,
 } from 'react';
 import { useRouter } from 'next/navigation';
+import OneSignal from 'react-onesignal';
+import { onesignalInit } from './onesignal-init';
 import { Tournament } from './types';
 import { parseTournamentDate, getTournamentState } from './tournament-view';
 import { getTournaments, updateDataCache, getPlayers } from './data';
@@ -130,6 +132,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (player) {
         updateDataCache('currentUser', player);
       }
+      // Set OneSignal external ID for push targeting (when ready)
+      if (onesignalInit.status === 'ready') {
+        OneSignal.login(String(user.playerId)).catch(() => {});
+      }
     } catch {
       setCurrentUser(null);
     }
@@ -144,6 +150,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     refreshCurrentUser().finally(() => setLoading(false));
   }, [refreshCurrentUser]);
 
+  // Sync OneSignal external ID when user is logged in and OneSignal becomes ready
+  // (OneSignal init is async; poll until ready since onesignalInit doesn't trigger re-renders)
+  useEffect(() => {
+    if (!currentUser) return;
+    const interval = setInterval(() => {
+      if (onesignalInit.status === 'ready') {
+        OneSignal.login(String(currentUser.playerId)).catch(() => {});
+        clearInterval(interval);
+      } else if (onesignalInit.status === 'failed' || onesignalInit.status === 'unavailable') {
+        clearInterval(interval);
+      }
+    }, 500);
+    return () => clearInterval(interval);
+  }, [currentUser?.playerId]);
+
   const login = useCallback((user: CurrentUser, token: string) => {
     localStorage.setItem(TOKEN_KEY, token);
     localStorage.setItem('major_pain_authenticated', 'true');
@@ -153,10 +174,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (player) {
       updateDataCache('currentUser', player);
     }
+    // Set OneSignal external ID for push targeting (when ready)
+    if (typeof window !== 'undefined' && onesignalInit.status === 'ready') {
+      OneSignal.login(String(user.playerId)).catch(() => {});
+    }
     router.push(getLandingPath());
   }, [router]);
 
   const logout = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      OneSignal.logout().catch(() => {});
+    }
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem('major_pain_authenticated');
     setCurrentUser(null);

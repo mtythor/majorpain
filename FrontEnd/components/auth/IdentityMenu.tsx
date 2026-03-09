@@ -128,6 +128,12 @@ export default function IdentityMenu({ userProfile, compact, variant = 'default'
         </button>
       )}
       <button
+        onClick={() => closeAnd(() => router.push('/notifications'))}
+        style={menuButtonStyle}
+      >
+        Notification settings
+      </button>
+      <button
         onClick={() => closeAnd(() => setShowChangePassword(true))}
         style={menuButtonStyle}
       >

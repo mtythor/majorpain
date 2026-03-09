@@ -66,6 +66,11 @@ async function main() {
       await runSqlFile(pool, m004);
     }
 
+    const m005 = path.join(repoRoot, 'migrations', '005_notification_state.sql');
+    if (fs.existsSync(m005)) {
+      await runSqlFile(pool, m005);
+    }
+
     console.log('Migration complete.');
   } finally {
     await pool.end();

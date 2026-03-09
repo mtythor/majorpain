@@ -6,6 +6,8 @@ import { openSans, notoSans } from "@/lib/fonts";
 import MobileFooterNav from "@/components/layout/MobileFooterNav";
 import MobileLayoutWrapper from "@/components/layout/MobileLayoutWrapper";
 import ViewportHeightProvider from "@/components/layout/ViewportHeightProvider";
+import OneSignalProvider from "@/components/notifications/OneSignalProvider";
+import NotificationBanner from "@/components/notifications/NotificationBanner";
 
 export const metadata: Metadata = {
   title: "Major Pain Fantasy Golf",
@@ -30,12 +32,15 @@ export default function RootLayout({
         <ViewportHeightProvider />
         <MobileLayoutWrapper>
           <AuthProvider>
-            <div className="mobile-layout-main">
-              {children}
-            </div>
+            <OneSignalProvider>
+              <NotificationBanner />
+              <div className="mobile-layout-main">
+                {children}
+              </div>
             <Suspense fallback={null}>
               <MobileFooterNav />
             </Suspense>
+            </OneSignalProvider>
           </AuthProvider>
         </MobileLayoutWrapper>
       </body>

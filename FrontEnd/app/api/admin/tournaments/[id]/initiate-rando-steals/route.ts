@@ -3,6 +3,7 @@ import { getData, saveData } from '@/lib/api-db';
 import { emitDraftUpdate } from '@/lib/draft-events';
 import { generateFatRandoSteals, createFatRandoStealEvents, calculateDraftOrderWithData } from '@/lib/draft-logic';
 import { isRyderCup } from '@/lib/dummyData';
+import { sendDraftTurnNotification } from '@/lib/notifications';
 import type { Golfer, Player } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
@@ -99,6 +100,11 @@ export async function POST(
 
     await saveData(newData);
     emitDraftUpdate(tournamentId);
+
+    const firstPlayerId = draftOrder[0];
+    const tournament = tournaments.find((t: { id?: string }) => t.id === tournamentId) as { name?: string } | undefined;
+    const tournamentName = tournament?.name;
+    await sendDraftTurnNotification(tournamentId, 0, firstPlayerId, tournamentName);
 
     return NextResponse.json({
       ok: true,
