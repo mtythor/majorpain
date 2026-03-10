@@ -29,7 +29,9 @@ export function useNotificationDiagnostics() {
         setNativePermission(Notification.permission);
       }
       const sub = (window as unknown as { OneSignal?: typeof OneSignal }).OneSignal?.User?.PushSubscription;
-      setOptedIn(sub?.optedIn);
+      // Only treat as subscribed when we have a subscription ID (reached OneSignal's servers)
+      const actuallySubscribed = !!(sub?.optedIn && sub?.id);
+      setOptedIn(actuallySubscribed);
     }, POLL_MS);
     return () => clearInterval(interval);
   }, []);

@@ -15,10 +15,11 @@ export function useNotificationSubscription(isMobile: boolean) {
   const [optedIn, setOptedIn] = useState<boolean | null>(null);
 
   const updateOptedIn = useCallback(() => {
-    const os = typeof window !== 'undefined' ? (window as unknown as { OneSignal?: { User?: { PushSubscription?: { optedIn?: boolean } } } }).OneSignal : undefined;
+    const os = typeof window !== 'undefined' ? (window as unknown as { OneSignal?: { User?: { PushSubscription?: { optedIn?: boolean; id?: string | null } } } }).OneSignal : undefined;
     if (!os?.User?.PushSubscription) return false;
     const sub = os.User.PushSubscription;
-    const opted = sub.optedIn === true || (typeof Notification !== 'undefined' && Notification.permission === 'granted');
+    // Only treat as subscribed when we have a subscription ID (reached OneSignal's servers)
+    const opted = sub.optedIn === true && !!sub.id;
     setOptedIn(opted);
     return opted;
   }, []);
@@ -41,11 +42,12 @@ export function useNotificationSubscription(isMobile: boolean) {
     const poll = () => {
       pollCount++;
       if (onesignalInit.status === 'ready') {
-        const os = (window as unknown as { OneSignal?: { User?: { PushSubscription?: { optedIn?: boolean; addEventListener: (e: string, h: () => void) => void; removeEventListener: (e: string, h: () => void) => void } } } }).OneSignal;
+        const os = (window as unknown as { OneSignal?: { User?: { PushSubscription?: { optedIn?: boolean; id?: string | null; addEventListener: (e: string, h: () => void) => void; removeEventListener: (e: string, h: () => void) => void } } } }).OneSignal;
         const sub = os?.User?.PushSubscription;
         if (sub) {
           const opts = () => {
-            const next = sub.optedIn === true || (typeof Notification !== 'undefined' && Notification.permission === 'granted');
+            // Only treat as subscribed when we have a subscription ID (reached OneSignal's servers)
+            const next = sub.optedIn === true && !!sub.id;
             setOptedIn(next);
           };
           opts();

@@ -6,6 +6,35 @@ import OneSignal from 'react-onesignal';
 import { ChevronLeft } from 'lucide-react';
 import { useNotificationDiagnostics } from '@/hooks/useNotificationDiagnostics';
 
+const SUBSCRIBE_TIMEOUT_MS = 10000;
+
+/** Wait for OneSignal to assign a subscription ID (proof it reached their servers). */
+function waitForSubscriptionId(timeoutMs: number): Promise<string | null> {
+  return new Promise((resolve) => {
+    const sub = OneSignal.User?.PushSubscription;
+    if (!sub) {
+      resolve(null);
+      return;
+    }
+    if (sub.id) {
+      resolve(sub.id);
+      return;
+    }
+    const handler = () => {
+      if (sub.id) {
+        sub.removeEventListener('change', handler);
+        clearTimeout(timer);
+        resolve(sub.id);
+      }
+    };
+    sub.addEventListener('change', handler);
+    const timer = setTimeout(() => {
+      sub.removeEventListener('change', handler);
+      resolve(sub.id ?? null);
+    }, timeoutMs);
+  });
+}
+
 export default function NotificationsPage() {
   const router = useRouter();
   const { log, appendLog, initStatus, nativePermission, optedIn } = useNotificationDiagnostics();
@@ -42,10 +71,19 @@ export default function NotificationsPage() {
     setSubscribing(true);
     appendLog('Requesting permission and opting in...');
     try {
-      await OneSignal.Notifications.requestPermission();
+      if (typeof Notification !== 'undefined' && Notification.permission !== 'granted') {
+        appendLog('Requesting OneSignal permission...');
+        await OneSignal.Notifications.requestPermission();
+      }
+      appendLog('Opting in to OneSignal...');
       await OneSignal.User.PushSubscription.optIn();
-      appendLog('Subscribed successfully!');
-      setShowPromptModal(false);
+      const id = await waitForSubscriptionId(SUBSCRIBE_TIMEOUT_MS);
+      if (id) {
+        appendLog(`Subscribed successfully! (ID: ${id.slice(0, 8)}...)`);
+        setShowPromptModal(false);
+      } else {
+        appendLog('Subscription may not have completed. Check OneSignal dashboard.', 'error');
+      }
     } catch (e) {
       appendLog(`Error: ${e instanceof Error ? e.message : String(e)}`, 'error');
     }
