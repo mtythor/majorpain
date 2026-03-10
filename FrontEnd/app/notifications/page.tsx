@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import OneSignal from 'react-onesignal';
 import { ChevronLeft } from 'lucide-react';
 import { useNotificationDiagnostics } from '@/hooks/useNotificationDiagnostics';
+import { useAuth } from '@/lib/auth-context';
 import { isDevNotificationsTest } from '@/lib/notifications-dev';
-import { onesignalInit } from '@/lib/onesignal-init';
+import { onesignalInit, tryOneSignalLogin } from '@/lib/onesignal-init';
 
 const SUBSCRIBE_TIMEOUT_MS = 20000;
 const INIT_WAIT_MS = 15000;
@@ -72,6 +73,7 @@ function waitForSubscriptionId(timeoutMs: number): Promise<string | null> {
 export default function NotificationsPage() {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
+  const { currentUser } = useAuth();
   const { log, appendLog, initStatus, initError, nativePermission, optedIn } = useNotificationDiagnostics();
   const [showPromptModal, setShowPromptModal] = useState(false);
   const [subscribing, setSubscribing] = useState(false);
@@ -151,6 +153,7 @@ export default function NotificationsPage() {
       const id = await Promise.race([subscribePromise, timeoutPromise]);
       if (id) {
         appendLog(`Subscribed! ID: ${id.slice(0, 8)}...`);
+        if (currentUser) tryOneSignalLogin(currentUser.playerId);
         setShowPromptModal(false);
       } else {
         appendLog('Subscription may not have completed.', 'error');

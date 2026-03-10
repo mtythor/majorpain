@@ -10,7 +10,7 @@ import {
 } from 'react';
 import { useRouter } from 'next/navigation';
 import OneSignal from 'react-onesignal';
-import { onesignalInit } from './onesignal-init';
+import { onesignalInit, tryOneSignalLogin } from './onesignal-init';
 import { Tournament } from './types';
 import { parseTournamentDate, getTournamentState } from './tournament-view';
 import { getTournaments, updateDataCache, getPlayers } from './data';
@@ -132,10 +132,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (player) {
         updateDataCache('currentUser', player);
       }
-      // Set OneSignal external ID for push targeting (when ready)
-      if (onesignalInit.status === 'ready') {
-        OneSignal.login(String(user.playerId)).catch(() => {});
-      }
+      // Set OneSignal external ID for push targeting (only when subscribed - else 400)
+      tryOneSignalLogin(user.playerId);
     } catch {
       setCurrentUser(null);
     }
@@ -150,18 +148,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     refreshCurrentUser().finally(() => setLoading(false));
   }, [refreshCurrentUser]);
 
-  // Sync OneSignal external ID when user is logged in and OneSignal becomes ready
-  // (OneSignal init is async; poll until ready since onesignalInit doesn't trigger re-renders)
+  // Sync OneSignal external ID when user is logged in, OneSignal ready, AND user has subscribed
+  // (login without subscription causes 400; poll until we have subscription, failed, or 2min timeout)
   useEffect(() => {
     if (!currentUser) return;
+    const start = Date.now();
+    const POLL_MS = 500;
+    const MAX_POLL_MS = 120000; // 2 min - notifications page will call tryOneSignalLogin on subscribe
     const interval = setInterval(() => {
-      if (onesignalInit.status === 'ready') {
-        OneSignal.login(String(currentUser.playerId)).catch(() => {});
+      if (Date.now() - start >= MAX_POLL_MS) {
         clearInterval(interval);
+        return;
+      }
+      if (onesignalInit.status === 'ready') {
+        tryOneSignalLogin(currentUser.playerId);
+        const sub = OneSignal.User?.PushSubscription;
+        if (sub?.optedIn && sub?.id) clearInterval(interval);
       } else if (onesignalInit.status === 'failed' || onesignalInit.status === 'unavailable') {
         clearInterval(interval);
       }
-    }, 500);
+    }, POLL_MS);
     return () => clearInterval(interval);
   }, [currentUser?.playerId]);
 
@@ -174,10 +180,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (player) {
       updateDataCache('currentUser', player);
     }
-    // Set OneSignal external ID for push targeting (when ready)
-    if (typeof window !== 'undefined' && onesignalInit.status === 'ready') {
-      OneSignal.login(String(user.playerId)).catch(() => {});
-    }
+    // Set OneSignal external ID for push targeting (only when subscribed - else 400)
+    if (typeof window !== 'undefined') tryOneSignalLogin(user.playerId);
     router.push(getLandingPath());
   }, [router]);
 

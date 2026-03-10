@@ -14,6 +14,8 @@ const nextConfig = {
     NEXT_PUBLIC_BUILD_TIMESTAMP:
       process.env.NEXT_PUBLIC_BUILD_TIMESTAMP ||
       new Date().toISOString(),
+    NEXT_PUBLIC_ONESIGNAL_APP_ID:
+      process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID || "",
   },
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
