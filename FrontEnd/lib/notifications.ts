@@ -1,8 +1,10 @@
 /**
  * OneSignal push notification helpers.
  * Sends via REST API; uses notification state for deduplication.
+ * Uses majorpain- prefix for external_id to match client-side OneSignal.login().
  */
 
+import { toOneSignalExternalId } from './onesignal-external-id';
 import { getNotificationState, saveNotificationState } from './notification-state';
 
 const ONESIGNAL_API = 'https://api.onesignal.com/notifications';
@@ -74,7 +76,7 @@ export async function sendDraftTurnNotification(
   const ok = await sendOneSignalNotification({
     contents: { en: `It's your turn to draft in ${name}!` },
     headings: { en: 'Draft Reminder' },
-    includeAliases: { external_id: [nextPlayerId] },
+    includeAliases: { external_id: [toOneSignalExternalId(nextPlayerId)] },
   });
   if (ok) {
     sent[key] = true;

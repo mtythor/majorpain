@@ -21,14 +21,17 @@ export const onesignalInit = {
   },
 };
 
+import { toOneSignalExternalId } from './onesignal-external-id';
+
 /**
  * Call OneSignal.login only when the user has an active push subscription.
  * Calling login without a subscription causes a 400 Bad Request from OneSignal's API.
+ * Uses majorpain- prefix to avoid "external_id is blocked" on raw numeric IDs.
  */
 export function tryOneSignalLogin(playerId: number): void {
   if (typeof window === 'undefined') return;
   if (onesignalInit.status !== 'ready') return;
   const sub = OneSignal.User?.PushSubscription;
   if (!sub?.optedIn || !sub?.id) return;
-  OneSignal.login(String(playerId)).catch(() => {});
+  OneSignal.login(toOneSignalExternalId(playerId)).catch(() => {});
 }
