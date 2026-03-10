@@ -98,25 +98,22 @@ export default function NotificationsPage() {
         setShowPromptModal(false);
         return;
       }
-      if (Notification.permission !== 'granted') {
-        appendLog('Requesting permission...');
-        const perm = await Notification.requestPermission();
-        appendLog(`Permission: ${perm}`);
-        if (perm !== 'granted') {
-          appendLog('Permission denied.', 'error');
-          setShowPromptModal(false);
-          return;
-        }
+      appendLog('Requesting permission via OneSignal...');
+      await OneSignal.Notifications.requestPermission();
+      if (!OneSignal.Notifications.permission) {
+        appendLog('Permission denied.', 'error');
+        setShowPromptModal(false);
+        return;
       }
-      appendLog('Subscribing to OneSignal (completes in background)...');
+      appendLog('Permission granted. Subscribing to OneSignal...');
       const sub = OneSignal.User?.PushSubscription;
       if (!sub) {
         appendLog('PushSubscription not ready yet. Try again in a moment.', 'error');
         setShowPromptModal(false);
       } else {
-        sub.optIn();
+        await sub.optIn();
         setShowPromptModal(false);
-        appendLog('Modal closed. OneSignal will finish subscribing. You can refresh to check status.');
+        appendLog('Subscribed.');
       }
     } catch (e) {
       appendLog(`Error: ${e instanceof Error ? e.message : String(e)}`, 'error');

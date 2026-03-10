@@ -30,15 +30,6 @@ export default function OneSignalProvider({
         message: "You're all set! You'll get notified when it's your turn to draft and when results are in.",
         title: 'Major Pain Notifications',
       },
-      promptOptions: {
-        slidedown: {
-          prompts: [{
-            type: 'push',
-            autoPrompt: false,
-            delay: { pageViews: 1, timeDelay: 0 },
-          }],
-        },
-      },
     };
 
     if (safariWebId) {

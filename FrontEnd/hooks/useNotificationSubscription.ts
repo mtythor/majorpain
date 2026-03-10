@@ -18,8 +18,8 @@ export function useNotificationSubscription(isMobile: boolean) {
     const os = typeof window !== 'undefined' ? (window as unknown as { OneSignal?: { User?: { PushSubscription?: { optedIn?: boolean; id?: string | null } } } }).OneSignal : undefined;
     if (!os?.User?.PushSubscription) return false;
     const sub = os.User.PushSubscription;
-    // Only treat as subscribed when we have a subscription ID (reached OneSignal's servers)
-    const opted = sub.optedIn === true && !!sub.id;
+    // Brocation pattern: sub.optedIn || Notification.permission === 'granted' to avoid UI flicker
+    const opted = sub.optedIn || (typeof Notification !== 'undefined' && Notification.permission === 'granted');
     setOptedIn(opted);
     return opted;
   }, []);
@@ -46,8 +46,8 @@ export function useNotificationSubscription(isMobile: boolean) {
         const sub = os?.User?.PushSubscription;
         if (sub) {
           const opts = () => {
-            // Only treat as subscribed when we have a subscription ID (reached OneSignal's servers)
-            const next = sub.optedIn === true && !!sub.id;
+            // Brocation pattern: sub.optedIn || Notification.permission === 'granted'
+            const next = sub.optedIn || (typeof Notification !== 'undefined' && Notification.permission === 'granted');
             setOptedIn(next);
           };
           opts();

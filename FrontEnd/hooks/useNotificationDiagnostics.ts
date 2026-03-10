@@ -34,8 +34,8 @@ export function useNotificationDiagnostics() {
         setNativePermission(Notification.permission);
       }
       const sub = (window as unknown as { OneSignal?: typeof OneSignal }).OneSignal?.User?.PushSubscription;
-      // Only treat as subscribed when we have a subscription ID (reached OneSignal's servers)
-      const actuallySubscribed = !!(sub?.optedIn && sub?.id);
+      // Brocation pattern: sub.optedIn || Notification.permission === 'granted' to avoid UI flicker
+      const actuallySubscribed = !!sub && (sub.optedIn || (typeof Notification !== 'undefined' && Notification.permission === 'granted'));
       setOptedIn(actuallySubscribed);
     }, POLL_MS);
     return () => clearInterval(interval);
