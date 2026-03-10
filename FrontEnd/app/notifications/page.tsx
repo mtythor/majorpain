@@ -5,14 +5,10 @@ import { useRouter } from 'next/navigation';
 import OneSignal from 'react-onesignal';
 import { ChevronLeft } from 'lucide-react';
 import { useNotificationDiagnostics } from '@/hooks/useNotificationDiagnostics';
-import { useAuth } from '@/lib/auth-context';
 import { isDevNotificationsTest } from '@/lib/notifications-dev';
-import { onesignalInit, tryOneSignalLogin } from '@/lib/onesignal-init';
+import { onesignalInit } from '@/lib/onesignal-init';
 
-const SUBSCRIBE_TIMEOUT_MS = 10000; // Wait for subscription ID
 const INIT_WAIT_MS = 15000;
-const OUTER_TIMEOUT_MS = 15000; // Max wait before giving up
-const OPTED_IN_POLL_MS = 8000;  // Race optedIn against id - often succeeds first
 
 function waitForInit(timeoutMs: number): Promise<boolean> {
   return new Promise((resolve) => {
@@ -44,64 +40,9 @@ function waitForInit(timeoutMs: number): Promise<boolean> {
   });
 }
 
-/** Call optIn, then wait for subscription ID via change event + polling. Change event can be unreliable. */
-function optInAndWaitForSubscriptionId(timeoutMs: number): Promise<string | null> {
-  const sub = OneSignal.User?.PushSubscription;
-  if (!sub) return Promise.resolve(null);
-  if (sub.id) return Promise.resolve(sub.id);
-
-  const idPromise = new Promise<string | null>((resolve) => {
-    const done = (id: string | null) => {
-      sub.removeEventListener('change', handler);
-      clearInterval(pollId);
-      clearTimeout(timer);
-      resolve(id);
-    };
-    const handler = () => {
-      if (sub.id) done(sub.id);
-    };
-    sub.addEventListener('change', handler);
-
-    const pollId = setInterval(() => {
-      if (sub.id) done(sub.id);
-    }, 400);
-
-    const timer = setTimeout(() => done(sub.id ?? null), timeoutMs);
-
-    OneSignal.User.PushSubscription.optIn().catch(() => {});
-  });
-
-  return idPromise;
-}
-
-/** Poll for optedIn as fallback when id is slow to appear. */
-function waitForOptedIn(timeoutMs: number): Promise<boolean> {
-  return new Promise((resolve) => {
-    const sub = OneSignal.User?.PushSubscription;
-    if (sub?.optedIn) {
-      resolve(true);
-      return;
-    }
-    const start = Date.now();
-    const check = () => {
-      if (OneSignal.User?.PushSubscription?.optedIn) {
-        resolve(true);
-        return;
-      }
-      if (Date.now() - start >= timeoutMs) {
-        resolve(false);
-        return;
-      }
-      setTimeout(check, 300);
-    };
-    check();
-  });
-}
-
 export default function NotificationsPage() {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
-  const { currentUser } = useAuth();
   const { log, appendLog, initStatus, initError, nativePermission, optedIn } = useNotificationDiagnostics();
   const [showPromptModal, setShowPromptModal] = useState(false);
   const [subscribing, setSubscribing] = useState(false);
@@ -141,7 +82,7 @@ export default function NotificationsPage() {
 
   const handlePromptAllow = async () => {
     setSubscribing(true);
-    appendLog('Waiting for OneSignal...');
+    appendLog('Starting subscription...');
     try {
       if (onesignalInit.status !== 'ready') {
         const ready = await waitForInit(INIT_WAIT_MS);
@@ -158,45 +99,24 @@ export default function NotificationsPage() {
         return;
       }
       if (Notification.permission !== 'granted') {
-        appendLog('Requesting notification permission...');
-        await Notification.requestPermission();
-        appendLog(`Permission: ${Notification.permission}`);
-      }
-      if (Notification.permission !== 'granted') {
-        appendLog('Permission denied.', 'error');
-        setShowPromptModal(false);
-        return;
-      }
-      appendLog('Subscribing to Major Pain...');
-      const idPromise = optInAndWaitForSubscriptionId(SUBSCRIBE_TIMEOUT_MS);
-      const optedInPromise = waitForOptedIn(OPTED_IN_POLL_MS).then((ok) =>
-        ok ? (OneSignal.User?.PushSubscription?.id ?? 'opted-in') : null
-      );
-      const timeoutPromise = new Promise<string | null>((resolve) =>
-        setTimeout(() => resolve(null), OUTER_TIMEOUT_MS)
-      );
-      const id = await Promise.race([idPromise, optedInPromise, timeoutPromise]);
-      if (id) {
-        appendLog(id !== 'opted-in' ? `Subscribed! ID: ${id.slice(0, 8)}...` : 'Subscribed!');
-        if (currentUser) {
-          tryOneSignalLogin(currentUser.playerId);
-          const token = localStorage.getItem('major_pain_token');
-          if (token) {
-            setTimeout(() => {
-              fetch('/api/notifications/welcome', {
-                method: 'POST',
-                headers: { Authorization: `Bearer ${token}` },
-              }).then(
-                () => appendLog('Confirmation push sent.'),
-                () => {}
-              );
-            }, 2000);
-          }
+        appendLog('Requesting permission...');
+        const perm = await Notification.requestPermission();
+        appendLog(`Permission: ${perm}`);
+        if (perm !== 'granted') {
+          appendLog('Permission denied.', 'error');
+          setShowPromptModal(false);
+          return;
         }
+      }
+      appendLog('Subscribing to OneSignal (completes in background)...');
+      const sub = OneSignal.User?.PushSubscription;
+      if (!sub) {
+        appendLog('PushSubscription not ready yet. Try again in a moment.', 'error');
         setShowPromptModal(false);
       } else {
-        appendLog('Subscription may not have completed.', 'error');
+        sub.optIn();
         setShowPromptModal(false);
+        appendLog('Modal closed. OneSignal will finish subscribing. You can refresh to check status.');
       }
     } catch (e) {
       appendLog(`Error: ${e instanceof Error ? e.message : String(e)}`, 'error');

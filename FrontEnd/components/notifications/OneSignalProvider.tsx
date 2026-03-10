@@ -26,6 +26,10 @@ export default function OneSignalProvider({
       serviceWorkerParam: { scope: '/push/' },
       allowLocalhostAsSecureOrigin: true,
       notifyButton: { enable: false },
+      welcomeNotification: {
+        message: "You're all set! You'll get notified when it's your turn to draft and when results are in.",
+        title: 'Major Pain Notifications',
+      },
       promptOptions: {
         slidedown: {
           prompts: [{
