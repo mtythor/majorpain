@@ -6,8 +6,41 @@ import OneSignal from 'react-onesignal';
 import { ChevronLeft } from 'lucide-react';
 import { useNotificationDiagnostics } from '@/hooks/useNotificationDiagnostics';
 import { isDevNotificationsTest } from '@/lib/notifications-dev';
+import { onesignalInit } from '@/lib/onesignal-init';
 
-const SUBSCRIBE_TIMEOUT_MS = 10000;
+const SUBSCRIBE_TIMEOUT_MS = 20000;
+const INIT_WAIT_MS = 15000;
+const OUTER_TIMEOUT_MS = 35000;
+
+function waitForInit(timeoutMs: number): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (onesignalInit.status === 'ready') {
+      resolve(true);
+      return;
+    }
+    if (onesignalInit.status === 'failed' || onesignalInit.status === 'unavailable') {
+      resolve(false);
+      return;
+    }
+    const start = Date.now();
+    const check = () => {
+      if (onesignalInit.status === 'ready') {
+        resolve(true);
+        return;
+      }
+      if (onesignalInit.status === 'failed' || onesignalInit.status === 'unavailable') {
+        resolve(false);
+        return;
+      }
+      if (Date.now() - start >= timeoutMs) {
+        resolve(false);
+        return;
+      }
+      setTimeout(check, 200);
+    };
+    check();
+  });
+}
 
 /** Wait for OneSignal to assign a subscription ID (proof it reached their servers). */
 function waitForSubscriptionId(timeoutMs: number): Promise<string | null> {
@@ -78,33 +111,53 @@ export default function NotificationsPage() {
 
   const handlePromptAllow = async () => {
     setSubscribing(true);
-    appendLog('Requesting permission and opting in...');
+    appendLog('Waiting for OneSignal...');
     try {
-      if (typeof Notification !== 'undefined' && Notification.permission !== 'granted') {
-        appendLog('Requesting native permission (required for optIn)...');
-        await Notification.requestPermission();
-        appendLog(`Native permission: ${Notification.permission}`);
+      if (onesignalInit.status !== 'ready') {
+        const ready = await waitForInit(INIT_WAIT_MS);
+        if (!ready) {
+          appendLog('OneSignal did not initialize. Check connection.', 'error');
+          setShowPromptModal(false);
+          setSubscribing(false);
+          return;
+        }
+        appendLog('OneSignal ready.');
       }
-      appendLog('Opting in to OneSignal...');
+      if (typeof Notification === 'undefined') {
+        appendLog('Notifications not supported in this browser.', 'error');
+        setShowPromptModal(false);
+        setSubscribing(false);
+        return;
+      }
+      if (Notification.permission !== 'granted') {
+        appendLog('Requesting notification permission...');
+        await Notification.requestPermission();
+        appendLog(`Permission: ${Notification.permission}`);
+      }
+      if (Notification.permission !== 'granted') {
+        appendLog('Permission denied.', 'error');
+        setShowPromptModal(false);
+        setSubscribing(false);
+        return;
+      }
+      appendLog('Subscribing to Major Pain...');
       const subscribePromise = (async () => {
         await OneSignal.User.PushSubscription.optIn();
         return await waitForSubscriptionId(SUBSCRIBE_TIMEOUT_MS);
       })();
       const timeoutPromise = new Promise<null>((_, reject) =>
-        setTimeout(() => reject(new Error('Subscribe timed out after 15s')), 15000)
+        setTimeout(() => reject(new Error('Timed out')), OUTER_TIMEOUT_MS)
       );
       const id = await Promise.race([subscribePromise, timeoutPromise]);
       if (id) {
-        appendLog(`Subscribed successfully! (ID: ${id.slice(0, 8)}...)`);
+        appendLog(`Subscribed! ID: ${id.slice(0, 8)}...`);
         setShowPromptModal(false);
       } else {
-        appendLog('Subscription may not have completed. Check OneSignal dashboard.', 'error');
-        appendLog('Check OneSignal dashboard for subscription status.', 'info');
+        appendLog('Subscription may not have completed.', 'error');
         setShowPromptModal(false);
       }
     } catch (e) {
       appendLog(`Error: ${e instanceof Error ? e.message : String(e)}`, 'error');
-      appendLog('Check OneSignal dashboard for subscription status.', 'info');
       setShowPromptModal(false);
     }
     setSubscribing(false);
