@@ -44,28 +44,33 @@ function waitForInit(timeoutMs: number): Promise<boolean> {
   });
 }
 
-/** Add listener before optIn, call optIn (don't await - it can hang), then wait for id or optedIn. */
+/** Call optIn, then wait for subscription ID via change event + polling. Change event can be unreliable. */
 function optInAndWaitForSubscriptionId(timeoutMs: number): Promise<string | null> {
   const sub = OneSignal.User?.PushSubscription;
   if (!sub) return Promise.resolve(null);
   if (sub.id) return Promise.resolve(sub.id);
 
   const idPromise = new Promise<string | null>((resolve) => {
+    const done = (id: string | null) => {
+      sub.removeEventListener('change', handler);
+      clearInterval(pollId);
+      clearTimeout(timer);
+      resolve(id);
+    };
     const handler = () => {
-      if (sub.id) {
-        sub.removeEventListener('change', handler);
-        clearTimeout(timer);
-        resolve(sub.id);
-      }
+      if (sub.id) done(sub.id);
     };
     sub.addEventListener('change', handler);
-    const timer = setTimeout(() => {
-      sub.removeEventListener('change', handler);
-      resolve(sub.id ?? null);
-    }, timeoutMs);
+
+    const pollId = setInterval(() => {
+      if (sub.id) done(sub.id);
+    }, 400);
+
+    const timer = setTimeout(() => done(sub.id ?? null), timeoutMs);
+
+    OneSignal.User.PushSubscription.optIn().catch(() => {});
   });
 
-  OneSignal.User.PushSubscription.optIn().catch(() => {}); // Fire and forget - optIn() can hang even when subscription succeeds
   return idPromise;
 }
 
@@ -173,7 +178,21 @@ export default function NotificationsPage() {
       const id = await Promise.race([idPromise, optedInPromise, timeoutPromise]);
       if (id) {
         appendLog(id !== 'opted-in' ? `Subscribed! ID: ${id.slice(0, 8)}...` : 'Subscribed!');
-        if (currentUser) tryOneSignalLogin(currentUser.playerId);
+        if (currentUser) {
+          tryOneSignalLogin(currentUser.playerId);
+          const token = localStorage.getItem('major_pain_token');
+          if (token) {
+            setTimeout(() => {
+              fetch('/api/notifications/welcome', {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` },
+              }).then(
+                () => appendLog('Confirmation push sent.'),
+                () => {}
+              );
+            }, 2000);
+          }
+        }
         setShowPromptModal(false);
       } else {
         appendLog('Subscription may not have completed.', 'error');
