@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import OneSignal from 'react-onesignal';
 import { onesignalInit } from '@/lib/onesignal-init';
+import { isDevNotificationsTest } from '@/lib/notifications-dev';
 
 export interface LogEntry {
   message: string;
@@ -15,6 +16,7 @@ const POLL_MS = 500;
 export function useNotificationDiagnostics() {
   const [log, setLog] = useState<LogEntry[]>([]);
   const [initStatus, setInitStatus] = useState(onesignalInit.status);
+  const [initError, setInitError] = useState<string | null>(onesignalInit.error);
   const [nativePermission, setNativePermission] = useState<NotificationPermission | 'unsupported'>('unsupported');
   const [optedIn, setOptedIn] = useState<boolean | undefined>(undefined);
 
@@ -25,7 +27,10 @@ export function useNotificationDiagnostics() {
   useEffect(() => {
     const interval = setInterval(() => {
       setInitStatus(onesignalInit.status);
-      if (typeof Notification !== 'undefined') {
+      setInitError(onesignalInit.error);
+      if (isDevNotificationsTest()) {
+        setNativePermission('granted');
+      } else if (typeof Notification !== 'undefined') {
         setNativePermission(Notification.permission);
       }
       const sub = (window as unknown as { OneSignal?: typeof OneSignal }).OneSignal?.User?.PushSubscription;
@@ -36,5 +41,5 @@ export function useNotificationDiagnostics() {
     return () => clearInterval(interval);
   }, []);
 
-  return { log, appendLog, initStatus, nativePermission, optedIn };
+  return { log, appendLog, initStatus, initError, nativePermission, optedIn };
 }

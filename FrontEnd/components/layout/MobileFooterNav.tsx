@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Trophy, ChartLine, SquareCheck, ListOrdered } from 'lucide-react';
@@ -11,10 +12,15 @@ import IdentityMenu from '@/components/auth/IdentityMenu';
 const ICON_SIZE = 22;
 
 export default function MobileFooterNav() {
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const isMobile = useIsMobile();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const { currentUser } = useAuth();
   const userProfile = getCurrentUser();
 
@@ -79,7 +85,7 @@ export default function MobileFooterNav() {
     margin: 0,
   });
 
-  if (!showFooter) return null;
+  if (!mounted || !showFooter) return null;
 
   /* Results page: show back link instead of nav */
   if (isResultsPage && tournamentId) {

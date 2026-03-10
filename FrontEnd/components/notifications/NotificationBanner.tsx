@@ -1,16 +1,28 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { Bell } from 'lucide-react';
-import { useIsMobile } from '@/hooks/useMediaQuery';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useNotificationSubscription } from '@/hooks/useNotificationSubscription';
+import { isDevNotificationsTest } from '@/lib/notifications-dev';
+
+/** Wider than layout mobile - catches phones in landscape and small tablets. */
+const BANNER_MEDIA_QUERY = '(max-width: 1023px)';
 
 export default function NotificationBanner() {
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
-  const isMobile = useIsMobile();
-  const { optedIn, hasOneSignal } = useNotificationSubscription(!!isMobile);
+  const pathname = usePathname();
+  const showBannerZone = useMediaQuery(BANNER_MEDIA_QUERY);
+  const devTest = isDevNotificationsTest();
+  const { optedIn, hasOneSignal } = useNotificationSubscription(!!showBannerZone || devTest);
 
-  if (!isMobile || !hasOneSignal || optedIn === true) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted || pathname === '/login' || (!showBannerZone && !devTest) || !hasOneSignal || optedIn === true) return null;
 
   return (
     <button

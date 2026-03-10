@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import OneSignal from 'react-onesignal';
 import { ChevronLeft } from 'lucide-react';
 import { useNotificationDiagnostics } from '@/hooks/useNotificationDiagnostics';
+import { isDevNotificationsTest } from '@/lib/notifications-dev';
 
 const SUBSCRIBE_TIMEOUT_MS = 10000;
 
@@ -36,10 +37,15 @@ function waitForSubscriptionId(timeoutMs: number): Promise<string | null> {
 }
 
 export default function NotificationsPage() {
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
-  const { log, appendLog, initStatus, nativePermission, optedIn } = useNotificationDiagnostics();
+  const { log, appendLog, initStatus, initError, nativePermission, optedIn } = useNotificationDiagnostics();
   const [showPromptModal, setShowPromptModal] = useState(false);
   const [subscribing, setSubscribing] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleEnableNative = async () => {
     appendLog('Requesting native notification permission...');
@@ -56,13 +62,16 @@ export default function NotificationsPage() {
   };
 
   const handleSubscribeClick = () => {
-    if (initStatus !== 'ready') {
+    if (!isDevNotificationsTest() && initStatus !== 'ready') {
       appendLog('OneSignal not ready yet. Wait a moment.', 'error');
       return;
     }
     if (optedIn === true) {
       appendLog('Already subscribed.');
       return;
+    }
+    if (initStatus !== 'ready') {
+      appendLog('OneSignal not ready yet - attempting anyway (dev test).', 'info');
     }
     setShowPromptModal(true);
   };
@@ -72,20 +81,31 @@ export default function NotificationsPage() {
     appendLog('Requesting permission and opting in...');
     try {
       if (typeof Notification !== 'undefined' && Notification.permission !== 'granted') {
-        appendLog('Requesting OneSignal permission...');
-        await OneSignal.Notifications.requestPermission();
+        appendLog('Requesting native permission (required for optIn)...');
+        await Notification.requestPermission();
+        appendLog(`Native permission: ${Notification.permission}`);
       }
       appendLog('Opting in to OneSignal...');
-      await OneSignal.User.PushSubscription.optIn();
-      const id = await waitForSubscriptionId(SUBSCRIBE_TIMEOUT_MS);
+      const subscribePromise = (async () => {
+        await OneSignal.User.PushSubscription.optIn();
+        return await waitForSubscriptionId(SUBSCRIBE_TIMEOUT_MS);
+      })();
+      const timeoutPromise = new Promise<null>((_, reject) =>
+        setTimeout(() => reject(new Error('Subscribe timed out after 15s')), 15000)
+      );
+      const id = await Promise.race([subscribePromise, timeoutPromise]);
       if (id) {
         appendLog(`Subscribed successfully! (ID: ${id.slice(0, 8)}...)`);
         setShowPromptModal(false);
       } else {
         appendLog('Subscription may not have completed. Check OneSignal dashboard.', 'error');
+        appendLog('Check OneSignal dashboard for subscription status.', 'info');
+        setShowPromptModal(false);
       }
     } catch (e) {
       appendLog(`Error: ${e instanceof Error ? e.message : String(e)}`, 'error');
+      appendLog('Check OneSignal dashboard for subscription status.', 'info');
+      setShowPromptModal(false);
     }
     setSubscribing(false);
   };
@@ -125,41 +145,46 @@ export default function NotificationsPage() {
 
       <h1 style={{ fontSize: 20, fontWeight: 600, marginBottom: 24 }}>
         Notification Settings
+        {mounted && isDevNotificationsTest() && (
+          <span style={{ marginLeft: 8, fontSize: 11, fontWeight: 400, color: '#fdc71c', verticalAlign: 'middle' }}>
+            (dev test)
+          </span>
+        )}
       </h1>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 32 }}>
         <button
           onClick={handleEnableNative}
-          disabled={nativePermission === 'granted'}
+          disabled={!mounted ? false : nativePermission === 'granted'}
           style={{
             padding: '14px 20px',
-            backgroundColor: nativePermission === 'granted' ? '#333' : '#262626',
+            backgroundColor: !mounted ? '#262626' : nativePermission === 'granted' ? '#333' : '#262626',
             border: '1px solid #444',
             borderRadius: 8,
             color: '#fff',
-            cursor: nativePermission === 'granted' ? 'not-allowed' : 'pointer',
+            cursor: !mounted ? 'pointer' : nativePermission === 'granted' ? 'not-allowed' : 'pointer',
             fontWeight: 500,
           }}
         >
           1. Enable Native Notifications
-          {nativePermission === 'granted' && ' (Done)'}
+          {mounted && nativePermission === 'granted' && ' (Done)'}
         </button>
 
         <button
           onClick={handleSubscribeClick}
-          disabled={initStatus !== 'ready' || optedIn === true}
+          disabled={!mounted ? true : optedIn === true || (!isDevNotificationsTest() && initStatus !== 'ready')}
           style={{
             padding: '14px 20px',
-            backgroundColor: initStatus === 'ready' && optedIn !== true ? '#fdc71c' : '#333',
+            backgroundColor: !mounted ? '#333' : optedIn !== true && (isDevNotificationsTest() || initStatus === 'ready') ? '#fdc71c' : '#333',
             border: 'none',
             borderRadius: 8,
-            color: initStatus === 'ready' && optedIn !== true ? '#000' : '#888',
-            cursor: initStatus === 'ready' && optedIn !== true ? 'pointer' : 'not-allowed',
+            color: !mounted ? '#888' : optedIn !== true && (isDevNotificationsTest() || initStatus === 'ready') ? '#000' : '#888',
+            cursor: !mounted ? 'not-allowed' : optedIn !== true && (isDevNotificationsTest() || initStatus === 'ready') ? 'pointer' : 'not-allowed',
             fontWeight: 600,
           }}
         >
           2. Subscribe to Major Pain Notifications
-          {optedIn === true && ' (Subscribed)'}
+          {mounted && optedIn === true && ' (Subscribed)'}
         </button>
       </div>
 
@@ -176,6 +201,11 @@ export default function NotificationsPage() {
       >
         <div style={{ marginBottom: 8, color: '#888' }}>Activity Log</div>
         <div>Init: {initStatus} | Native: {nativePermission} | Opted in: {String(optedIn)}</div>
+        {initStatus === 'failed' && initError && (
+          <div style={{ marginTop: 4, color: '#e12c55', fontSize: 11 }}>
+            OneSignal init error: {initError}
+          </div>
+        )}
         {log.slice(-10).map((entry, i) => (
           <div
             key={i}
