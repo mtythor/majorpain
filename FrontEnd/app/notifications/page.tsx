@@ -9,9 +9,10 @@ import { useAuth } from '@/lib/auth-context';
 import { isDevNotificationsTest } from '@/lib/notifications-dev';
 import { onesignalInit, tryOneSignalLogin } from '@/lib/onesignal-init';
 
-const SUBSCRIBE_TIMEOUT_MS = 20000;
+const SUBSCRIBE_TIMEOUT_MS = 15000;
 const INIT_WAIT_MS = 15000;
-const OUTER_TIMEOUT_MS = 35000;
+const OUTER_TIMEOUT_MS = 25000;
+const OPTED_IN_FALLBACK_MS = 5000;
 
 function waitForInit(timeoutMs: number): Promise<boolean> {
   return new Promise((resolve) => {
@@ -43,18 +44,13 @@ function waitForInit(timeoutMs: number): Promise<boolean> {
   });
 }
 
-/** Wait for OneSignal to assign a subscription ID (proof it reached their servers). */
-function waitForSubscriptionId(timeoutMs: number): Promise<string | null> {
-  return new Promise((resolve) => {
-    const sub = OneSignal.User?.PushSubscription;
-    if (!sub) {
-      resolve(null);
-      return;
-    }
-    if (sub.id) {
-      resolve(sub.id);
-      return;
-    }
+/** Add change listener BEFORE optIn so we don't miss the event. Returns id when subscription completes or null on timeout. */
+async function optInAndWaitForSubscriptionId(timeoutMs: number): Promise<string | null> {
+  const sub = OneSignal.User?.PushSubscription;
+  if (!sub) return null;
+  if (sub.id) return sub.id;
+
+  const idPromise = new Promise<string | null>((resolve) => {
     const handler = () => {
       if (sub.id) {
         sub.removeEventListener('change', handler);
@@ -67,6 +63,33 @@ function waitForSubscriptionId(timeoutMs: number): Promise<string | null> {
       sub.removeEventListener('change', handler);
       resolve(sub.id ?? null);
     }, timeoutMs);
+  });
+
+  await OneSignal.User.PushSubscription.optIn();
+  return idPromise;
+}
+
+/** Poll for optedIn as fallback when id is slow to appear. */
+function waitForOptedIn(timeoutMs: number): Promise<boolean> {
+  return new Promise((resolve) => {
+    const sub = OneSignal.User?.PushSubscription;
+    if (sub?.optedIn) {
+      resolve(true);
+      return;
+    }
+    const start = Date.now();
+    const check = () => {
+      if (OneSignal.User?.PushSubscription?.optedIn) {
+        resolve(true);
+        return;
+      }
+      if (Date.now() - start >= timeoutMs) {
+        resolve(false);
+        return;
+      }
+      setTimeout(check, 300);
+    };
+    check();
   });
 }
 
@@ -120,7 +143,6 @@ export default function NotificationsPage() {
         if (!ready) {
           appendLog('OneSignal did not initialize. Check connection.', 'error');
           setShowPromptModal(false);
-          setSubscribing(false);
           return;
         }
         appendLog('OneSignal ready.');
@@ -128,7 +150,6 @@ export default function NotificationsPage() {
       if (typeof Notification === 'undefined') {
         appendLog('Notifications not supported in this browser.', 'error');
         setShowPromptModal(false);
-        setSubscribing(false);
         return;
       }
       if (Notification.permission !== 'granted') {
@@ -139,20 +160,20 @@ export default function NotificationsPage() {
       if (Notification.permission !== 'granted') {
         appendLog('Permission denied.', 'error');
         setShowPromptModal(false);
-        setSubscribing(false);
         return;
       }
       appendLog('Subscribing to Major Pain...');
-      const subscribePromise = (async () => {
-        await OneSignal.User.PushSubscription.optIn();
-        return await waitForSubscriptionId(SUBSCRIBE_TIMEOUT_MS);
-      })();
+      const subscribePromise = optInAndWaitForSubscriptionId(SUBSCRIBE_TIMEOUT_MS);
       const timeoutPromise = new Promise<null>((_, reject) =>
         setTimeout(() => reject(new Error('Timed out')), OUTER_TIMEOUT_MS)
       );
-      const id = await Promise.race([subscribePromise, timeoutPromise]);
+      let id = await Promise.race([subscribePromise, timeoutPromise]);
+      if (!id) {
+        const hasOptedIn = await waitForOptedIn(OPTED_IN_FALLBACK_MS);
+        if (hasOptedIn) id = OneSignal.User?.PushSubscription?.id ?? 'opted-in';
+      }
       if (id) {
-        appendLog(`Subscribed! ID: ${id.slice(0, 8)}...`);
+        appendLog(id !== 'opted-in' ? `Subscribed! ID: ${id.slice(0, 8)}...` : 'Subscribed!');
         if (currentUser) tryOneSignalLogin(currentUser.playerId);
         setShowPromptModal(false);
       } else {
@@ -162,8 +183,9 @@ export default function NotificationsPage() {
     } catch (e) {
       appendLog(`Error: ${e instanceof Error ? e.message : String(e)}`, 'error');
       setShowPromptModal(false);
+    } finally {
+      setSubscribing(false);
     }
-    setSubscribing(false);
   };
 
   const handlePromptNoThanks = () => {
