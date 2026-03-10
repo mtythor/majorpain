@@ -54,11 +54,12 @@ export default function NotificationsPage() {
   const handleEnableNative = async () => {
     appendLog('Requesting native notification permission...');
     try {
-      if (typeof Notification === 'undefined') {
-        appendLog('Notification API not available', 'error');
+      const NotificationApi = typeof window !== 'undefined' ? window.Notification : undefined;
+      if (!NotificationApi) {
+        appendLog('Notification API not available (need HTTPS or localhost)', 'error');
         return;
       }
-      const perm = await Notification.requestPermission();
+      const perm = await NotificationApi.requestPermission();
       appendLog(`Native permission: ${perm}`);
     } catch (e) {
       appendLog(`Error: ${e instanceof Error ? e.message : String(e)}`, 'error');
@@ -93,8 +94,9 @@ export default function NotificationsPage() {
         }
         appendLog('OneSignal ready.');
       }
-      if (typeof Notification === 'undefined') {
-        appendLog('Notifications not supported in this browser.', 'error');
+      const NotificationApi = typeof window !== 'undefined' ? window.Notification : undefined;
+      if (!NotificationApi) {
+        appendLog('Notifications not supported (need HTTPS or localhost)', 'error');
         setShowPromptModal(false);
         return;
       }

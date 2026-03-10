@@ -30,8 +30,8 @@ export function useNotificationDiagnostics() {
       setInitError(onesignalInit.error);
       if (isDevNotificationsTest()) {
         setNativePermission('granted');
-      } else if (typeof Notification !== 'undefined') {
-        setNativePermission(Notification.permission);
+      } else if (typeof window !== 'undefined' && window.Notification) {
+        setNativePermission(window.Notification.permission);
       }
       const sub = (window as unknown as { OneSignal?: typeof OneSignal }).OneSignal?.User?.PushSubscription;
       const actuallySubscribed = !!(sub?.optedIn && sub?.id);
