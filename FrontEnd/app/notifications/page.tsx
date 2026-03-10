@@ -9,10 +9,10 @@ import { useAuth } from '@/lib/auth-context';
 import { isDevNotificationsTest } from '@/lib/notifications-dev';
 import { onesignalInit, tryOneSignalLogin } from '@/lib/onesignal-init';
 
-const SUBSCRIBE_TIMEOUT_MS = 15000;
+const SUBSCRIBE_TIMEOUT_MS = 10000; // Wait for subscription ID
 const INIT_WAIT_MS = 15000;
-const OUTER_TIMEOUT_MS = 25000;
-const OPTED_IN_FALLBACK_MS = 5000;
+const OUTER_TIMEOUT_MS = 15000; // Max wait before giving up
+const OPTED_IN_POLL_MS = 8000;  // Race optedIn against id - often succeeds first
 
 function waitForInit(timeoutMs: number): Promise<boolean> {
   return new Promise((resolve) => {
@@ -44,11 +44,11 @@ function waitForInit(timeoutMs: number): Promise<boolean> {
   });
 }
 
-/** Add change listener BEFORE optIn so we don't miss the event. Returns id when subscription completes or null on timeout. */
-async function optInAndWaitForSubscriptionId(timeoutMs: number): Promise<string | null> {
+/** Add listener before optIn, call optIn (don't await - it can hang), then wait for id or optedIn. */
+function optInAndWaitForSubscriptionId(timeoutMs: number): Promise<string | null> {
   const sub = OneSignal.User?.PushSubscription;
-  if (!sub) return null;
-  if (sub.id) return sub.id;
+  if (!sub) return Promise.resolve(null);
+  if (sub.id) return Promise.resolve(sub.id);
 
   const idPromise = new Promise<string | null>((resolve) => {
     const handler = () => {
@@ -65,7 +65,7 @@ async function optInAndWaitForSubscriptionId(timeoutMs: number): Promise<string 
     }, timeoutMs);
   });
 
-  await OneSignal.User.PushSubscription.optIn();
+  OneSignal.User.PushSubscription.optIn().catch(() => {}); // Fire and forget - optIn() can hang even when subscription succeeds
   return idPromise;
 }
 
@@ -163,15 +163,14 @@ export default function NotificationsPage() {
         return;
       }
       appendLog('Subscribing to Major Pain...');
-      const subscribePromise = optInAndWaitForSubscriptionId(SUBSCRIBE_TIMEOUT_MS);
-      const timeoutPromise = new Promise<null>((_, reject) =>
-        setTimeout(() => reject(new Error('Timed out')), OUTER_TIMEOUT_MS)
+      const idPromise = optInAndWaitForSubscriptionId(SUBSCRIBE_TIMEOUT_MS);
+      const optedInPromise = waitForOptedIn(OPTED_IN_POLL_MS).then((ok) =>
+        ok ? (OneSignal.User?.PushSubscription?.id ?? 'opted-in') : null
       );
-      let id = await Promise.race([subscribePromise, timeoutPromise]);
-      if (!id) {
-        const hasOptedIn = await waitForOptedIn(OPTED_IN_FALLBACK_MS);
-        if (hasOptedIn) id = OneSignal.User?.PushSubscription?.id ?? 'opted-in';
-      }
+      const timeoutPromise = new Promise<string | null>((resolve) =>
+        setTimeout(() => resolve(null), OUTER_TIMEOUT_MS)
+      );
+      const id = await Promise.race([idPromise, optedInPromise, timeoutPromise]);
       if (id) {
         appendLog(id !== 'opted-in' ? `Subscribed! ID: ${id.slice(0, 8)}...` : 'Subscribed!');
         if (currentUser) tryOneSignalLogin(currentUser.playerId);
