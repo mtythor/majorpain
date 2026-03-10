@@ -39,6 +39,8 @@ jobs:
           NEXT_PUBLIC_MAJOR_PAIN_WRITE_SECRET: ${{ secrets.MAJOR_PAIN_WRITE_SECRET }}
           NEXT_PUBLIC_BUILD_ID: ${{ steps.build-info.outputs.build_id }}
           NEXT_PUBLIC_BUILD_TIMESTAMP: ${{ steps.build-info.outputs.build_timestamp }}
+          NEXT_PUBLIC_ONESIGNAL_APP_ID: ${{ secrets.NEXT_PUBLIC_ONESIGNAL_APP_ID }}
+          NEXT_PUBLIC_ONESIGNAL_SAFARI_WEB_ID: ${{ secrets.NEXT_PUBLIC_ONESIGNAL_SAFARI_WEB_ID }}
         run: npm run build
 
       - name: Save Next.js cache
