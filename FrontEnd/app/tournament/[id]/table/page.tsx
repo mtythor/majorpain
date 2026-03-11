@@ -240,7 +240,9 @@ function getPlayerTableData(tournamentId: string) {
         const pts = position !== undefined ? pointsFromPosition(position) : { basePoints: 0, bonusPoints: 0, totalPoints: 0 };
         
         const status: 'cut' | 'wd' | undefined =
-          golferResult?.status === 'withdrawn' ? 'wd' : golferResult?.madeCut !== true ? 'cut' : undefined;
+          !golferResult ? undefined
+          : golferResult.status === 'withdrawn' ? 'wd'
+          : golferResult.madeCut !== true ? 'cut' : undefined;
         return {
           position: positionStr,
           name: golfer.name,
@@ -448,8 +450,9 @@ function getPlayerTableData(tournamentId: string) {
           : false);
         const status: 'cut' | 'wd' | 'alt' | undefined =
           index === 3 ? (alternateSubstitutedIn ? undefined : 'alt')
-          : golferResult?.status === 'withdrawn' ? 'wd'
-          : golferResult?.madeCut !== true ? 'cut' : undefined;
+          : !golferResult ? undefined
+          : golferResult.status === 'withdrawn' ? 'wd'
+          : golferResult.madeCut !== true ? 'cut' : undefined;
         return {
           position: positionStr,
           name: golfer.name,
