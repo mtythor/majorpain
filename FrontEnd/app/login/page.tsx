@@ -201,7 +201,6 @@ export default function LoginPage() {
               height: '60px',
               lineHeight: 'normal',
               padding: '0 24px',
-              textTransform: 'uppercase',
               width: '100%',
             }}
             onFocus={(e) => {
