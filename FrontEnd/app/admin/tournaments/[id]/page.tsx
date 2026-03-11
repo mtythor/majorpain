@@ -14,6 +14,7 @@ import { useTournamentData } from '@/lib/use-api-data';
 import { fetchDraftState } from '@/lib/api-client';
 import { calculateTeamScoresFromDrafts, isRyderCup } from '@/lib/dummyData';
 import { GolferTypeahead } from '@/components/admin/GolferTypeahead';
+import { getTournamentState } from '@/lib/tournament-utils';
 import type {
   Tournament,
   TournamentState,
@@ -59,6 +60,8 @@ export default function AdminTournamentEditorPage({
   const [seedMessage, setSeedMessage] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
   const [importMessage, setImportMessage] = useState<string | null>(null);
+  const [syncResultsRefreshing, setSyncResultsRefreshing] = useState(false);
+  const [syncResultsMessage, setSyncResultsMessage] = useState<string | null>(null);
   const [randoInitiating, setRandoInitiating] = useState(false);
   const [randoMessage, setRandoMessage] = useState<string | null>(null);
 
@@ -281,6 +284,7 @@ export default function AdminTournamentEditorPage({
   const handleImportFromLive = async () => {
     setImporting(true);
     setImportMessage(null);
+    setSyncResultsMessage(null);
     setError(null);
     try {
       const headers: Record<string, string> = { 'Content-Type': 'application/json' };
@@ -313,6 +317,39 @@ export default function AdminTournamentEditorPage({
       setImportMessage(msg);
     } finally {
       setImporting(false);
+    }
+  };
+
+  const handleRefreshResults = async () => {
+    if (!tournament) return;
+    setSyncResultsRefreshing(true);
+    setSyncResultsMessage(null);
+    setImportMessage(null);
+    setError(null);
+    try {
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      const secret = getWriteSecret();
+      if (secret) headers['X-Major-Pain-Write-Secret'] = secret;
+
+      const res = await fetch(`${API_URL}/admin/tournaments/${params.id}/sync-results`, {
+        method: 'POST',
+        headers,
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const errMsg = json?.error || getWriteSecretError(res, json, 'Failed to sync results');
+        throw new Error(errMsg);
+      }
+      setSyncResultsMessage(json.message || 'Results refreshed from Live API.');
+      updateDataCache(`results-${params.id}`, undefined);
+      if (typeof window !== 'undefined') {
+        setTimeout(() => window.location.reload(), 1200);
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Failed to sync results';
+      setSyncResultsMessage(msg);
+    } finally {
+      setSyncResultsRefreshing(false);
     }
   };
 
@@ -637,25 +674,32 @@ export default function AdminTournamentEditorPage({
               }}
             />
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <label style={{ width: '120px' }}>Cut Line Score</label>
-            <input
-              type="number"
-              value={tournament.cutLineScore ?? ''}
-              onChange={(e) => {
-                const v = e.target.value;
-                updateT({ cutLineScore: v === '' ? undefined : parseInt(v, 10) });
-              }}
-              placeholder="e.g. 4 (+4 or better makes cut)"
-              style={{
-                padding: '8px',
-                backgroundColor: '#333',
-                color: '#fff',
-                border: '1px solid #555',
-                borderRadius: '4px',
-                width: '80px',
-              }}
-            />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <label style={{ width: '120px' }}>Cut Line Score</label>
+              <input
+                type="number"
+                value={tournament.cutLineScore ?? ''}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  updateT({ cutLineScore: v === '' ? undefined : parseInt(v, 10) });
+                }}
+                placeholder="e.g. 4 (+4 or better makes cut)"
+                style={{
+                  padding: '8px',
+                  backgroundColor: '#333',
+                  color: '#fff',
+                  border: '1px solid #555',
+                  borderRadius: '4px',
+                  width: '80px',
+                }}
+              />
+            </div>
+            {tournament.fieldSource === 'live' && (
+              <div style={{ fontSize: '11px', opacity: 0.8, marginLeft: '132px' }}>
+                Fallback only when Live API has no cut info; auto-sync uses API cut when available.
+              </div>
+            )}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <label style={{ width: '120px' }}>Background Image</label>
@@ -822,6 +866,11 @@ export default function AdminTournamentEditorPage({
           </div>
           <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid #444' }}>
             <div style={{ fontSize: '13px', fontWeight: 700, marginBottom: '8px', opacity: 0.9 }}>Import Live Data</div>
+            {tournament.fieldSource === 'live' && getTournamentState(tournament) === 'draft' && (
+              <div style={{ marginBottom: '8px', padding: '8px', backgroundColor: 'rgba(253, 199, 28, 0.2)', borderRadius: '4px', fontSize: '12px', color: '#fdc71c' }}>
+                Draft has started. Import will reset the draft. Only use before draft starts.
+              </div>
+            )}
             <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center' }}>
               <button
                 onClick={handleImportFromLive}
@@ -839,15 +888,31 @@ export default function AdminTournamentEditorPage({
               >
                 {importing ? 'Importing...' : 'Import from Live API'}
               </button>
+              <button
+                onClick={handleRefreshResults}
+                disabled={syncResultsRefreshing || importing || seeding || tournament.fieldSource !== 'live' || getTournamentState(tournament) === 'draft'}
+                style={{
+                  padding: '6px 12px',
+                  backgroundColor: syncResultsRefreshing || importing || seeding || tournament.fieldSource !== 'live' || getTournamentState(tournament) === 'draft' ? '#555' : '#5a8f3e',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: syncResultsRefreshing || importing || seeding || tournament.fieldSource !== 'live' || getTournamentState(tournament) === 'draft' ? 'not-allowed' : 'pointer',
+                  fontWeight: 600,
+                  fontSize: '11px',
+                }}
+              >
+                {syncResultsRefreshing ? 'Refreshing...' : 'Refresh results from Live API'}
+              </button>
             </div>
             <div style={{ marginTop: '8px', fontSize: '11px', opacity: 0.8 }}>
               {tournament.fieldSource === 'live'
-                ? 'Fetch the real tournament field from RapidAPI Live Golf Data. Requires RAPIDAPI_KEY in .env.local.'
+                ? 'Import: fetch the real tournament field from RapidAPI. Refresh: sync golfer scores during playing/completed. Requires RAPIDAPI_KEY.'
                 : 'Set Field Source to Live API above and save to enable.'}
             </div>
-            {importMessage && (
-              <div style={{ marginTop: '8px', fontSize: '12px', color: importMessage.includes('Failed') || importMessage.includes('error') ? '#e12c55' : '#74a553' }}>
-                {importMessage}
+            {(importMessage || syncResultsMessage) && (
+              <div style={{ marginTop: '8px', fontSize: '12px', color: (importMessage || syncResultsMessage)?.includes('Failed') || (importMessage || syncResultsMessage)?.includes('error') ? '#e12c55' : '#74a553' }}>
+                {importMessage || syncResultsMessage}
               </div>
             )}
           </div>
@@ -1156,7 +1221,7 @@ export default function AdminTournamentEditorPage({
                   }}
                 >
                   <span style={{ width: '140px' }}>{golfer?.name ?? gr.golferId}</span>
-                  <span>Pos: {gr.finalPosition ?? 'MC'}</span>
+                  <span>Pos: {gr.status === 'withdrawn' ? 'WD' : gr.finalPosition ?? (gr.madeCut !== true ? 'CUT' : '--')}</span>
                   <span>Cut: {gr.madeCut ? 'Y' : 'N'}</span>
                   <select
                     value={gr.status ?? 'active'}

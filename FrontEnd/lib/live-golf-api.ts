@@ -31,6 +31,10 @@ export const LIVE_API_TOURNAMENT_MAP: Record<string, { tournId: string; year: st
   '7': { tournId: '028', year: '2026' }, // BMW Championship
   '8': { tournId: '060', year: '2026' }, // TOUR Championship
   '9': { tournId: '500', year: '2026' }, // Presidents Cup
+  // Dev/test only - excluded in production
+  ...(process.env.NODE_ENV !== 'production'
+    ? { 'arnold-palmer-2026': { tournId: '009', year: '2026' } }
+    : {}),
 };
 
 function getApiKey(): string {
@@ -157,4 +161,22 @@ export async function fetchTournamentField(tournamentId: string): Promise<Golfer
 
   const owgrByPlayerId = await fetchOwgrRankings(year);
   return players.map((p, i) => mapLiveApiPlayerToGolfer(p, i, owgrByPlayerId));
+}
+
+/**
+ * Fetch tournament leaderboard (results) from live API.
+ * Uses GET /leaderboard?orgId=1&tournId=&year= (RapidAPI Live Golf Data).
+ * Returns raw response for mapping layer.
+ */
+export async function fetchLeaderboard(tournamentId: string): Promise<Record<string, unknown>> {
+  const mapping = LIVE_API_TOURNAMENT_MAP[tournamentId];
+  if (!mapping) {
+    throw new Error(`No live API mapping for tournament ${tournamentId}. Add it to LIVE_API_TOURNAMENT_MAP.`);
+  }
+  const { tournId, year } = mapping;
+  return fetchFromApi('/leaderboard', {
+    orgId: ORG_ID,
+    tournId,
+    year,
+  });
 }

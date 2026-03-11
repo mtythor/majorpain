@@ -427,12 +427,16 @@ export function calculateTeamScoresFromDrafts(
   return teamDrafts.map((draft) => {
     const actives = draft.activeGolfers ?? [];
     const alternate = draft.alternateGolfer ?? '';
+    let alternateAlreadyUsed = false;
     const golferPoints = actives.map((golferId) => {
       const result = golferResults.find((r) => r.golferId === golferId);
-      if (!result || !result.madeCut) {
-        const alternateResult = golferResults.find((r) => r.golferId === alternate);
-        if (alternateResult && alternateResult.madeCut) {
-          return { golferId: alternate, points: alternateResult.totalPoints };
+      if (!result || result.madeCut !== true) {
+        if (!alternateAlreadyUsed) {
+          const alternateResult = golferResults.find((r) => r.golferId === alternate);
+          if (alternateResult && alternateResult.madeCut === true) {
+            alternateAlreadyUsed = true;
+            return { golferId: alternate, points: alternateResult.totalPoints };
+          }
         }
         return { golferId, points: 0 };
       }

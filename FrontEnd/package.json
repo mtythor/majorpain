@@ -13,6 +13,7 @@
     "migrate": "tsx scripts/migrate.ts",
     "seed-users": "tsx scripts/seed-users.ts",
     "test-slash-golf": "tsx scripts/test-slash-golf-api.ts",
+    "test-arnold-palmer-leaderboard": "tsx scripts/test-arnold-palmer-leaderboard.ts",
     "test-owgr": "tsx scripts/test-owgr-import.ts",
     "test-owgr": "tsx scripts/test-owgr-import.ts",
     "test-owgr": "tsx scripts/test-owgr-import.ts",

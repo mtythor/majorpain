@@ -34,15 +34,27 @@ const playerColors: Record<string, string> = {
 };
 
 // Helper function to calculate positions with tie handling
-// Golfers with the same score share the same position
+// Only golfers who made cut and didn't withdraw get numeric positions
 function calculatePositions(
-  golferResults: Array<{ golferId: string; rounds: Array<{ toPar: number }>; totalToPar?: number; finalPosition?: number | null }>,
+  golferResults: Array<{
+    golferId: string;
+    rounds: Array<{ toPar: number }>;
+    totalToPar?: number;
+    finalPosition?: number | null;
+    madeCut?: boolean;
+    status?: string;
+  }>,
   useFinalPosition: boolean
 ): Map<string, number> {
   const positions = new Map<string, number>();
-  
-  // Filter to golfers with rounds
-  const golfersWithRounds = golferResults.filter(r => r.rounds && r.rounds.length > 0);
+
+  const golfersWithRounds = golferResults.filter(
+    (r) =>
+      r.rounds &&
+      r.rounds.length > 0 &&
+      r.madeCut === true &&
+      r.status !== 'withdrawn'
+  );
   
   // Sort by score - use totalToPar if available and useFinalPosition is true, otherwise use round 1 toPar
   golfersWithRounds.sort((a, b) => {
@@ -130,25 +142,30 @@ function getPlayerTableData(tournamentId: string) {
     ? calculatePositions(results.golferResults, useTotalScore)
     : new Map<string, number>();
   
-  // Count how many golfers share each position (for "T" prefix)
+  // Count how many golfers share each position (for "T" prefix) - only those who made cut
   const positionCounts: Record<number, number> = {};
   if (hasGolferResults && results) {
     results.golferResults.forEach((result) => {
+      if (result.status === 'withdrawn' || result.madeCut !== true) return;
       const position = result.finalPosition ?? calculatedPositions.get(result.golferId);
       if (position !== undefined) {
         positionCounts[position] = (positionCounts[position] || 0) + 1;
       }
     });
   }
-  
+
   // Helper function to format position with "T" prefix for ties
-  const formatPosition = (golferId: string, finalPosition: number | null | undefined): string => {
+  const formatPosition = (
+    golferId: string,
+    finalPosition: number | null | undefined,
+    madeCut?: boolean,
+    status?: string
+  ): string => {
+    if (status === 'withdrawn') return 'WD';
+    if (madeCut !== true) return 'CUT';
     const position = finalPosition ?? calculatedPositions.get(golferId);
     if (position === undefined) return '--';
-    // If more than one golfer has this position, it's a tie
-    if (positionCounts[position] > 1) {
-      return `T${position}`;
-    }
+    if (positionCounts[position] > 1) return `T${position}`;
     return position.toString();
   };
 
@@ -214,14 +231,16 @@ function getPlayerTableData(tournamentId: string) {
         }
         
         // Format position with "T" prefix for ties (same as leaderboard)
-        const positionStr = golferResult 
-          ? formatPosition(golferId, golferResult.finalPosition)
+        const positionStr = golferResult
+          ? formatPosition(golferId, golferResult.finalPosition, golferResult.madeCut, golferResult.status)
           : (hasGolferResults ? '--' : '--');
         
         // Compute points from current position (scores update as rounds are entered)
         const position = tempPositions.get(golferId);
         const pts = position !== undefined ? pointsFromPosition(position) : { basePoints: 0, bonusPoints: 0, totalPoints: 0 };
         
+        const status: 'cut' | 'wd' | undefined =
+          golferResult?.status === 'withdrawn' ? 'wd' : golferResult?.madeCut !== true ? 'cut' : undefined;
         return {
           position: positionStr,
           name: golfer.name,
@@ -230,6 +249,7 @@ function getPlayerTableData(tournamentId: string) {
           points: pts.basePoints,
           bonus: pts.bonusPoints,
           total: pts.totalPoints,
+          status,
         };
       }).filter((g): g is NonNullable<typeof g> => g !== null);
       
@@ -240,20 +260,25 @@ function getPlayerTableData(tournamentId: string) {
         if (hasGolferResults && results) {
           alternateResult = results.golferResults.find((r) => r.golferId === draft.alternateGolfer);
         }
-        
+        const alternateSubstitutedIn = hasGolferResults && results && alternateResult?.madeCut === true && draft.activeGolfers.some((id) => {
+          const gr = results.golferResults?.find((r) => r.golferId === id);
+          return gr && gr.madeCut !== true;
+        });
         const tempAltPosition = tempPositions.get(draft.alternateGolfer);
-        // Use position if available, otherwise use 0 (will show as -- if no rounds)
-        const altPosition = alternateResult ? (tempAltPosition ?? 0) : 0;
+        const altPositionStr = alternateResult
+          ? formatPosition(draft.alternateGolfer, alternateResult.finalPosition, alternateResult.madeCut, alternateResult.status)
+          : (hasGolferResults ? '--' : '--');
         const altPts = tempAltPosition !== undefined ? pointsFromPosition(tempAltPosition) : { basePoints: 0, bonusPoints: 0, totalPoints: 0 };
         
         golferTableData.push({
-          position: String(altPosition),
+          position: altPositionStr,
           name: alternateGolfer.name,
           strokes: alternateResult?.rounds[0]?.toPar ?? (hasGolferResults ? 0 : 0),
           rounds: alternateResult?.rounds.map((r) => r.score) || [],
           points: altPts.basePoints,
           bonus: altPts.bonusPoints,
           total: altPts.totalPoints,
+          status: alternateSubstitutedIn ? undefined : 'alt',
         });
       }
       
@@ -284,6 +309,7 @@ function getPlayerTableData(tournamentId: string) {
     }
 
     // Get golfer data for active golfers and alternate
+    // Always show each golfer's actual result (no substitution for display - matches list/leaderboard)
     const golferTableData = draft.activeGolfers.map((golferId) => {
       const golferResult = results.golferResults?.find((r) => r.golferId === golferId);
       const golfer = golfers.find((g) => g.id === golferId);
@@ -292,19 +318,11 @@ function getPlayerTableData(tournamentId: string) {
         return null;
       }
 
-      // Check if this golfer made cut, otherwise use alternate
-      let resultToUse = golferResult;
-      if (!golferResult.madeCut) {
-        const alternateResult = results.golferResults?.find(
-          (r) => r.golferId === draft.alternateGolfer
-        );
-        if (alternateResult && alternateResult.madeCut) {
-          resultToUse = alternateResult;
-        }
-      }
+      // Use golfer's actual result (substitution only affects team totals, not row display)
+      const resultToUse = golferResult;
 
       // Format position with "T" prefix for ties (same as leaderboard)
-      const positionStr = formatPosition(golferId, resultToUse.finalPosition);
+      const positionStr = formatPosition(golferId, resultToUse.finalPosition, resultToUse.madeCut, resultToUse.status);
       
       // Use stored points when available (final results), otherwise compute from current position
       const position = resultToUse.finalPosition ?? calculatedPositions.get(golferId);
@@ -312,6 +330,8 @@ function getPlayerTableData(tournamentId: string) {
         ? { basePoints: resultToUse.basePoints, bonusPoints: resultToUse.bonusPoints, totalPoints: resultToUse.totalPoints }
         : (position !== undefined ? pointsFromPosition(position) : { basePoints: 0, bonusPoints: 0, totalPoints: 0 });
       
+      const status: 'cut' | 'wd' | undefined =
+        resultToUse.status === 'withdrawn' ? 'wd' : resultToUse.madeCut !== true ? 'cut' : undefined;
       return {
         position: positionStr,
         name: golfer.name,
@@ -320,6 +340,7 @@ function getPlayerTableData(tournamentId: string) {
         points: pts.basePoints,
         bonus: pts.bonusPoints,
         total: pts.totalPoints,
+        status,
       };
     }).filter((g): g is NonNullable<typeof g> => g !== null);
 
@@ -330,8 +351,14 @@ function getPlayerTableData(tournamentId: string) {
       );
       
       if (alternateGolfer && alternateResult) {
+        // Alternate substituted in when: at least one active missed cut AND alternate made cut
+        const alternateSubstitutedIn = draft.activeGolfers.some((id) => {
+          const gr = results.golferResults?.find((r) => r.golferId === id);
+          return gr && gr.madeCut !== true;
+        }) && alternateResult.madeCut === true;
+
         // Format position with "T" prefix for ties (same as leaderboard)
-        const altPositionStr = formatPosition(draft.alternateGolfer, alternateResult.finalPosition);
+        const altPositionStr = formatPosition(draft.alternateGolfer, alternateResult.finalPosition, alternateResult.madeCut, alternateResult.status);
         const altPosition = alternateResult.finalPosition ?? calculatedPositions.get(draft.alternateGolfer);
         const altPts = alternateResult.totalPoints > 0
           ? { basePoints: alternateResult.basePoints, bonusPoints: alternateResult.bonusPoints, totalPoints: alternateResult.totalPoints }
@@ -345,19 +372,29 @@ function getPlayerTableData(tournamentId: string) {
           points: altPts.basePoints,
           bonus: altPts.bonusPoints,
           total: altPts.totalPoints,
+          status: alternateSubstitutedIn ? undefined : 'alt',
         });
       }
 
-    // Use computed totals (from stored or position-based calculation)
-    const totalPoints = golferTableData
-      .slice(0, 3)
-      .reduce((sum, g) => sum + g.points, 0);
-    const totalBonus = golferTableData
-      .slice(0, 3)
-      .reduce((sum, g) => sum + g.bonus, 0);
-    const totalTotal = golferTableData
-      .slice(0, 3)
-      .reduce((sum, g) => sum + g.total, 0);
+    // Compute totals with substitution: alternate replaces first cut only
+    let alternateUsedForTotals = false;
+    let totalPoints = 0;
+    let totalBonus = 0;
+    for (let i = 0; i < 3; i++) {
+      const golferId = draft.activeGolfers[i];
+      const gr = results.golferResults?.find((r) => r.golferId === golferId);
+      const alternateResult = results.golferResults?.find((r) => r.golferId === draft.alternateGolfer);
+      if (!gr) continue;
+      if (gr.madeCut === true) {
+        totalPoints += gr.basePoints ?? 0;
+        totalBonus += gr.bonusPoints ?? 0;
+      } else if (!alternateUsedForTotals && alternateResult?.madeCut === true) {
+        totalPoints += alternateResult.basePoints ?? 0;
+        totalBonus += alternateResult.bonusPoints ?? 0;
+        alternateUsedForTotals = true;
+      }
+    }
+    const totalTotal = totalPoints + totalBonus;
 
     return {
       id: player.id,
@@ -385,7 +422,7 @@ function getPlayerTableData(tournamentId: string) {
         ? calculatePositions(results.golferResults, useTotalScore)
         : new Map<string, number>();
       
-      const fatRandoGolferData = fatRandoGolfers.map((golferId) => {
+      const fatRandoGolferData = fatRandoGolfers.map((golferId, index) => {
         const golfer = golfers.find((g) => g.id === golferId);
         if (!golfer) return null;
         
@@ -396,14 +433,23 @@ function getPlayerTableData(tournamentId: string) {
         }
         
         // Format position with "T" prefix for ties (same as leaderboard)
-        const positionStr = golferResult 
-          ? formatPosition(golferId, golferResult.finalPosition)
+        const positionStr = golferResult
+          ? formatPosition(golferId, golferResult.finalPosition, golferResult.madeCut, golferResult.status)
           : (hasGolferResults ? '--' : '--');
         
         // Compute points from current position
         const position = tempPositions.get(golferId);
         const pts = position !== undefined ? pointsFromPosition(position) : { basePoints: 0, bonusPoints: 0, totalPoints: 0 };
-        
+        const alternateSubstitutedIn = index === 3 && golferResult?.madeCut === true && (hasGolferResults && results
+          ? fatRandoGolfers.slice(0, 3).some((id) => {
+              const gr = results.golferResults?.find((r) => r.golferId === id);
+              return gr && gr.madeCut !== true;
+            })
+          : false);
+        const status: 'cut' | 'wd' | 'alt' | undefined =
+          index === 3 ? (alternateSubstitutedIn ? undefined : 'alt')
+          : golferResult?.status === 'withdrawn' ? 'wd'
+          : golferResult?.madeCut !== true ? 'cut' : undefined;
         return {
           position: positionStr,
           name: golfer.name,
@@ -412,6 +458,7 @@ function getPlayerTableData(tournamentId: string) {
           points: pts.basePoints,
           bonus: pts.bonusPoints,
           total: pts.totalPoints,
+          status,
         };
       }).filter((g): g is NonNullable<typeof g> => g !== null);
       
@@ -449,7 +496,7 @@ function getPlayerTableData(tournamentId: string) {
       });
     } else {
       // Original logic for when results exist
-      const fatRandoGolferData = fatRandoGolfers.map((golferId) => {
+      const fatRandoGolferData = fatRandoGolfers.map((golferId, index) => {
         const golferResult = results?.golferResults?.find((r) => r.golferId === golferId);
         const golfer = golfers.find((g) => g.id === golferId);
         
@@ -458,14 +505,21 @@ function getPlayerTableData(tournamentId: string) {
         }
 
         // Format position with "T" prefix for ties (same as leaderboard)
-        const positionStr = formatPosition(golferId, golferResult.finalPosition);
+        const positionStr = formatPosition(golferId, golferResult.finalPosition, golferResult.madeCut, golferResult.status);
 
         // Use stored points when available, otherwise compute from current position
         const position = golferResult.finalPosition ?? calculatedPositions.get(golferId);
         const pts = golferResult.totalPoints > 0
           ? { basePoints: golferResult.basePoints, bonusPoints: golferResult.bonusPoints, totalPoints: golferResult.totalPoints }
           : (position !== undefined ? pointsFromPosition(position) : { basePoints: 0, bonusPoints: 0, totalPoints: 0 });
-
+        const alternateSubstitutedIn = index === 3 && golferResult.madeCut === true && fatRandoGolfers.slice(0, 3).some((id) => {
+          const gr = results?.golferResults?.find((r) => r.golferId === id);
+          return gr && gr.madeCut !== true;
+        });
+        const status: 'cut' | 'wd' | 'alt' | undefined =
+          index === 3 ? (alternateSubstitutedIn ? undefined : 'alt')
+          : golferResult.status === 'withdrawn' ? 'wd'
+          : golferResult.madeCut !== true ? 'cut' : undefined;
         return {
           position: positionStr,
           name: golfer.name,
@@ -474,6 +528,7 @@ function getPlayerTableData(tournamentId: string) {
           points: pts.basePoints,
           bonus: pts.bonusPoints,
           total: pts.totalPoints,
+          status,
         };
       }).filter((g): g is NonNullable<typeof g> => g !== null);
       
@@ -498,8 +553,12 @@ function getPlayerTableData(tournamentId: string) {
         const altGolfer = golfers.find((g) => g.id === altGolferId);
         
         if (altGolfer && altGolferResult) {
+          const altSubstitutedIn = altGolferResult.madeCut === true && fatRandoGolfers.slice(0, 3).some((id) => {
+            const gr = results?.golferResults?.find((r) => r.golferId === id);
+            return gr && gr.madeCut !== true;
+          });
           // Format position with "T" prefix for ties (same as leaderboard)
-          const altPositionStr = formatPosition(altGolferId, altGolferResult.finalPosition);
+          const altPositionStr = formatPosition(altGolferId, altGolferResult.finalPosition, altGolferResult.madeCut, altGolferResult.status);
           const altPosition = altGolferResult.finalPosition ?? calculatedPositions.get(altGolferId);
           const altPts = altGolferResult.totalPoints > 0
             ? { basePoints: altGolferResult.basePoints, bonusPoints: altGolferResult.bonusPoints, totalPoints: altGolferResult.totalPoints }
@@ -513,6 +572,7 @@ function getPlayerTableData(tournamentId: string) {
             points: altPts.basePoints,
             bonus: altPts.bonusPoints,
             total: altPts.totalPoints,
+            status: altSubstitutedIn ? undefined : 'alt',
           });
         }
       }

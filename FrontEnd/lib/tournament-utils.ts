@@ -72,6 +72,11 @@ export function getTournamentState(tournament: Tournament): TournamentState {
   return 'pre-draft';
 }
 
+/** Whether the tournament has a cut (vs no-cut events like TOUR Championship). */
+export function hasCut(tournament: Tournament): boolean {
+  return tournament.cutLineScore != null;
+}
+
 // Check if tournament is upcoming (not yet started)
 export function isUpcomingTournament(tournament: Tournament): boolean {
   const state = getTournamentState(tournament);

@@ -120,8 +120,19 @@ function TournamentResultsPageContent({ params }: { params: { id: string } }) {
   };
 
 
-  // Prepare golfer results data
-  const golferResultsData = results && golfers
+  // Prepare golfer results data - split into made cut, cut, and withdrawn; sort each segment
+  type GolferResultRow = {
+    golferId: string;
+    golferName: string;
+    golferRank: number;
+    finalPosition: number | null;
+    rounds: Array<{ round: number; score: number; toPar: number }>;
+    totalToPar: number;
+    madeCut: boolean;
+    status?: string;
+  };
+
+  const rawResults = results && golfers
     ? results.golferResults
         .map((result) => {
           const golfer = golfers.find((g) => g.id === result.golferId);
@@ -134,20 +145,41 @@ function TournamentResultsPageContent({ params }: { params: { id: string } }) {
             : null;
         })
         .filter((r): r is NonNullable<typeof r> => r !== null)
-        .sort((a, b) => {
-          // If both have final positions, sort by position
-          if (a.finalPosition !== null && b.finalPosition !== null) {
-            return a.finalPosition - b.finalPosition;
-          }
-          // If one has final position and one doesn't, final position comes first
-          if (a.finalPosition !== null) return -1;
-          if (b.finalPosition !== null) return 1;
-          // If neither has final position, sort by round 1 score (toPar)
-          const aRound1Score = a.rounds[0]?.toPar ?? 999;
-          const bRound1Score = b.rounds[0]?.toPar ?? 999;
-          return aRound1Score - bRound1Score;
-        })
     : [];
+
+  const useTotalScore = rawResults.some(r => r.totalToPar !== undefined);
+
+  // Made cut: sort by finalPosition, or by totalToPar/round1 for in-progress
+  const madeCutResults = rawResults
+    .filter((r) => r.madeCut === true && r.status !== 'withdrawn')
+    .sort((a, b) => {
+      if (a.finalPosition != null && b.finalPosition != null) return a.finalPosition - b.finalPosition;
+      if (a.finalPosition != null) return -1;
+      if (b.finalPosition != null) return 1;
+      const aScore = useTotalScore && a.totalToPar != null ? a.totalToPar : a.rounds[0]?.toPar ?? 999;
+      const bScore = useTotalScore && b.totalToPar != null ? b.totalToPar : b.rounds[0]?.toPar ?? 999;
+      return aScore - bScore;
+    });
+
+  // Missed cut: sort by totalToPar (ascending - best score first)
+  const cutResults = rawResults
+    .filter((r) => r.madeCut !== true && r.status !== 'withdrawn')
+    .sort((a, b) => {
+      const aScore = a.totalToPar ?? a.rounds?.reduce((s, r) => s + r.toPar, 0) ?? 999;
+      const bScore = b.totalToPar ?? b.rounds?.reduce((s, r) => s + r.toPar, 0) ?? 999;
+      return aScore - bScore;
+    });
+
+  // Withdrawn: at bottom (optionally sort by score if they have rounds)
+  const wdResults = rawResults
+    .filter((r) => r.status === 'withdrawn')
+    .sort((a, b) => {
+      const aScore = a.totalToPar ?? a.rounds?.reduce((s, r) => s + r.toPar, 0) ?? 999;
+      const bScore = b.totalToPar ?? b.rounds?.reduce((s, r) => s + r.toPar, 0) ?? 999;
+      return aScore - bScore;
+    });
+
+  const golferResultsData: GolferResultRow[] = [...madeCutResults, ...cutResults, ...wdResults];
 
   // Calculate positions with tie handling
   // Helper function to calculate positions with tie handling
@@ -156,9 +188,15 @@ function TournamentResultsPageContent({ params }: { params: { id: string } }) {
     useFinalPosition: boolean
   ): Map<string, number> => {
     const positions = new Map<string, number>();
-    
-    // Filter to golfers with rounds
-    const golfersWithRounds = golferResults.filter(r => r.rounds && r.rounds.length > 0);
+
+    // Only golfers who made cut and didn't withdraw get numeric positions
+    const golfersWithRounds = golferResults.filter(
+      (r) =>
+        r.rounds &&
+        r.rounds.length > 0 &&
+        r.madeCut === true &&
+        r.status !== 'withdrawn'
+    );
     
     // Sort by score - use totalToPar if available and useFinalPosition is true, otherwise use round 1 toPar
     golfersWithRounds.sort((a, b) => {
@@ -215,16 +253,13 @@ function TournamentResultsPageContent({ params }: { params: { id: string } }) {
     return positions;
   };
   
-  // Calculate positions: always use the same logic regardless of number of rounds
-  // Use totalToPar if available (4 rounds), otherwise use round 1 toPar (partial results)
-  const useTotalScore = golferResultsData.some(r => r.totalToPar !== undefined);
-  
   // Calculate all positions using the same tie-handling logic
   const tempPositions = calculatePositionsWithTies(golferResultsData, useTotalScore);
 
-  // Count how many golfers share each position (for tie display)
+  // Count how many golfers share each position (for tie display) - only for those who made cut
   const positionCounts: Record<number, number> = {};
   golferResultsData.forEach((result) => {
+    if (result.status === 'withdrawn' || result.madeCut !== true) return;
     const position = result.finalPosition ?? tempPositions.get(result.golferId);
     if (position !== undefined) {
       positionCounts[position] = (positionCounts[position] || 0) + 1;
@@ -233,8 +268,10 @@ function TournamentResultsPageContent({ params }: { params: { id: string } }) {
 
   // Helper function to format position with "T" prefix for ties
   const formatPosition = (result: typeof golferResultsData[0]): string => {
+    if (result.status === 'withdrawn') return 'WD';
+    if (result.madeCut !== true) return 'CUT';
     const position = result.finalPosition ?? tempPositions.get(result.golferId);
-    if (position === undefined) return 'MC';
+    if (position === undefined) return 'CUT';
     // If more than one golfer has this position, it's a tie
     if (positionCounts[position] > 1) {
       return `T${position}`;

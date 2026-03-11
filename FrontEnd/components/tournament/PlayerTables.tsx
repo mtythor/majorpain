@@ -3,13 +3,15 @@
 import Image from 'next/image';
 
 interface GolferTableData {
-  position: number | string; // Can be number, "T1", "T2", "--", etc.
+  position: number | string; // Can be number, "T1", "T2", "CUT", "WD", "--", etc.
   name: string;
   strokes: number; // Total to par
   rounds: number[]; // Round scores (strokes per round)
   points: number;
   bonus: number;
   total: number;
+  /** cut = missed cut, wd = withdrawn, alt = alternate - for text color (matches list view) */
+  status?: 'cut' | 'wd' | 'alt';
 }
 
 interface PlayerTableData {
@@ -41,6 +43,12 @@ function formatStrokes(val: number, hasResults: boolean | undefined): string {
 function getLastName(fullName: string): string {
   const parts = fullName.trim().split(/\s+/);
   return parts.length > 1 ? parts[parts.length - 1]! : fullName;
+}
+
+function getGolferTextColor(status?: 'cut' | 'wd' | 'alt'): string {
+  if (status === 'cut' || status === 'wd') return '#ae6161';
+  if (status === 'alt') return '#ae9661';
+  return '#ffffff';
 }
 
 function MobilePlayerTableCard({ player }: { player: PlayerTableData }) {
@@ -142,42 +150,45 @@ function MobilePlayerTableCard({ player }: { player: PlayerTableData }) {
       {/* Divider between player row and first golfer */}
       <div style={{ height: 2, backgroundColor: '#121212', width: '100%' }} />
       {/* Golfer rows - one header removed, each golfer: main row + detail row with same column alignment */}
-      {player.golfers.map((golfer, index) => (
-        <div key={index} data-golfer-row={index} style={{ borderBottom: index < player.golfers.length - 1 ? '2px solid #121212' : 'none' }}>
-          {/* Golfer main row: Name | POS | PTS | BNS | TOT */}
-          <div style={{ display: 'flex', alignItems: 'stretch', backgroundColor: index % 2 === 0 ? '#262626' : '#1f1f1f' }}>
-            <div style={{ width: nameColWidth, flexShrink: 0, padding: '8px 6px 8px 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-              <p style={{ ...textStyle, fontWeight: 700, fontSize: '13px', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{getLastName(golfer.name)}</p>
+      {player.golfers.map((golfer, index) => {
+        const golferColor = getGolferTextColor(golfer.status);
+        return (
+          <div key={index} data-golfer-row={index} style={{ borderBottom: index < player.golfers.length - 1 ? '2px solid #121212' : 'none' }}>
+            {/* Golfer main row: Name | POS | PTS | BNS | TOT */}
+            <div style={{ display: 'flex', alignItems: 'stretch', backgroundColor: index % 2 === 0 ? '#262626' : '#1f1f1f' }}>
+              <div style={{ width: nameColWidth, flexShrink: 0, padding: '8px 6px 8px 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                <p style={{ ...textStyle, color: golferColor, fontWeight: 700, fontSize: '13px', textAlign: 'center', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{getLastName(golfer.name)}</p>
+              </div>
+              <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
+              <div style={{ ...dataColStyle }}>
+                <p style={{ ...textStyle, color: golferColor, fontWeight: 700, fontSize: '14px' }}>
+                  {player.hasResults === false && (golfer.position === 0 || golfer.position === '--') && golfer.rounds.length === 0 ? '--' : typeof golfer.position === 'number' && golfer.position === 0 && golfer.rounds.length > 0 ? '--' : golfer.position}
+                </p>
+              </div>
+              <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
+              <div style={{ ...dataColStyle }}>
+                <p style={{ ...textStyle, color: golferColor, fontWeight: 700, fontSize: '14px' }}>{player.hasResults === false && golfer.points === 0 ? '--' : golfer.points}</p>
+              </div>
+              <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
+              <div style={{ ...dataColStyle }}>
+                <p style={{ ...textStyle, color: golferColor, fontWeight: 700, fontSize: '14px' }}>{player.hasResults === false && golfer.bonus === 0 ? '--' : golfer.bonus}</p>
+              </div>
+              <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
+              <div style={{ ...dataColStyle }}>
+                <p style={{ ...textStyle, color: golferColor, fontWeight: 700, fontSize: '14px' }}>{player.hasResults === false && golfer.total === 0 ? '--' : golfer.total}</p>
+              </div>
             </div>
-            <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
-            <div style={{ ...dataColStyle }}>
-              <p style={{ ...textStyle, fontWeight: 700, fontSize: '14px' }}>
-                {player.hasResults === false && (golfer.position === 0 || golfer.position === '--') && golfer.rounds.length === 0 ? '--' : typeof golfer.position === 'number' && golfer.position === 0 && golfer.rounds.length > 0 ? '--' : golfer.position}
-              </p>
-            </div>
-            <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
-            <div style={{ ...dataColStyle }}>
-              <p style={{ ...textStyle, fontWeight: 700, fontSize: '14px' }}>{player.hasResults === false && golfer.points === 0 ? '--' : golfer.points}</p>
-            </div>
-            <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
-            <div style={{ ...dataColStyle }}>
-              <p style={{ ...textStyle, fontWeight: 700, fontSize: '14px' }}>{player.hasResults === false && golfer.bonus === 0 ? '--' : golfer.bonus}</p>
-            </div>
-            <div style={{ width: 1, flexShrink: 0, backgroundColor: dividerColor }} />
-            <div style={{ ...dataColStyle }}>
-              <p style={{ ...textStyle, fontWeight: 700, fontSize: '14px' }}>{player.hasResults === false && golfer.total === 0 ? '--' : golfer.total}</p>
+            {/* Detail row: rounds and strokes */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, backgroundColor: '#1a1a1a', padding: '6px 12px' }}>
+              <span style={{ ...textStyle, color: golfer.status ? golferColor : '#b0b0b0', fontWeight: 400, fontSize: '12px' }}>
+                {golfer.rounds.length > 0 ? [1, 2, 3, 4].map((i) => golfer.rounds[i - 1] ?? '–').join(' / ') : '--'}
+              </span>
+              <div style={{ width: 1, height: 14, backgroundColor: '#505050', flexShrink: 0 }} />
+              <span style={{ ...textStyle, color: golfer.status ? golferColor : '#b0b0b0', fontWeight: 400, fontSize: '12px' }}>{player.hasResults === false && golfer.rounds.length === 0 ? '--' : formatStrokes(golfer.strokes, player.hasResults)}</span>
             </div>
           </div>
-          {/* Detail row: one contiguous area, rounds and strokes centered with light divider */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, backgroundColor: '#1a1a1a', padding: '6px 12px' }}>
-            <span style={{ ...textStyle, fontWeight: 400, fontSize: '12px', color: '#b0b0b0' }}>
-              {golfer.rounds.length > 0 ? [1, 2, 3, 4].map((i) => golfer.rounds[i - 1] ?? '–').join(' / ') : '--'}
-            </span>
-            <div style={{ width: 1, height: 14, backgroundColor: '#505050', flexShrink: 0 }} />
-            <span style={{ ...textStyle, fontWeight: 400, fontSize: '12px', color: '#b0b0b0' }}>{player.hasResults === false && golfer.rounds.length === 0 ? '--' : formatStrokes(golfer.strokes, player.hasResults)}</span>
-          </div>
-        </div>
-      ))}
+        );
+      })}
       {/* Colored bar at bottom */}
       <div style={{ height: 2, backgroundColor: player.color, width: '100%' }} />
     </div>
@@ -385,7 +396,7 @@ export default function PlayerTables({ players, position = 'absolute', isMobile 
                       fontFamily: "'Open Sans', sans-serif",
                       lineHeight: 'normal',
                       textAlign: 'center',
-                      color: '#ffffff',
+                      color: getGolferTextColor(golfer.status),
                       fontWeight: 700,
                       fontSize: '16px',
                       margin: 0,
@@ -543,7 +554,7 @@ export default function PlayerTables({ players, position = 'absolute', isMobile 
                       fontFamily: "'Open Sans', sans-serif",
                       lineHeight: 'normal',
                       textAlign: 'left',
-                      color: '#ffffff',
+                      color: getGolferTextColor(golfer.status),
                       fontWeight: 700,
                       fontSize: '16px',
                       margin: 0,
@@ -669,7 +680,7 @@ export default function PlayerTables({ players, position = 'absolute', isMobile 
                       fontFamily: "'Open Sans', sans-serif",
                       lineHeight: 'normal',
                       textAlign: 'center',
-                      color: '#ffffff',
+                      color: getGolferTextColor(golfer.status),
                       fontWeight: 700,
                       fontSize: '16px',
                       margin: 0,
@@ -782,7 +793,7 @@ export default function PlayerTables({ players, position = 'absolute', isMobile 
                           fontFamily: "'Open Sans', sans-serif",
                           lineHeight: 'normal',
                           textAlign: 'center',
-                          color: '#ffffff',
+                          color: getGolferTextColor(golfer.status),
                           fontWeight: 700,
                           fontSize: '16px',
                           margin: 0,
@@ -917,7 +928,7 @@ export default function PlayerTables({ players, position = 'absolute', isMobile 
                       fontFamily: "'Open Sans', sans-serif",
                       lineHeight: 'normal',
                       textAlign: 'center',
-                      color: '#ffffff',
+                      color: getGolferTextColor(golfer.status),
                       fontWeight: 700,
                       fontSize: '16px',
                       margin: 0,
@@ -1036,7 +1047,7 @@ export default function PlayerTables({ players, position = 'absolute', isMobile 
                       fontFamily: "'Open Sans', sans-serif",
                       lineHeight: 'normal',
                       textAlign: 'center',
-                      color: '#ffffff',
+                      color: getGolferTextColor(golfer.status),
                       fontWeight: 700,
                       fontSize: '16px',
                       margin: 0,
@@ -1155,7 +1166,7 @@ export default function PlayerTables({ players, position = 'absolute', isMobile 
                       fontFamily: "'Open Sans', sans-serif",
                       lineHeight: 'normal',
                       textAlign: 'center',
-                      color: '#ffffff',
+                      color: getGolferTextColor(golfer.status),
                       fontWeight: 700,
                       fontSize: '16px',
                       margin: 0,

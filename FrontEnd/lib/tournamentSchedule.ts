@@ -6,8 +6,8 @@
 
 import type { Tournament } from './types';
 
-/** 2026 season schedule - draft start = Monday of tournament week. State is date-based unless admin overrides. */
-export const TOURNAMENT_SCHEDULE_2026: Tournament[] = [
+/** Core 2026 season schedule - draft start = Monday of tournament week. State is date-based unless admin overrides. */
+const CORE_SCHEDULE_2026: Tournament[] = [
   {
     id: '1',
     name: 'PLAYERS CHAMPIONSHIP',
@@ -141,6 +141,32 @@ export const TOURNAMENT_SCHEDULE_2026: Tournament[] = [
       location: 'Medinah, Illinois',
     },
   },
+];
+
+/**
+ * Arnold Palmer Invitational - dev/test only for validating results sync.
+ * Excluded in production (NODE_ENV === 'production').
+ */
+const ARNOLD_PALMER_2026: Tournament = {
+  id: 'arnold-palmer-2026',
+  name: 'ARNOLD PALMER INVITATIONAL',
+  dateRange: 'MAR 05 - 08, 2026',
+  backgroundImage: '/images/TPC-Sawgrass.jpg',
+  draftStartDate: '2026-03-02',
+  startDate: '2026-03-05',
+  endDate: '2026-03-08',
+  cutLineScore: 4,
+  venue: {
+    name: 'Bay Hill Club & Lodge',
+    par: 72,
+    location: 'Orlando, Florida',
+  },
+};
+
+/** 2026 season schedule. In dev, includes Arnold Palmer for results-sync testing. */
+export const TOURNAMENT_SCHEDULE_2026: Tournament[] = [
+  ...CORE_SCHEDULE_2026,
+  ...(process.env.NODE_ENV !== 'production' ? [ARNOLD_PALMER_2026] : []),
 ];
 
 /**
