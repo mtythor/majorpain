@@ -9,6 +9,7 @@ import { getTournamentState } from './tournament-utils';
 import { fetchLeaderboard } from './live-golf-api';
 import { mapLeaderboardToGolferResults } from './leaderboard-mapper';
 import { calculateTeamScoresFromDrafts } from './dummyData';
+import { sendSubstitutionReminderNotification } from './notifications';
 import type { Tournament, TournamentResult } from './types';
 
 export interface SyncResultsOptions {
@@ -96,6 +97,34 @@ export async function syncResultsFromLiveApi(
         results: newResults,
       };
       synced.push(tournament.id);
+
+      // After R2: notify eligible players who can make a voluntary substitution
+      const afterR2 = golferResults.some((gr) => (gr.rounds?.length ?? 0) >= 2);
+      const subWindowOpen = (() => {
+        if (!tournament.startDate) return false;
+        const cutoff = new Date(tournament.startDate + 'T00:00:00');
+        cutoff.setDate(cutoff.getDate() + 2);
+        cutoff.setHours(0, 0, 0, 0);
+        return new Date() < cutoff;
+      })();
+      if (afterR2 && subWindowOpen) {
+        const eligiblePlayerIds = (existing?.teamDrafts ?? [])
+          .filter((draft) => {
+            if (draft.playerId === '5') return false;
+            if (draft.substitutions?.length) return false;
+            const allActivesMadeCut = draft.activeGolfers.every((id) => {
+              const gr = golferResults.find((r) => r.golferId === id);
+              return gr?.madeCut === true;
+            });
+            if (!allActivesMadeCut) return false;
+            const altResult = golferResults.find((r) => r.golferId === draft.alternateGolfer);
+            return altResult?.madeCut === true;
+          })
+          .map((draft) => draft.playerId);
+        if (eligiblePlayerIds.length > 0) {
+          await sendSubstitutionReminderNotification(tournament.id, eligiblePlayerIds, tournament.name).catch(() => {});
+        }
+      }
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       errors.push(`${tournament.id}: ${msg}`);

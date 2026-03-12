@@ -1,6 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
+import SubstitutionModal from '@/components/modal/SubstitutionModal';
 
 interface GolferTableData {
   position: number | string; // Can be number, "T1", "T2", "CUT", "WD", "--", etc.
@@ -10,8 +12,8 @@ interface GolferTableData {
   points: number;
   bonus: number;
   total: number;
-  /** cut = missed cut, wd = withdrawn, alt = alternate - for text color (matches list view) */
-  status?: 'cut' | 'wd' | 'alt';
+  /** cut = missed cut, wd = withdrawn, alt = alternate, out = voluntarily subbed out */
+  status?: 'cut' | 'wd' | 'alt' | 'out';
 }
 
 interface PlayerTableData {
@@ -32,6 +34,9 @@ interface PlayerTablesProps {
   players: PlayerTableData[];
   position?: 'absolute' | 'relative';
   isMobile?: boolean;
+  currentUserId?: string;
+  voluntarySubEligiblePlayerIds?: string[];
+  onSubstitutionConfirm?: (playerId: string, replacedGolferName: string) => void;
 }
 
 function formatStrokes(val: number, hasResults: boolean | undefined): string {
@@ -45,13 +50,14 @@ function getLastName(fullName: string): string {
   return parts.length > 1 ? parts[parts.length - 1]! : fullName;
 }
 
-function getGolferTextColor(status?: 'cut' | 'wd' | 'alt'): string {
+function getGolferTextColor(status?: 'cut' | 'wd' | 'alt' | 'out'): string {
   if (status === 'cut' || status === 'wd') return '#ae6161';
   if (status === 'alt') return '#ae9661';
+  if (status === 'out') return '#707070';
   return '#ffffff';
 }
 
-function MobilePlayerTableCard({ player }: { player: PlayerTableData }) {
+function MobilePlayerTableCard({ player, showSubBanner, onSubClick }: { player: PlayerTableData; showSubBanner?: boolean; onSubClick?: () => void }) {
   const textStyle = { fontFamily: "'Open Sans', sans-serif" as const, color: '#ffffff', margin: 0 };
   const borderColor = '#323232';
   const dividerColor = '#707070';
@@ -189,13 +195,27 @@ function MobilePlayerTableCard({ player }: { player: PlayerTableData }) {
           </div>
         );
       })}
+      {showSubBanner && (
+        <button
+          onClick={onSubClick}
+          style={{ width: '100%', backgroundColor: 'rgba(255, 226, 60, 0.2)', color: '#FFFFFF', border: '1px solid #F2AE00', borderBottomLeftRadius: '4px', borderBottomRightRadius: '4px', cursor: 'pointer', padding: '10px 0', fontFamily: 'var(--font-noto-sans), sans-serif', fontWeight: 800, fontSize: '13px', letterSpacing: '0.05em' }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(255, 226, 60, 0.3)'; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(255, 226, 60, 0.2)'; }}
+        >
+          MAKE A SUBSTITUTION
+        </button>
+      )}
       {/* Colored bar at bottom */}
-      <div style={{ height: 2, backgroundColor: player.color, width: '100%' }} />
+      <div style={{ height: 2, backgroundColor: player.color, width: '100%', marginTop: showSubBanner ? '2px' : undefined }} />
     </div>
   );
 }
 
-export default function PlayerTables({ players, position = 'absolute', isMobile = false }: PlayerTablesProps) {
+export default function PlayerTables({ players, position = 'absolute', isMobile = false, currentUserId, voluntarySubEligiblePlayerIds = [], onSubstitutionConfirm }: PlayerTablesProps) {
+  const [subModalPlayerId, setSubModalPlayerId] = useState<string | null>(null);
+  const modalPlayer = subModalPlayerId ? players.find((p) => p.id === subModalPlayerId) : null;
+  const modalAlternate = modalPlayer?.golfers.find((g) => g.status === 'alt');
+  const modalActives = modalPlayer?.golfers.filter((g) => g.status !== 'alt') ?? [];
   if (isMobile) {
     return (
       <div
@@ -213,8 +233,22 @@ export default function PlayerTables({ players, position = 'absolute', isMobile 
         }}
       >
         {players.map((player) => (
-          <MobilePlayerTableCard key={player.id} player={player} />
+          <MobilePlayerTableCard
+            key={player.id}
+            player={player}
+            showSubBanner={player.id === currentUserId && voluntarySubEligiblePlayerIds.includes(player.id)}
+            onSubClick={() => setSubModalPlayerId(player.id)}
+          />
         ))}
+        {modalPlayer && modalAlternate && modalActives.length >= 3 && (
+          <SubstitutionModal
+            isOpen={true}
+            alternateGolferName={modalAlternate.name}
+            activeGolferNames={[modalActives[0].name, modalActives[1].name, modalActives[2].name]}
+            onConfirm={(replacedGolferName) => { onSubstitutionConfirm?.(subModalPlayerId!, replacedGolferName); setSubModalPlayerId(null); }}
+            onCancel={() => setSubModalPlayerId(null)}
+          />
+        )}
       </div>
     );
   }
@@ -1179,8 +1213,27 @@ export default function PlayerTables({ players, position = 'absolute', isMobile 
               ))}
             </div>
           </div>
+          {player.id === currentUserId && voluntarySubEligiblePlayerIds.includes(player.id) && (
+            <button
+              onClick={() => setSubModalPlayerId(player.id)}
+              style={{ width: '1057px', minWidth: '1057px', backgroundColor: 'rgba(255, 226, 60, 0.2)', color: '#FFFFFF', border: '1px solid #F2AE00', borderBottomLeftRadius: '4px', borderBottomRightRadius: '4px', cursor: 'pointer', padding: '10px 0', fontFamily: 'var(--font-noto-sans), sans-serif', fontWeight: 800, fontSize: '13px', letterSpacing: '0.05em' }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(255, 226, 60, 0.3)'; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(255, 226, 60, 0.2)'; }}
+            >
+              MAKE A SUBSTITUTION
+            </button>
+          )}
         </div>
       ))}
+      {modalPlayer && modalAlternate && modalActives.length >= 3 && (
+        <SubstitutionModal
+          isOpen={true}
+          alternateGolferName={modalAlternate.name}
+          activeGolferNames={[modalActives[0].name, modalActives[1].name, modalActives[2].name]}
+          onConfirm={(replacedGolferName) => { onSubstitutionConfirm?.(subModalPlayerId!, replacedGolferName); setSubModalPlayerId(null); }}
+          onCancel={() => setSubModalPlayerId(null)}
+        />
+      )}
     </div>
   );
 }

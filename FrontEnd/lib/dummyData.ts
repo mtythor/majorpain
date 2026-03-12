@@ -421,12 +421,16 @@ export function generateTournamentResult(
  * Used when draft completes after scores exist, or when recalculating.
  */
 export function calculateTeamScoresFromDrafts(
-  teamDrafts: Array<{ playerId: string; activeGolfers: string[]; alternateGolfer?: string }>,
+  teamDrafts: Array<{ playerId: string; activeGolfers: string[]; alternateGolfer?: string; substitutions?: Array<{ round: number; replacedGolferId: string; replacementGolferId: string }> }>,
   golferResults: Array<{ golferId: string; madeCut: boolean; totalPoints: number }>
 ): Array<{ playerId: string; totalPoints: number; golferPoints: Array<{ golferId: string; points: number }> }> {
   return teamDrafts.map((draft) => {
-    const actives = draft.activeGolfers ?? [];
-    const alternate = draft.alternateGolfer ?? '';
+    const sub = draft.substitutions?.[0];
+    // Apply voluntary sub: swap replaced golfer out, replacement in; no alternate left for cut protection
+    const actives = sub
+      ? (draft.activeGolfers ?? []).map((id) => (id === sub.replacedGolferId ? sub.replacementGolferId : id))
+      : (draft.activeGolfers ?? []);
+    const alternate = sub ? '' : (draft.alternateGolfer ?? '');
     let alternateAlreadyUsed = false;
     const golferPoints = actives.map((golferId) => {
       const result = golferResults.find((r) => r.golferId === golferId);

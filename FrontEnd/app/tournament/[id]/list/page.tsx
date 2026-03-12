@@ -22,11 +22,13 @@ import { useApiData, useTournamentData } from '@/lib/use-api-data';
 import { getTournamentState, shouldShowPreDraftBanner } from '@/lib/tournament-view';
 import { isUpcomingTournament } from '@/lib/tournament-utils';
 import { fetchDraftState, USE_DRAFT_API } from '@/lib/api-client';
-import { updateDataCache } from '@/lib/data';
+import { updateDataCache, getVoluntarySubEligiblePlayerIds } from '@/lib/data';
+import { useAuth } from '@/lib/auth-context';
 import type { Tournament } from '@/lib/types';
 
 export default function TournamentListView({ params }: { params: { id: string } }) {
   const router = useRouter();
+  const { currentUser } = useAuth();
   const { loading: loadingData, error: dataError } = useApiData();
   const { loading: loadingTournament, error: tournamentError } = useTournamentData(params.id);
   
@@ -156,6 +158,43 @@ export default function TournamentListView({ params }: { params: { id: string } 
     );
   }
 
+  const voluntarySubEligiblePlayerIds = getVoluntarySubEligiblePlayerIds(params.id);
+  const currentUserId = currentUser ? String(currentUser.playerId) : undefined;
+
+  const handleSubstitutionConfirm = async (playerId: string, replacedGolferName: string) => {
+    const { results: currentResults, golfers: currentGolfers } = getTournamentData(params.id);
+    if (!currentResults) return;
+
+    const draft = currentResults.teamDrafts.find((d) => d.playerId === playerId);
+    if (!draft) return;
+
+    // Map golfer name back to ID
+    const replacedGolferId = draft.activeGolfers.find((golferId) => {
+      const golfer = currentGolfers.find((g) => g.id === golferId);
+      return golfer?.name === replacedGolferName;
+    });
+    if (!replacedGolferId) return;
+
+    const token = typeof window !== 'undefined' ? localStorage.getItem('major_pain_token') : null;
+    if (!token) return;
+
+    const res = await fetch(`/api/tournaments/${params.id}/substitution`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        playerId,
+        replacedGolferId,
+        replacementGolferId: draft.alternateGolfer,
+      }),
+    });
+    if (res.ok && typeof window !== 'undefined') {
+      window.location.reload();
+    }
+  };
+
   const handleViewChange = (view: import('@/lib/types').ViewMode) => {
     if (view === 'season') router.push('/season');
     else if (view === 'tournament') router.push(`/tournament/${params.id}/list`);
@@ -212,7 +251,13 @@ export default function TournamentListView({ params }: { params: { id: string } 
         </div>
       ) : playerCards.length > 0 ? (
         <div className="tournament-list-content">
-          <PlayerCards players={playerCards} position="relative" />
+          <PlayerCards
+            players={playerCards}
+            position="relative"
+            currentUserId={currentUserId}
+            voluntarySubEligiblePlayerIds={voluntarySubEligiblePlayerIds}
+            onSubstitutionConfirm={handleSubstitutionConfirm}
+          />
           {results && results.golferResults && results.golferResults.length > 0 &&
             results.golferResults.some((gr) => gr.rounds && gr.rounds.length > 0) && (
               <div

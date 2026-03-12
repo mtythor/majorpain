@@ -1,7 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import styles from './PlayerCards.module.css';
+import SubstitutionModal from '@/components/modal/SubstitutionModal';
 
 interface Golfer {
   rank: number;
@@ -25,6 +27,9 @@ interface PlayerCardData {
 interface PlayerCardsProps {
   players: PlayerCardData[];
   position?: 'absolute' | 'relative';
+  currentUserId?: string;
+  voluntarySubEligiblePlayerIds?: string[];
+  onSubstitutionConfirm?: (playerId: string, replacedGolferName: string) => void;
 }
 
 function getLastName(fullName: string): string {
@@ -50,7 +55,19 @@ function ScoreBarDivider() {
   );
 }
 
-export default function PlayerCards({ players, position = 'absolute' }: PlayerCardsProps) {
+export default function PlayerCards({
+  players,
+  position = 'absolute',
+  currentUserId,
+  voluntarySubEligiblePlayerIds = [],
+  onSubstitutionConfirm,
+}: PlayerCardsProps) {
+  const [subModalPlayerId, setSubModalPlayerId] = useState<string | null>(null);
+
+  const modalPlayer = subModalPlayerId ? players.find((p) => p.id === subModalPlayerId) : null;
+  const modalAlternate = modalPlayer?.golfers.find((g) => g.status === 'alt');
+  const modalActives = modalPlayer?.golfers.filter((g) => g.status !== 'alt') ?? [];
+
   return (
     <div
       className={`${styles.root} ${position === 'relative' ? styles.positionRelative : styles.positionAbsolute}`}
@@ -78,9 +95,29 @@ export default function PlayerCards({ players, position = 'absolute' }: PlayerCa
         </div>
       </div>
 
+      {modalPlayer && modalAlternate && modalActives.length >= 3 && (
+        <SubstitutionModal
+          isOpen={true}
+          alternateGolferName={modalAlternate.name}
+          activeGolferNames={[modalActives[0].name, modalActives[1].name, modalActives[2].name]}
+          onConfirm={(replacedGolferName) => {
+            onSubstitutionConfirm?.(subModalPlayerId!, replacedGolferName);
+            setSubModalPlayerId(null);
+          }}
+          onCancel={() => setSubModalPlayerId(null)}
+        />
+      )}
+
       {/* Player Cards */}
-      {players.map((player) => (
-        <div key={player.id} data-player-card-id={player.id} className={styles.card}>
+      {players.map((player) => {
+        const hasSubBanner = player.id === currentUserId && voluntarySubEligiblePlayerIds.includes(player.id);
+        return (
+        <div key={player.id} style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+        <div
+          data-player-card-id={player.id}
+          className={styles.card}
+          style={hasSubBanner ? { borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } : undefined}
+        >
           {/* Player Score Bar */}
           <div className={styles.scoreBar}>
             {/* Player Tag */}
@@ -178,8 +215,39 @@ export default function PlayerCards({ players, position = 'absolute' }: PlayerCa
               ),
             ])}
           </div>
+
         </div>
-      ))}
+        {hasSubBanner && (
+          <button
+            onClick={() => setSubModalPlayerId(player.id)}
+            style={{
+              width: '100%',
+              backgroundColor: 'rgba(255, 226, 60, 0.2)',
+              border: '1px solid #F2AE00',
+              borderBottomLeftRadius: '4px',
+              borderBottomRightRadius: '4px',
+              padding: '10px',
+              cursor: 'pointer',
+              fontFamily: "var(--font-noto-sans), sans-serif",
+              fontWeight: 800,
+              fontSize: '13px',
+              color: '#FFFFFF',
+              letterSpacing: '0.05em',
+              textAlign: 'center',
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(255, 226, 60, 0.3)';
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(255, 226, 60, 0.2)';
+            }}
+          >
+            MAKE A SUBSTITUTION
+          </button>
+        )}
+        </div>
+        );
+      })}
     </div>
   );
 }

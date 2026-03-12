@@ -153,8 +153,8 @@ const ARNOLD_PALMER_2026: Tournament = {
   dateRange: 'MAR 05 - 08, 2026',
   backgroundImage: '/images/TPC-Sawgrass.jpg',
   draftStartDate: '2026-03-02',
-  startDate: '2026-03-05',
-  endDate: '2026-03-08',
+  startDate: '2026-03-10',
+  endDate: '2026-03-13',
   cutLineScore: 4,
   venue: {
     name: 'Bay Hill Club & Lodge',

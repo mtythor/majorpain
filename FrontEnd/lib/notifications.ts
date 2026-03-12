@@ -129,11 +129,28 @@ export async function sendTournamentWinnerNotification(
   }
 }
 
-/** Placeholder: implement when golfer status management and results auto-fill exist */
 export async function sendSubstitutionReminderNotification(
-  _tournamentId: string,
-  _playerIds: string[]
+  tournamentId: string,
+  playerIds: string[],
+  tournamentName?: string
 ): Promise<void> {
-  void _tournamentId;
-  void _playerIds;
+  const sent = await getNotificationState();
+  let changed = false;
+  const name = tournamentName || `Tournament ${tournamentId}`;
+
+  for (const playerId of playerIds) {
+    const key = `sub-reminder-${tournamentId}-player${playerId}`;
+    if (sent[key]) continue;
+    const ok = await sendOneSignalNotification({
+      contents: { en: `You can substitute your alternate in ${name}! Open the app before the window closes.` },
+      headings: { en: 'Substitution Available' },
+      includeAliases: { external_id: [toOneSignalExternalId(playerId)] },
+    });
+    if (ok) {
+      sent[key] = true;
+      changed = true;
+    }
+  }
+
+  if (changed) await saveNotificationState(sent);
 }

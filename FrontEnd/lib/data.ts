@@ -100,6 +100,41 @@ function getAllTournamentData() {
 }
 
 
+// --- Substitution helpers ---
+
+export function isAfterRound2(results: TournamentResult): boolean {
+  return results.golferResults.some((gr) => (gr.rounds?.length ?? 0) >= 2);
+}
+
+export function isSubWindowOpen(tournament: Tournament): boolean {
+  if (!tournament.startDate) return false;
+  const cutoff = new Date(tournament.startDate + 'T00:00:00');
+  cutoff.setDate(cutoff.getDate() + 2); // midnight at start of day 3 (Saturday)
+  cutoff.setHours(0, 0, 0, 0);
+  return new Date() < cutoff;
+}
+
+export function getVoluntarySubEligiblePlayerIds(tournamentId: string): string[] {
+  const { tournament, results } = getTournamentData(tournamentId);
+  if (!results || !tournament) return [];
+  if (!isAfterRound2(results)) return [];
+  if (!isSubWindowOpen(tournament)) return [];
+
+  return results.teamDrafts
+    .filter((draft) => {
+      if (draft.playerId === '5') return false; // Fat Rando never eligible
+      if (draft.substitutions?.length) return false; // sub already made
+      const allActivesMadeCut = draft.activeGolfers.every((golferId) => {
+        const gr = results.golferResults.find((r) => r.golferId === golferId);
+        return gr?.madeCut === true;
+      });
+      if (!allActivesMadeCut) return false;
+      const alternateResult = results.golferResults.find((r) => r.golferId === draft.alternateGolfer);
+      return alternateResult?.madeCut === true;
+    })
+    .map((draft) => draft.playerId);
+}
+
 // --- Adapters: shape dummy data for specific UI components ---
 
 /** Shape for SeasonTable (season page) */
@@ -391,73 +426,93 @@ export function getPlayerCardsForTournament(tournamentId: string): PlayerCardRow
       positionMap.set(sortedByScore[i].golferId, pos);
     }
 
+    const sub = draft.substitutions?.[0];
     const golfersList: PlayerCardRow['golfers'] = [];
 
     // Add all 3 active golfers
     draft.activeGolfers.forEach((golferId) => {
       const golfer = golfers.find((g) => g.id === golferId);
       const gr = results.golferResults.find((r) => r.golferId === golferId);
-      
+
       if (golfer && gr) {
         const rank = gr.finalPosition ?? positionMap.get(golferId) ?? 0;
-        golfersList.push({
-          rank,
-          name: golfer.name,
-          status: gr.status === 'withdrawn' ? 'wd' as const : gr.madeCut ? undefined : 'cut' as const,
-        });
+        if (sub && golferId === sub.replacedGolferId) {
+          golfersList.push({ rank, name: golfer.name, status: 'out' as const });
+        } else {
+          golfersList.push({
+            rank,
+            name: golfer.name,
+            status: gr.status === 'withdrawn' ? 'wd' as const : gr.madeCut ? undefined : 'cut' as const,
+          });
+        }
       }
     });
 
-    // Always add the alternate golfer
+    // Alternate: show as active scorer (no 'alt') if sub was made, otherwise as 'alt'
     const alternateGolfer = golfers.find((g) => g.id === draft.alternateGolfer);
     const alternateResult = results.golferResults.find((r) => r.golferId === draft.alternateGolfer);
-    
+
     if (alternateGolfer && alternateResult) {
       const rank = alternateResult.finalPosition ?? positionMap.get(draft.alternateGolfer) ?? 0;
       golfersList.push({
         rank,
         name: alternateGolfer.name,
-        status: 'alt' as const,
+        status: sub
+          ? (alternateResult.status === 'withdrawn' ? 'wd' as const : alternateResult.madeCut ? undefined : 'cut' as const)
+          : 'alt' as const,
       });
     }
 
-    // Calculate points: use stored when available, else compute from position
+    // Calculate points
+    // When a voluntary sub exists, compute directly from effective active golfers (bypass stored teamScores
+    // which may predate the sub). Otherwise use stored teamScores which handle cut protection correctly.
     let totalPoints = 0;
     let totalBonus = 0;
-    
-    teamScore.golferPoints.forEach((gp) => {
-      const gr = results.golferResults.find((r) => r.golferId === gp.golferId);
-      if (gr) {
-        if (gr.totalPoints > 0) {
-          totalPoints += gp.points;
-          totalBonus += gr.bonusPoints;
-        } else {
-          const position = gr.finalPosition ?? positionMap.get(gp.golferId);
-          if (position != null) {
+    let posSum = 0;
+    let posCount = 0;
+
+    if (sub) {
+      const effectiveActives = draft.activeGolfers.map((id) =>
+        id === sub.replacedGolferId ? sub.replacementGolferId : id
+      );
+      effectiveActives.forEach((golferId) => {
+        const gr = results.golferResults.find((r) => r.golferId === golferId);
+        if (gr) {
+          const position = gr.finalPosition ?? positionMap.get(golferId);
+          if (gr.totalPoints > 0) {
+            totalPoints += gr.totalPoints;
+            totalBonus += gr.bonusPoints;
+          } else if (position != null) {
             const pts = pointsFromPosition(position);
             totalPoints += pts.totalPoints;
             totalBonus += pts.bonusPoints;
           }
+          if (position != null) { posSum += position; posCount++; }
         }
-      }
-    });
+      });
+    } else {
+      teamScore.golferPoints.forEach((gp) => {
+        const gr = results.golferResults.find((r) => r.golferId === gp.golferId);
+        if (gr) {
+          if (gr.totalPoints > 0) {
+            totalPoints += gp.points;
+            totalBonus += gr.bonusPoints;
+          } else {
+            const position = gr.finalPosition ?? positionMap.get(gp.golferId);
+            if (position != null) {
+              const pts = pointsFromPosition(position);
+              totalPoints += pts.totalPoints;
+              totalBonus += pts.bonusPoints;
+            }
+          }
+          const position = gr.finalPosition ?? positionMap.get(gp.golferId);
+          if (position != null) { posSum += position; posCount++; }
+        }
+      });
+    }
 
     const basePoints = totalPoints - totalBonus;
-    
-    // Calculate avgPos from golfers that actually scored (made cut)
-    const scoringPositions = teamScore.golferPoints
-      .map((gp) => {
-        const gr = results.golferResults.find((r) => r.golferId === gp.golferId);
-        return gr?.finalPosition ?? positionMap.get(gp.golferId);
-      })
-      .filter((pos): pos is number => pos !== null && pos !== undefined);
-    
-    const avgPos =
-      scoringPositions.length > 0
-        ? Math.round(
-            scoringPositions.reduce((a, p) => a + p, 0) / scoringPositions.length
-          )
-        : 0;
+    const avgPos = posCount > 0 ? Math.round(posSum / posCount) : 0;
 
     return {
       id: player.id,

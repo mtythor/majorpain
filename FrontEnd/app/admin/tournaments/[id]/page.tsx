@@ -64,6 +64,11 @@ export default function AdminTournamentEditorPage({
   const [syncResultsMessage, setSyncResultsMessage] = useState<string | null>(null);
   const [randoInitiating, setRandoInitiating] = useState(false);
   const [randoMessage, setRandoMessage] = useState<string | null>(null);
+  const [addingSubForPlayer, setAddingSubForPlayer] = useState<string | null>(null);
+  const [pendingSubReplacedId, setPendingSubReplacedId] = useState<string>('');
+  const [draftSaveSuccess, setDraftSaveSuccess] = useState(false);
+  const [draftSaveBtnHover, setDraftSaveBtnHover] = useState(false);
+  const [draftSaveBtnActive, setDraftSaveBtnActive] = useState(false);
 
   useEffect(() => {
     const t = getTournament(params.id) ?? getTournaments()[0];
@@ -107,6 +112,12 @@ export default function AdminTournamentEditorPage({
     const t = setTimeout(() => setSaveSuccess(false), 2000);
     return () => clearTimeout(t);
   }, [saveSuccess]);
+
+  useEffect(() => {
+    if (!draftSaveSuccess) return;
+    const t = setTimeout(() => setDraftSaveSuccess(false), 2000);
+    return () => clearTimeout(t);
+  }, [draftSaveSuccess]);
 
   // Check write secret: server requires it but client build doesn't have it
   useEffect(() => {
@@ -274,6 +285,7 @@ export default function AdminTournamentEditorPage({
       setResults(updated);
       setTeamDraftsFromDraft(null);
       setEditableTeamDrafts(drafts.map((d) => ({ ...d, activeGolfers: [...(d.activeGolfers ?? [])], alternateGolfer: d.alternateGolfer ?? '' })));
+      setDraftSaveSuccess(true);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to save');
     } finally {
@@ -1166,6 +1178,63 @@ export default function AdminTournamentEditorPage({
                         excludeIds={[...actives.filter(Boolean), ...allDraftedExcludingCurrent]}
                       />
                     </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                      <span style={{ fontWeight: 600, width: '70px' }}>Sub:</span>
+                      {draft.substitutions?.length ? (
+                        <>
+                          <span style={{ fontSize: '13px' }}>
+                            {golfers.find((g) => g.id === draft.substitutions![0].replacedGolferId)?.name ?? draft.substitutions![0].replacedGolferId}
+                            {' → '}
+                            {golfers.find((g) => g.id === draft.substitutions![0].replacementGolferId)?.name ?? draft.substitutions![0].replacementGolferId}
+                          </span>
+                          <button
+                            onClick={() => setEditableTeamDrafts((prev) => prev.map((d) => d.playerId !== draft.playerId ? d : { ...d, substitutions: [] }))}
+                            style={{ padding: '3px 8px', backgroundColor: '#ae6161', color: '#fff', border: 'none', borderRadius: '3px', cursor: 'pointer', fontSize: '12px' }}
+                          >
+                            Remove
+                          </button>
+                        </>
+                      ) : addingSubForPlayer === draft.playerId ? (
+                        <>
+                          <select
+                            value={pendingSubReplacedId}
+                            onChange={(e) => setPendingSubReplacedId(e.target.value)}
+                            style={{ padding: '4px 8px', backgroundColor: '#222', color: '#fff', border: '1px solid #555', borderRadius: '3px', fontSize: '13px' }}
+                          >
+                            {(draft.activeGolfers ?? []).map((id) => {
+                              const g = golfers.find((g) => g.id === id);
+                              return <option key={id} value={id}>{g?.name ?? id}</option>;
+                            })}
+                          </select>
+                          <span style={{ fontSize: '12px', color: '#aaa' }}>→ {golfers.find((g) => g.id === draft.alternateGolfer)?.name ?? draft.alternateGolfer}</span>
+                          <button
+                            onClick={() => {
+                              if (!pendingSubReplacedId || !draft.alternateGolfer) return;
+                              setEditableTeamDrafts((prev) => prev.map((d) => d.playerId !== draft.playerId ? d : { ...d, substitutions: [{ round: 2, replacedGolferId: pendingSubReplacedId, replacementGolferId: draft.alternateGolfer }] }));
+                              setAddingSubForPlayer(null);
+                              setPendingSubReplacedId('');
+                            }}
+                            style={{ padding: '3px 8px', backgroundColor: '#74a553', color: '#fff', border: 'none', borderRadius: '3px', cursor: 'pointer', fontSize: '12px' }}
+                          >
+                            Confirm
+                          </button>
+                          <button
+                            onClick={() => { setAddingSubForPlayer(null); setPendingSubReplacedId(''); }}
+                            style={{ padding: '3px 8px', backgroundColor: '#555', color: '#fff', border: 'none', borderRadius: '3px', cursor: 'pointer', fontSize: '12px' }}
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          onClick={() => { setAddingSubForPlayer(draft.playerId); setPendingSubReplacedId(draft.activeGolfers[0] ?? ''); }}
+                          disabled={!draft.alternateGolfer || !draft.activeGolfers?.length}
+                          style={{ padding: '3px 8px', backgroundColor: '#3ca1ff', color: '#fff', border: 'none', borderRadius: '3px', cursor: 'pointer', fontSize: '12px' }}
+                        >
+                          Add Sub
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               );
@@ -1173,18 +1242,32 @@ export default function AdminTournamentEditorPage({
             <button
               onClick={() => saveTeamDrafts(editableTeamDrafts)}
               disabled={saving}
+              onMouseEnter={() => setDraftSaveBtnHover(true)}
+              onMouseLeave={() => { setDraftSaveBtnHover(false); setDraftSaveBtnActive(false); }}
+              onMouseDown={() => setDraftSaveBtnActive(true)}
+              onMouseUp={() => setDraftSaveBtnActive(false)}
               style={{
                 padding: '10px 20px',
-                backgroundColor: '#74a553',
+                backgroundColor: draftSaveSuccess
+                  ? '#5a8f3e'
+                  : saving
+                    ? '#555'
+                    : draftSaveBtnActive
+                      ? '#5a8f3e'
+                      : draftSaveBtnHover
+                        ? '#8bc96f'
+                        : '#74a553',
                 color: '#fff',
                 border: 'none',
                 borderRadius: '4px',
                 cursor: saving ? 'not-allowed' : 'pointer',
                 fontWeight: 700,
                 alignSelf: 'flex-start',
+                transform: draftSaveBtnActive ? 'scale(0.98)' : 'scale(1)',
+                transition: 'background-color 0.15s ease, transform 0.1s ease',
               }}
             >
-              Save Team Drafts
+              {saving ? 'Saving...' : draftSaveSuccess ? 'Saved!' : 'Save Team Drafts'}
             </button>
           </div>
         )}
