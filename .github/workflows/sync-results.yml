@@ -1,0 +1,37 @@
+name: Sync golf results
+
+on:
+  schedule:
+    # Thu–Mon at midnight UTC (5pm Mountain) and 3am UTC (8pm Mountain) — 2 syncs/day, ~24 calls/tournament, well within RapidAPI free tier (250 calls/month)
+    - cron: '0 0,3 * * 5,6,7,1,2'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (fetch and map without saving)'
+        type: boolean
+        default: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: POST /api/cron/sync-results
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          DRY_RUN="${{ inputs.dry_run }}"
+          URL="https://majorpain.devinhansen.com/api/cron/sync-results${DRY_RUN:+?dryRun=true}"
+          echo "Calling $URL"
+          curl -sf -X POST "$URL" \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            -H "Content-Type: application/json" \
+            --max-time 30 \
+            | tee response.json
+          echo ""
+          cat response.json
+
+      - name: Check for errors
+        run: |
+          if grep -q '"errors":\s*\[.\]' response.json 2>/dev/null; then
+            echo "::warning::Sync completed with errors - check response above"
+          fi
