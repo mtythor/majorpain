@@ -131,15 +131,13 @@ export function mapLeaderboardToGolferResults(
     let madeCut: boolean;
     if (isWd || isCut) {
       madeCut = false;
-    } else if (tournamentHasCut) {
-      madeCut = rounds.length >= 4;
-      // Fallback only when API has no status: use cutLineScore for 2-round golfers
-      if (rounds.length === 2 && cutLineScore != null) {
-        const twoRoundToPar = rounds.reduce((s, r) => s + r.toPar, 0);
-        madeCut = twoRoundToPar <= cutLineScore;
-      }
+    } else if (tournamentHasCut && rounds.length === 2 && cutLineScore != null) {
+      // 2-round golfers with no explicit cut status: use cutLineScore
+      const twoRoundToPar = rounds.reduce((s, r) => s + r.toPar, 0);
+      madeCut = twoRoundToPar <= cutLineScore;
     } else {
-      madeCut = true; // no-cut event
+      // Default: player made (or is making) the cut unless API explicitly says otherwise
+      madeCut = true;
     }
 
     const totalToParFromRounds = rounds.reduce((s, r) => s + r.toPar, 0);

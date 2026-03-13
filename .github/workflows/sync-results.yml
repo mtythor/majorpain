@@ -2,8 +2,8 @@ name: Sync golf results
 
 on:
   schedule:
-    # Sun/Mon/Thu–Sat at midnight UTC (5pm Mountain) and 3am UTC (8pm Mountain) — 2 syncs/day, ~24 calls/tournament, well within RapidAPI free tier (250 calls/month)
-    - cron: '0 0,3 * * 0,1,4,5,6'
+    # Sun/Mon/Thu–Sat at midnight, 3am, 5am UTC (6pm, 9pm, 11pm MDT) — 3 syncs/day, ~15 calls/tournament, well within RapidAPI free tier (250 calls/month)
+    - cron: '0 0,3,5 * * 0,1,4,5,6'
   workflow_dispatch:
     inputs:
       dry_run:

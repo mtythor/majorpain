@@ -9,7 +9,7 @@ import { getTournamentState } from './tournament-utils';
 import { fetchLeaderboard } from './live-golf-api';
 import { mapLeaderboardToGolferResults } from './leaderboard-mapper';
 import { calculateTeamScoresFromDrafts } from './dummyData';
-import { sendSubstitutionReminderNotification } from './notifications';
+import { sendSubstitutionReminderNotification, sendStandingsNotification, sendTournamentWinnerNotification } from './notifications';
 import type { Tournament, TournamentResult } from './types';
 
 export interface SyncResultsOptions {
@@ -39,6 +39,7 @@ export async function syncResultsFromLiveApi(
   ) as Tournament[];
   const results = (data?.results ?? {}) as Record<string, TournamentResult>;
   const golfers = (data?.golfers ?? {}) as Record<string, Array<{ id: string; name: string }>>;
+  const players = (data?.players ?? []) as Array<{ id: string; name: string }>;
 
   const toSync = tournaments.filter((t) => {
     if (singleTournamentId && t.id !== singleTournamentId) return false;
@@ -104,7 +105,7 @@ export async function syncResultsFromLiveApi(
         if (!tournament.startDate) return false;
         const cutoff = new Date(tournament.startDate + 'T00:00:00');
         cutoff.setDate(cutoff.getDate() + 2);
-        cutoff.setHours(0, 0, 0, 0);
+        cutoff.setHours(14, 0, 0, 0); // 2pm UTC = 8am MDT Saturday
         return new Date() < cutoff;
       })();
       if (afterR2 && subWindowOpen) {
@@ -123,6 +124,27 @@ export async function syncResultsFromLiveApi(
           .map((draft) => draft.playerId);
         if (eligiblePlayerIds.length > 0) {
           await sendSubstitutionReminderNotification(tournament.id, eligiblePlayerIds, tournament.name).catch(() => {});
+        }
+      }
+
+      // Send standings or winner notification
+      const leader = [...teamScores]
+        .filter((ts) => ts.playerId !== '5')
+        .sort((a, b) => b.totalPoints - a.totalPoints)[0];
+      if (leader) {
+        const leaderName = players.find((p) => p.id === leader.playerId)?.name ?? `Player ${leader.playerId}`;
+        const tournamentState = getTournamentState(tournament);
+        if (tournamentState === 'completed') {
+          await sendTournamentWinnerNotification(tournament.id, leaderName, leader.totalPoints, tournament.name).catch(() => {});
+        } else {
+          // Completed round = fewest rounds any active golfer has finished
+          const activeRoundCounts = golferResults
+            .filter((gr) => gr.madeCut && gr.status !== 'withdrawn' && gr.rounds.length > 0)
+            .map((gr) => gr.rounds.length);
+          const completedRound = activeRoundCounts.length > 0 ? Math.min(...activeRoundCounts) : 0;
+          if (completedRound > 0) {
+            await sendStandingsNotification(tournament.id, completedRound, leaderName, leader.totalPoints, tournament.name).catch(() => {});
+          }
         }
       }
     } catch (e) {

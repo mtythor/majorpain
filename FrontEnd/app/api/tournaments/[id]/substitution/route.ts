@@ -21,7 +21,7 @@ function isSubWindowOpen(startDate: string | undefined): boolean {
   if (!startDate) return false;
   const cutoff = new Date(startDate + 'T00:00:00');
   cutoff.setDate(cutoff.getDate() + 2);
-  cutoff.setHours(0, 0, 0, 0);
+  cutoff.setHours(14, 0, 0, 0); // 2pm UTC = 8am MDT Saturday — gives players overnight after R2
   return new Date() < cutoff;
 }
 

@@ -109,8 +109,8 @@ export function isAfterRound2(results: TournamentResult): boolean {
 export function isSubWindowOpen(tournament: Tournament): boolean {
   if (!tournament.startDate) return false;
   const cutoff = new Date(tournament.startDate + 'T00:00:00');
-  cutoff.setDate(cutoff.getDate() + 2); // midnight at start of day 3 (Saturday)
-  cutoff.setHours(0, 0, 0, 0);
+  cutoff.setDate(cutoff.getDate() + 2);
+  cutoff.setHours(14, 0, 0, 0); // 2pm UTC = 8am MDT Saturday — gives players overnight after R2
   return new Date() < cutoff;
 }
 
