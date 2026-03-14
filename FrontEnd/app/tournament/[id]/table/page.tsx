@@ -373,7 +373,11 @@ function getPlayerTableData(tournamentId: string) {
         points: altPts.basePoints,
         bonus: altPts.bonusPoints,
         total: altPts.totalPoints,
-        status: (sub || autoSubIn) ? (alternateResult.status === 'withdrawn' ? 'wd' : alternateResult.madeCut !== true ? 'cut' : undefined) : 'alt',
+        status: (sub || autoSubIn)
+          ? (alternateResult.status === 'withdrawn' ? 'wd' : alternateResult.madeCut !== true ? 'cut' : undefined)
+          : alternateResult.madeCut !== true
+            ? (alternateResult.status === 'withdrawn' ? 'wd' : 'cut')
+            : 'alt',
       });
     }
 
