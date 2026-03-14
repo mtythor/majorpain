@@ -448,18 +448,24 @@ export function getPlayerCardsForTournament(tournamentId: string): PlayerCardRow
       }
     });
 
-    // Alternate: show as active scorer (no 'alt') if sub was made, otherwise as 'alt'
+    // Alternate: show as active scorer (no 'alt') if sub was made or cut protection fired, otherwise as 'alt'
     const alternateGolfer = golfers.find((g) => g.id === draft.alternateGolfer);
     const alternateResult = results.golferResults.find((r) => r.golferId === draft.alternateGolfer);
+    const cutProtectionFired = !sub && draft.activeGolfers.some((id) => {
+      const gr = results.golferResults.find((r) => r.golferId === id);
+      return !gr || !gr.madeCut;
+    });
 
     if (alternateGolfer && alternateResult) {
       const rank = alternateResult.finalPosition ?? positionMap.get(draft.alternateGolfer) ?? 0;
       golfersList.push({
         rank,
         name: alternateGolfer.name,
-        status: sub
+        status: (sub || cutProtectionFired)
           ? (alternateResult.status === 'withdrawn' ? 'wd' as const : alternateResult.madeCut ? undefined : 'cut' as const)
-          : 'alt' as const,
+          : !alternateResult.madeCut
+            ? (alternateResult.status === 'withdrawn' ? 'wd' as const : 'cut' as const)
+            : 'alt' as const,
       });
     }
 
@@ -615,10 +621,16 @@ export function getPlayerCardsForTournament(tournamentId: string): PlayerCardRow
         positionMap.set(sortedByScore[i].golferId, pos);
       }
 
+      const fatRandoCutProtectionFired = fatRandoGolfers.slice(0, 3).some((id) => {
+        const gr = results?.golferResults?.find((r) => r.golferId === id);
+        return !gr || !gr.madeCut;
+      });
+      const fatRandoAltResult = results?.golferResults?.find((r) => r.golferId === fatRandoGolfers[3]);
+
       const fatRandoGolferData = fatRandoGolfers.map((golferId, index) => {
         const golferResult = results?.golferResults?.find((r) => r.golferId === golferId);
         const golfer = golfers.find((g) => g.id === golferId);
-        
+
         if (!golferResult || !golfer) {
           return null;
         }
@@ -628,41 +640,51 @@ export function getPlayerCardsForTournament(tournamentId: string): PlayerCardRow
         return {
           rank,
           name: golfer.name,
-          status: index === 3 
-            ? (golferResult.madeCut ? 'alt' as const : cutOrWd)
+          status: index === 3
+            ? (fatRandoCutProtectionFired
+                ? (golferResult.status === 'withdrawn' ? 'wd' as const : !golferResult.madeCut ? 'cut' as const : undefined)
+                : (!golferResult.madeCut ? cutOrWd : 'alt' as const))
             : (golferResult.madeCut ? undefined : cutOrWd),
         };
       }).filter((g): g is NonNullable<typeof g> => g !== null);
 
-      // Calculate Fat Rando totals (use top 3 golfers for scoring)
-      const activeGolferIds = fatRandoGolfers.slice(0, 3);
-      const activeGolferResults = activeGolferIds.map((golferId) => 
-        results?.golferResults?.find((r) => r.golferId === golferId)
-      ).filter((r): r is NonNullable<typeof r> => r !== null);
-    
-      const fatRandoPositions = activeGolferResults.map((r) => 
-        r.finalPosition ?? positionMap.get(r.golferId)
-      ).filter((p): p is number => p !== null && p !== undefined);
-    
-      const fatRandoAvgPos = fatRandoPositions.length > 0
-        ? Math.round(fatRandoPositions.reduce((sum, p) => sum + p, 0) / fatRandoPositions.length)
-        : 0;
-    
+      // Calculate Fat Rando totals with cut protection (alternate substitutes for first missed-cut active)
+      const fatRandoPositions: number[] = [];
       let fatRandoPoints = 0;
       let fatRandoBonus = 0;
-      activeGolferResults.forEach((r) => {
-        if (r.totalPoints > 0) {
-          fatRandoPoints += r.basePoints;
-          fatRandoBonus += r.bonusPoints;
-        } else {
+      let fatRandoAltUsed = false;
+      fatRandoGolfers.slice(0, 3).forEach((golferId) => {
+        const r = results?.golferResults?.find((res) => res.golferId === golferId);
+        if (!r) return;
+        if (r.madeCut) {
           const position = r.finalPosition ?? positionMap.get(r.golferId);
-          if (position != null) {
+          if (r.totalPoints > 0) {
+            fatRandoPoints += r.basePoints;
+            fatRandoBonus += r.bonusPoints;
+          } else if (position != null) {
             const pts = pointsFromPosition(position);
             fatRandoPoints += pts.basePoints;
             fatRandoBonus += pts.bonusPoints;
           }
+          if (position != null) fatRandoPositions.push(position);
+        } else if (!fatRandoAltUsed && fatRandoAltResult?.madeCut) {
+          const altPosition = fatRandoAltResult.finalPosition ?? positionMap.get(fatRandoAltResult.golferId);
+          if (fatRandoAltResult.totalPoints > 0) {
+            fatRandoPoints += fatRandoAltResult.basePoints;
+            fatRandoBonus += fatRandoAltResult.bonusPoints;
+          } else if (altPosition != null) {
+            const pts = pointsFromPosition(altPosition);
+            fatRandoPoints += pts.basePoints;
+            fatRandoBonus += pts.bonusPoints;
+          }
+          if (altPosition != null) fatRandoPositions.push(altPosition);
+          fatRandoAltUsed = true;
         }
       });
+
+      const fatRandoAvgPos = fatRandoPositions.length > 0
+        ? Math.round(fatRandoPositions.reduce((sum, p) => sum + p, 0) / fatRandoPositions.length)
+        : 0;
 
       cards.push({
         id: '5',

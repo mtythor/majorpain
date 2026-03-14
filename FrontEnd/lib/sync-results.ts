@@ -142,7 +142,7 @@ export async function syncResultsFromLiveApi(
             .filter((gr) => gr.madeCut && gr.status !== 'withdrawn' && gr.rounds.length > 0)
             .map((gr) => gr.rounds.length);
           const completedRound = activeRoundCounts.length > 0 ? Math.min(...activeRoundCounts) : 0;
-          if (completedRound > 0) {
+          if (completedRound > 0 && leader.totalPoints > 0) {
             await sendStandingsNotification(tournament.id, completedRound, leaderName, leader.totalPoints, tournament.name).catch(() => {});
           }
         }
