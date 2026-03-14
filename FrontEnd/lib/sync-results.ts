@@ -22,6 +22,7 @@ export interface SyncResultsOptions {
 export interface SyncResultsResult {
   synced: string[];
   errors: string[];
+  notifications: string[];
   dryRunPreview?: Record<string, { golferResultsCount: number; teamScoresCount: number }>;
 }
 
@@ -31,6 +32,7 @@ export async function syncResultsFromLiveApi(
   const { dryRun = false, tournamentId: singleTournamentId } = options;
   const synced: string[] = [];
   const errors: string[] = [];
+  const notifications: string[] = [];
   const dryRunPreview: Record<string, { golferResultsCount: number; teamScoresCount: number }> = {};
 
   const { data } = await getData();
@@ -123,8 +125,14 @@ export async function syncResultsFromLiveApi(
           })
           .map((draft) => draft.playerId);
         if (eligiblePlayerIds.length > 0) {
-          await sendSubstitutionReminderNotification(tournament.id, eligiblePlayerIds, tournament.name).catch(() => {});
+          await sendSubstitutionReminderNotification(tournament.id, eligiblePlayerIds, tournament.name)
+            .then(() => notifications.push(`sub-reminder:${tournament.id}:players=${eligiblePlayerIds.join(',')}`))
+            .catch((e) => { console.error('sendSubstitutionReminderNotification failed:', e); notifications.push(`sub-reminder:${tournament.id}:ERROR:${e instanceof Error ? e.message : String(e)}`); });
+        } else {
+          notifications.push(`sub-reminder:${tournament.id}:skipped:no-eligible-players`);
         }
+      } else {
+        notifications.push(`sub-reminder:${tournament.id}:skipped:afterR2=${afterR2},subWindowOpen=${subWindowOpen}`);
       }
 
       // Send standings or winner notification
@@ -135,7 +143,9 @@ export async function syncResultsFromLiveApi(
         const leaderName = players.find((p) => p.id === leader.playerId)?.name ?? `Player ${leader.playerId}`;
         const tournamentState = getTournamentState(tournament);
         if (tournamentState === 'completed') {
-          await sendTournamentWinnerNotification(tournament.id, leaderName, leader.totalPoints, tournament.name).catch(() => {});
+          await sendTournamentWinnerNotification(tournament.id, leaderName, leader.totalPoints, tournament.name)
+            .then(() => notifications.push(`winner:${tournament.id}:${leaderName}`))
+            .catch((e) => { console.error('sendTournamentWinnerNotification failed:', e); notifications.push(`winner:${tournament.id}:ERROR:${e instanceof Error ? e.message : String(e)}`); });
         } else {
           // Completed round = fewest rounds any active golfer has finished
           const activeRoundCounts = golferResults
@@ -143,9 +153,15 @@ export async function syncResultsFromLiveApi(
             .map((gr) => gr.rounds.length);
           const completedRound = activeRoundCounts.length > 0 ? Math.min(...activeRoundCounts) : 0;
           if (completedRound > 0 && leader.totalPoints > 0) {
-            await sendStandingsNotification(tournament.id, completedRound, leaderName, leader.totalPoints, tournament.name).catch(() => {});
+            await sendStandingsNotification(tournament.id, completedRound, leaderName, leader.totalPoints, tournament.name)
+              .then(() => notifications.push(`standings:${tournament.id}:r${completedRound}:${leaderName}=${leader.totalPoints}`))
+              .catch((e) => { console.error('sendStandingsNotification failed:', e); notifications.push(`standings:${tournament.id}:r${completedRound}:ERROR:${e instanceof Error ? e.message : String(e)}`); });
+          } else {
+            notifications.push(`standings:${tournament.id}:skipped:completedRound=${completedRound},leaderPoints=${leader.totalPoints}`);
           }
         }
+      } else {
+        notifications.push(`standings:${tournament.id}:skipped:no-leader`);
       }
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
@@ -160,6 +176,7 @@ export async function syncResultsFromLiveApi(
   return {
     synced,
     errors,
+    notifications,
     ...(dryRun && Object.keys(dryRunPreview).length > 0 ? { dryRunPreview } : {}),
   };
 }

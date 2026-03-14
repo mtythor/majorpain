@@ -36,7 +36,7 @@ async function saveStateToFile(sent: SentMap): Promise<void> {
 export async function getNotificationState(): Promise<SentMap> {
   if (process.env.DATABASE_URL) {
     const { pool } = await import('./db');
-    const res = await pool.query('SELECT sent FROM major_pain_notification_state WHERE id = 1');
+    const res = await pool.query('SELECT sent FROM major_pain_notification_state WHERE id = 1').catch((e) => { console.error('getNotificationState DB error (table may not exist — run migrations):', e.message); throw e; });
     if (!res.rows?.length) return {};
     const sent = res.rows[0].sent;
     return (sent as SentMap) ?? {};
