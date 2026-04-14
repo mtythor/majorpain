@@ -17,10 +17,10 @@ import { useAllTournamentData } from '@/lib/use-api-data';
 export default function SeasonPage() {
   const router = useRouter();
   const isMobile = useIsMobile();
-  const { loading, error } = useAllTournamentData();
+  const { loading, error, refreshTrigger } = useAllTournamentData();
 
-  const seasonStandings = useMemo(() => getSeasonStandings(), []);
-  const tournamentNames = useMemo(() => getSeasonTournamentNames(), []);
+  const seasonStandings = useMemo(() => getSeasonStandings(), [refreshTrigger]);
+  const tournamentNames = useMemo(() => getSeasonTournamentNames(), [refreshTrigger]);
 
   const handleViewChange = (view: import('@/lib/types').ViewMode) => {
     if (view === 'tournament') router.push('/tournament/1/list');

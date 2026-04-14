@@ -115,7 +115,7 @@ export function useTournamentData(
     };
   }, [tournamentId, pollInterval, refetch]);
 
-  return { loading, error };
+  return { loading, error, refreshTrigger };
 }
 
 function useRefCallback<T extends (...args: unknown[]) => unknown>(cb: T): T {
@@ -222,5 +222,5 @@ export function useAllTournamentData(options?: { pollInterval?: number }) {
     };
   }, [pollInterval, refetch]);
 
-  return { loading, error };
+  return { loading, error, refreshTrigger };
 }
