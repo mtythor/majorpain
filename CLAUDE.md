@@ -110,6 +110,10 @@ Copy `FrontEnd/.env.example`. Key variables:
 - **CI/CD**: GitHub Actions → SSH → rsync → PM2 restart
 - See `docs/DEPLOY.md` for full deployment instructions and troubleshooting
 
+## Session Start
+
+At the start of each session, read `progress.md` in the project root to get context on what has been built and what is still to do.
+
 ## TypeScript / Build Notes
 
 `next.config.js` is configured to **not block builds** on TypeScript errors or ESLint warnings. Fix issues but don't rely on the build failing to catch them.

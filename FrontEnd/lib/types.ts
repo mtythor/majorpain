@@ -53,6 +53,7 @@ export interface DraftEvent {
   golferName: string;
   golferRank: number;
   timestamp: Date;
+  stealRange?: number; // e.g. 5, 10, 15, 20 — the upper bound of the random range used
 }
 
 export type ViewMode = 'tournament' | 'season' | 'admin';

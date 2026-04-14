@@ -64,15 +64,16 @@ export async function POST(
       );
     }
 
-    const fatRandoStolenGolfers = generateFatRandoSteals(golfers);
-    if (fatRandoStolenGolfers.length === 0) {
+    const steals = generateFatRandoSteals(golfers);
+    if (steals.length === 0) {
       return NextResponse.json(
         { error: 'Could not generate steals (field too small or invalid)' },
         { status: 400 }
       );
     }
+    const fatRandoStolenGolfers = steals.map(s => s.id);
 
-    const stealEvents = createFatRandoStealEvents(fatRandoStolenGolfers, golfers);
+    const stealEvents = createFatRandoStealEvents(steals, golfers);
     const tournaments = data?.tournaments ?? [];
     const results = (data?.results ?? {}) as Record<string, { teamScores?: Array<{ playerId: string; totalPoints: number }> } | null | undefined>;
     const draftOrder = calculateDraftOrderWithData(players, tournamentId, tournaments, results);

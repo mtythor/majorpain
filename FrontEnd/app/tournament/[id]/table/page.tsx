@@ -926,7 +926,7 @@ export default function TournamentTableView({ params }: { params: { id: string }
                 justifyContent: 'center',
                 width: isMobile ? '100%' : '1057px',
                 paddingTop: '8px',
-                paddingBottom: '24px',
+                paddingBottom: '64px',
               }}
             >
               <Link

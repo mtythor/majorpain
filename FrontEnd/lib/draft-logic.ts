@@ -8,41 +8,35 @@ const MIN_FIELD_FOR_RANDO_STEALS = 20;
 /** First tournament of season: MtyThor → KristaKay → MrHattyhat → Atticus, then snake. */
 const FIRST_TOURNAMENT_DRAFT_ORDER = ['1', '3', '4', '2'];
 
+export interface FatRandoSteal {
+  id: string;
+  range: number;
+}
+
 /**
- * Generate Fat Rando steals using progressive random selection
+ * Generate Fat Rando steals using progressive random selection.
  * Steal #1: Random 1-5
  * Steal #2: Random 1-10 (from remaining)
  * Steal #3: Random 1-15 (from remaining)
  * Steal #4: Random 1-20 (from remaining)
  * Requires field to be set and sorted by OWGR rank (same order as draft table).
+ * Returns each steal with the random range used, for transparent display.
  */
-export function generateFatRandoSteals(golfers: Golfer[]): string[] {
+export function generateFatRandoSteals(golfers: Golfer[]): FatRandoSteal[] {
   if (!golfers || golfers.length < MIN_FIELD_FOR_RANDO_STEALS) {
     return [];
   }
   // Sort by OWGR rank ascending (same order as draft table: best/favorite first)
   const available = [...golfers].sort((a, b) => a.rank - b.rank);
-  const stolen: string[] = [];
-  
-  // Steal #1: Random 1-5
-  const steal1 = Math.floor(Math.random() * Math.min(5, available.length));
-  stolen.push(available[steal1].id);
-  available.splice(steal1, 1);
-  
-  // Steal #2: Random 1-10 (from remaining)
-  const steal2 = Math.floor(Math.random() * Math.min(10, available.length));
-  stolen.push(available[steal2].id);
-  available.splice(steal2, 1);
-  
-  // Steal #3: Random 1-15 (from remaining)
-  const steal3 = Math.floor(Math.random() * Math.min(15, available.length));
-  stolen.push(available[steal3].id);
-  available.splice(steal3, 1);
-  
-  // Steal #4: Random 1-20 (from remaining)
-  const steal4 = Math.floor(Math.random() * Math.min(20, available.length));
-  stolen.push(available[steal4].id);
-  
+  const stolen: FatRandoSteal[] = [];
+
+  const ranges = [5, 10, 15, 20];
+  for (const range of ranges) {
+    const idx = Math.floor(Math.random() * Math.min(range, available.length));
+    stolen.push({ id: available[idx].id, range });
+    available.splice(idx, 1);
+  }
+
   return stolen;
 }
 
@@ -178,16 +172,17 @@ export function calculateDraftOrder(players: Player[], currentTournamentId: stri
  * Create activity log events for Fat Rando steals
  */
 export function createFatRandoStealEvents(
-  stolenGolferIds: string[],
+  steals: FatRandoSteal[],
   golfers: Golfer[]
 ): DraftEvent[] {
-  return stolenGolferIds.map(golferId => {
-    const golfer = golfers.find(g => g.id === golferId);
+  return steals.map(({ id, range }) => {
+    const golfer = golfers.find(g => g.id === id);
     return {
       type: 'steal',
       playerName: 'FAT RANDO',
       golferName: golfer?.name || 'Unknown',
       golferRank: golfer?.rank || 0,
+      stealRange: range,
       timestamp: new Date(),
     };
   });
@@ -239,10 +234,11 @@ export function initializeDraftState(
   players: Player[]
 ): DraftState {
   // Generate Fat Rando steals
-  const fatRandoStolenGolfers = generateFatRandoSteals(golfers);
-  
+  const steals = generateFatRandoSteals(golfers);
+  const fatRandoStolenGolfers = steals.map(s => s.id);
+
   // Create activity log events for steals
-  const stealEvents = createFatRandoStealEvents(fatRandoStolenGolfers, golfers);
+  const stealEvents = createFatRandoStealEvents(steals, golfers);
   
   // Calculate draft order
   const draftOrder = calculateDraftOrder(players, tournamentId);

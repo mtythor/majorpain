@@ -266,7 +266,7 @@ export default function TournamentListView({ params }: { params: { id: string } 
                   display: 'flex',
                   justifyContent: 'center',
                   paddingTop: '8px',
-                  paddingBottom: '24px',
+                  paddingBottom: '64px',
                 }}
               >
                 <Link
