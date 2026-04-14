@@ -41,6 +41,7 @@ export default function PlayByPlay({ events, isMobile }: PlayByPlayProps) {
           const showSeparator = isLastSteal && events.some(e => e.type === 'select');
           
           if (event.type === 'steal') {
+            const rangeLabel = event.stealRange ? `ranks 1-${event.stealRange}` : null;
             return (
               <div key={index}>
                 <p
@@ -49,8 +50,11 @@ export default function PlayByPlay({ events, isMobile }: PlayByPlayProps) {
                     marginBottom: 0,
                   }}
                 >
-                  <span style={{ fontWeight: 700 }}>{event.playerName}</span> steals #{event.golferRank}{' '}
-                  {event.golferName}
+                  <span style={{ fontWeight: 700 }}>{event.playerName}</span>
+                  {rangeLabel
+                    ? <> picks randomly from {rangeLabel}: #{event.golferRank} {event.golferName}</>
+                    : <> steals #{event.golferRank} {event.golferName}</>
+                  }
                 </p>
                 {showSeparator && (
                   <p

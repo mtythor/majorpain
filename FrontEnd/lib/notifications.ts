@@ -89,16 +89,20 @@ export async function sendStandingsNotification(
   round: number,
   leaderName: string,
   leaderPoints: number,
-  tournamentName?: string
+  tournamentName?: string,
+  isFinalRound?: boolean
 ): Promise<void> {
   const key = `standings-${tournamentId}-r${round}`;
   const sent = await getNotificationState();
   if (sent[key]) return;
 
   const name = tournamentName || `Tournament ${tournamentId}`;
+  const message = isFinalRound
+    ? `Day ${round} complete: ${leaderName} wins with ${leaderPoints} points!`
+    : `Day ${round} complete: ${leaderName} leads with ${leaderPoints} points!`;
   const ok = await sendOneSignalNotification({
-    contents: { en: `Day ${round} complete: ${leaderName} leads with ${leaderPoints} points!` },
-    headings: { en: 'Tournament Update' },
+    contents: { en: message },
+    headings: { en: isFinalRound ? 'Tournament Complete' : 'Tournament Update' },
     includedSegments: ['Active Subscriptions'],
   });
   if (ok) {

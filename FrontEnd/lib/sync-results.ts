@@ -153,7 +153,7 @@ export async function syncResultsFromLiveApi(
             .map((gr) => gr.rounds.length);
           const completedRound = activeRoundCounts.length > 0 ? Math.min(...activeRoundCounts) : 0;
           if (completedRound > 0 && leader.totalPoints > 0) {
-            await sendStandingsNotification(tournament.id, completedRound, leaderName, leader.totalPoints, tournament.name)
+            await sendStandingsNotification(tournament.id, completedRound, leaderName, leader.totalPoints, tournament.name, completedRound >= 4)
               .then(() => notifications.push(`standings:${tournament.id}:r${completedRound}:${leaderName}=${leader.totalPoints}`))
               .catch((e) => { console.error('sendStandingsNotification failed:', e); notifications.push(`standings:${tournament.id}:r${completedRound}:ERROR:${e instanceof Error ? e.message : String(e)}`); });
           } else {
