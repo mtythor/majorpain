@@ -87,6 +87,7 @@ export function useTournamentData(
         updateDataCache(`golfers-${tournamentId}`, golfers);
         updateDataCache(`results-${tournamentId}`, results);
 
+        setRefreshTrigger((t) => t + 1);
         setLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Failed to load tournament data'));
@@ -142,9 +143,8 @@ export function useAllTournamentData(options?: { pollInterval?: number }) {
       updateDataCache('tournaments', tournaments);
       updateDataCache('players', players);
 
-      const completedTournaments = tournaments.filter((t) => t.state === 'completed');
       await Promise.all(
-        completedTournaments.map(async (tournament) => {
+        tournaments.map(async (tournament) => {
           try {
             const [golfers, results] = await Promise.all([
               fetchGolfers(tournament.id),
@@ -177,8 +177,7 @@ export function useAllTournamentData(options?: { pollInterval?: number }) {
         updateDataCache('tournaments', tournaments);
         updateDataCache('players', players);
 
-        const completedTournaments = tournaments.filter((t) => t.state === 'completed');
-        const tournamentDataPromises = completedTournaments.map(async (tournament) => {
+        const tournamentDataPromises = tournaments.map(async (tournament) => {
           try {
             const [golfers, results] = await Promise.all([
               fetchGolfers(tournament.id),
@@ -194,6 +193,7 @@ export function useAllTournamentData(options?: { pollInterval?: number }) {
 
         await Promise.all(tournamentDataPromises);
 
+        setRefreshTrigger((t) => t + 1);
         setLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Failed to load tournament data'));
