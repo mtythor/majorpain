@@ -1,7 +1,7 @@
 // Game constants based on GameRules.md
 
 export const SCORING = {
-  BASE_POINTS_FORMULA: (position: number) => 100 - position,
+  BASE_POINTS_FORMULA: (position: number) => Math.max(0, 100 - position),
   BONUS_POINTS: {
     FIRST_PLACE: 6,
     TOP_5: 5, // 2nd-5th
